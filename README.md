@@ -1,6 +1,6 @@
 # Exhibition
 
-Django application to manage philatelic exhibition participations.
+Django application for managing philatelic exhibition registrations.
 
 ## Running
 
