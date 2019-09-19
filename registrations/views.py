@@ -4,8 +4,9 @@ from django.contrib.auth import logout as auth_logout
 
 
 def index(request):
-    context = {}
-    return render(request, 'registrations/login.html', context)
+    if not request.user.is_authenticated:
+        return render(request, 'registrations/login.html')
+    return render(request, 'registrations/index.html')
 
 def logout(request, next_page):
     auth_logout(request)
