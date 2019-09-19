@@ -1,6 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib.auth import logout as auth_logout
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the registrations index.")
+    context = {}
+    return render(request, 'registrations/login.html', context)
+
+def logout(request, next_page):
+    auth_logout(request)
+    return redirect(next_page)
