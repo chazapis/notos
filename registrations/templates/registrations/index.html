@@ -1,15 +1,60 @@
 {% extends 'registrations/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-<div class="jumbotron">
-<h1>My fake blog!</h1>
-{% if user.is_authenticated %}
-  <p>Logged as {{ user.username }}</p>
-  <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
-{% else %}
-  <a class="btn btn-primary" href="{% url 'social:begin' 'google-oauth2' %}">
-    Login
-  </a>
-{% endif %}
+<div class="container">
+  <div class="py-5 text-center">
+    <img class="d-block mx-auto mb-4" src="{% static 'registrations/notos_2021.jpg' %}" alt="" width="200" height="200">
+    <h2>Registration</h2>
+    <p class="lead">Please fill out the following information to register for <a class="text-secondary" href="http://hps.gr/notos2021/" target="_blank">NOTOS 2021</a>.</p>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4 order-md-2 mb-4">
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-muted">Steps</span>
+      </h4>
+      <ul class="list-group mb-3">
+        <li class="list-group-item d-flex justify-content-between bg-light">
+          <div class="text-success">
+            <h6 class="my-0">Personal data</h6>
+            <small>Name and contact details</small>
+          </div>
+          <span class="badge badge-success badge-pill" style="height: 18px;"><span class="fa fa-check" aria-hidden="true"></span></span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between lh-condensed">
+          <div>
+            <h6 class="my-0">Entries</h6>
+            <small class="text-muted">Exhibit(s) participating</small>
+          </div>
+          <span class="badge badge-secondary badge-pill" style="height: 18px;"><span class="fa fa-pencil" aria-hidden="true"></span></span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between lh-condensed">
+          <div>
+            <h6 class="my-0">Travel details</h6>
+            <small class="text-muted">Arrival and departure</small>
+          </div>
+          <span class="badge badge-secondary badge-pill" style="height: 18px;"><span class="fa fa-pencil" aria-hidden="true"></span></span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-md-8 order-md-1">
+      <h4 class="mb-3">Personal data</h4>
+      <form action="/your-name/" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" class="btn btn-success btn-lg btn-block" value="Submit">
+      </form>
+    </div>
+  </div>
+
+  <footer class="my-5 pt-5 text-muted text-center text-small">
+    <ul class="list-inline">
+      <li class="list-inline-item">Logged in as {{ user.username }}</li>
+      <li class="list-inline-item"><a class="text-secondary" href="{% url 'logout' %}">Logout</a></li>
+    </ul>
+  </footer>
 </div>
 {% endblock %}

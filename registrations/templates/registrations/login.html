@@ -27,14 +27,15 @@
   <div class="row">
     <div class="col-md">
     </div>
-    <div class="col-12 col-md-6 text-center">
-      <img class="mt-3 mb-1" src="{% static 'registrations/notos_2021.jpg' %}" alt="NOTOS 2021" width="200" height="203">
-      <p class="text-muted">Welcome to Prospective Exhibitors, National Commissioners, Members of the Jury and the Expert Team, as well as Prospective Visitors to the exhibition and anybody else involved in one way or the other with <a href="http://hps.gr/notos2021/" target="_blank">NOTOS 2021</a>.</p>
-      <p>Please select one of the following to enter:</p>
+    <div class="col-12 col-md-8 py-5 text-center">
+      <img class="d-block mx-auto mb-4" src="{% static 'registrations/notos_2021.jpg' %}" alt="" width="200" height="200">
+      <h2>Registration</h2>
+      <p class="lead">Welcome to Prospective Exhibitors, National Commissioners, Members of the Jury and the Expert Team, as well as Prospective Visitors to the exhibition and anybody else involved in one way or the other with <a class="text-secondary" href="http://hps.gr/notos2021/" target="_blank">NOTOS 2021</a>.</p>
+      <p class="lead">Please select one of the following to enter:</p>
       <div class="row">
         <div class="col">
         </div>
-        <div class="col-8">
+        <div class="col-6">
           <p><a class="btn btn-light btn-block" href="{% url 'social:begin' 'google-oauth2' %}"><span class="fa fa-google" aria-hidden="true"></span> Sign in with Google</a></p>
           <p><button class="btn btn-light btn-block" type="submit"><span class="fa fa-twitter" aria-hidden="true"></span> Sign in with Twitter</button></p>
           <p><button class="btn btn-light btn-block" type="submit"><span class="fa fa-facebook" aria-hidden="true"></span> Sign in with Facebook</button></p>

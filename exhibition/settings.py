@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'registrations.apps.RegistrationsConfig',
     'django_countries',
     'social_django',
+    'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -142,3 +143,9 @@ LOGOUT_REDIRECT_URL = '/'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 from exhibition.oauth2 import *
+
+
+# Form styling with crispy-forms
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
