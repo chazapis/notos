@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'registrations.apps.RegistrationsConfig',
     'django_countries',
     'social_django',
+    'tempus_dominus',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',

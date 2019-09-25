@@ -1,4 +1,5 @@
 from django import forms
+from tempus_dominus.widgets import DateTimePicker
 
 from .models import Participant, Exhibit, ExhibitParticipation, TravelDetails
 
@@ -18,4 +19,7 @@ class TravelDetailsForm(forms.ModelForm):
     class Meta:
         model = TravelDetails
         exclude = ('participant',)
-        widgets = {'step': forms.HiddenInput()}
+        widgets = {'arrival': DateTimePicker(options={'sideBySide': True},
+                                             attrs={'append': 'fa fa-calendar'}),
+                   'departure': DateTimePicker(options={'sideBySide': True},
+                                               attrs={'append': 'fa fa-calendar'})}
