@@ -16,33 +16,27 @@
         <span class="text-muted">Steps</span>
       </h4>
       <ul class="list-group mb-3">
-        <li class="list-group-item d-flex justify-content-between bg-light">
-          <div class="text-success">
-            <h6 class="my-0">Personal data</h6>
-            <small>Name and contact details</small>
+        {% for step in steps %}
+        <li class="list-group-item d-flex justify-content-between {% if step.current %}bg-light{% else %}lh-condensed{% endif %}">
+          <div {% if step.current %}class="text-success"{% endif %}>
+            <h6 class="my-0">{{ step.title }}</h6>
+            <small>{{ step.description }}</small>
           </div>
-          <span class="badge badge-success badge-pill" style="height: 18px;"><span class="fa fa-check" aria-hidden="true"></span></span>
+          <a href="{{ step.url }}" style="line-height: 18px;"><span class="badge {% if step.current %}badge-success{% else %}badge-secondary{% endif %} badge-pill" style="height: 18px;"><span class="fa {% if step.done %}fa-check{% else %}fa-pencil{% endif %}" aria-hidden="true"></span></span></a>
         </li>
-        <li class="list-group-item d-flex justify-content-between lh-condensed">
-          <div>
-            <h6 class="my-0">Entries</h6>
-            <small class="text-muted">Exhibit(s) participating</small>
-          </div>
-          <span class="badge badge-secondary badge-pill" style="height: 18px;"><span class="fa fa-pencil" aria-hidden="true"></span></span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between lh-condensed">
-          <div>
-            <h6 class="my-0">Travel details</h6>
-            <small class="text-muted">Arrival and departure</small>
-          </div>
-          <span class="badge badge-secondary badge-pill" style="height: 18px;"><span class="fa fa-pencil" aria-hidden="true"></span></span>
-        </li>
+        {% endfor %}
       </ul>
     </div>
 
     <div class="col-md-8 order-md-1">
-      <h4 class="mb-3">Personal data</h4>
-      <form action="/your-name/" method="post">
+      <h4 class="mb-3">
+      {% for step in steps %}
+      {% if step.current %}
+      {{ step.title }}
+      {% endif %}
+      {% endfor %}
+      </h4>
+      <form action="{{ action }}" method="post">
         {% csrf_token %}
         {{ form|crispy }}
         <input type="submit" class="btn btn-success btn-lg btn-block" value="Submit">

@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django_countries.fields import CountryField
 from django.core.exceptions import ValidationError
 from datetime import datetime
@@ -11,6 +12,8 @@ class Participant(models.Model):
                      ('DR', 'Dr')]
     LANGUAGE_CHOICES = [('EN', 'English'),
                         ('EL', 'Greek')]
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
 
     title = models.CharField(max_length=4, choices=TITLE_CHOICES, default='MR')
     surname = models.CharField(max_length=128)
@@ -60,7 +63,7 @@ class Exhibit(models.Model):
                              ('Y3', 'Y3. Youth Philately - Exhibitor’s age (at 1.1.2021) 19-21 years')]
     FRAME_CHOICES = [(f, f) for f in (1, 2, 4, 6, 8)]
 
-    participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
+    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='exhibits')
 
     title = models.CharField(max_length=128)
     short_description = models.TextField()
@@ -123,7 +126,7 @@ class TravelDetails(models.Model):
         verbose_name = 'Travel Details'
         verbose_name_plural = 'Travel Details'
 
-    participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
+    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='travel_details')
 
     arrival = models.DateTimeField(null=True, blank=True)
     arrival_flight_number = models.CharField(max_length=8, blank=True)
