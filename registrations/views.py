@@ -73,7 +73,7 @@ def register(request, step='personal'):
     else:
         return redirect('register', step='personal')
 
-    action = reverse('register', kwargs={'step': step})
+    form.helper.form_action = reverse('register', kwargs={'step': step})
     steps = [{'title': 'Personal',
               'description': 'Name and contact details',
               'done': True if participant else False,
@@ -89,7 +89,7 @@ def register(request, step='personal'):
               'done': participant and participant.travel_details.count(),
               'current': step == 'travel',
               'url': reverse('register', kwargs={'step': 'travel'})}]
-    return render(request, 'registrations/register.html', {'action': action, 'form': form, 'steps': steps})
+    return render(request, 'registrations/register.html', {'form': form, 'steps': steps})
 
 def logout(request, next_page):
     auth_logout(request)
