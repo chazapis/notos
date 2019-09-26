@@ -4,6 +4,7 @@ from crispy_forms.layout import Layout, Div, Row, Column, Submit, HTML
 from tempus_dominus.widgets import DateTimePicker
 
 from .models import Participant, Exhibit, ExhibitParticipation, TravelDetails
+from .layout import Formset
 
 
 class ParticipantForm(forms.ModelForm):
@@ -79,6 +80,7 @@ class ExhibitForm(forms.ModelForm):
                     Column('price', css_class='form-group col-md-3 mb-0'),
                     css_class='form-row'
                 ),
+                Formset('formset'),
                 css_class='card card-body bg-light mb-3'
             ),
             Submit('submit', 'Submit', css_class='btn-success btn-lg btn-block')
@@ -106,7 +108,7 @@ class ExhibitParticipationForm(forms.ModelForm):
                 Column('felicitations', css_class='form-group col-md-3 mb-0'),
                 css_class='form-row'
             ),
-            Submit('submit', 'Submit', css_class='btn-success btn-lg btn-block')
+            # Submit('submit', 'Submit', css_class='btn-success btn-lg btn-block')
         )
 
 class TravelDetailsForm(forms.ModelForm):
