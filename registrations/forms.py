@@ -1,6 +1,6 @@
 from django import forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Row, Column
+from crispy_forms.layout import Layout, Div, Row, Column, Submit, HTML
 from tempus_dominus.widgets import DateTimePicker
 
 from .models import Participant, Exhibit, ExhibitParticipation, TravelDetails
@@ -59,22 +59,27 @@ class ExhibitForm(forms.ModelForm):
                 css_class='form-row'
             ),
             'remarks',
-            'author',
-            Row(
-                Column('publisher', css_class='form-group col-md-9 mb-0'),
-                Column('year_of_publication', css_class='form-group col-md-3 mb-0'),
-                css_class='form-row'
-            ),
-            Row(
-                Column('pages', css_class='form-group col-md-4 mb-0'),
-                Column('format', css_class='form-group col-md-5 mb-0'),
-                Column('frequency', css_class='form-group col-md-3 mb-0'),
-                css_class='form-row'
-            ),
-            Row(
-                Column('availability', css_class='form-group col-md-9 mb-0'),
-                Column('price', css_class='form-group col-md-3 mb-0'),
-                css_class='form-row'
+            Div(
+                HTML('<h6 class="mb-0">Philatelic Literature Details</h6>'),
+                HTML('<small class="form-text text-muted">Fill in only if exhibit class is L1-8</small>'),
+                'author',
+                Row(
+                    Column('publisher', css_class='form-group col-md-9 mb-0'),
+                    Column('year_of_publication', css_class='form-group col-md-3 mb-0'),
+                    css_class='form-row'
+                ),
+                Row(
+                    Column('pages', css_class='form-group col-md-4 mb-0'),
+                    Column('format', css_class='form-group col-md-5 mb-0'),
+                    Column('frequency', css_class='form-group col-md-3 mb-0'),
+                    css_class='form-row'
+                ),
+                Row(
+                    Column('availability', css_class='form-group col-md-9 mb-0'),
+                    Column('price', css_class='form-group col-md-3 mb-0'),
+                    css_class='form-row'
+                ),
+                css_class='card card-body bg-light mb-3'
             ),
             Submit('submit', 'Submit', css_class='btn-success btn-lg btn-block')
         )

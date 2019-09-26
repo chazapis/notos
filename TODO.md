@@ -5,4 +5,3 @@
 * Upload introductory/cover page for exhibit
 * Multiple exhibits
 * Thank you/all complete note
-* Show/hide literature details for exhibit
