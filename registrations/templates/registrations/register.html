@@ -41,6 +41,9 @@
       {% endfor %}
       </h4>
       {% crispy form %}
+      {% if formset %}
+      {% crispy formset formset.form.helper %}
+      {% endif %}
     </div>
   </div>
 

@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.forms.models import inlineformset_factory
 from django_countries.fields import CountryField
 from django.core.exceptions import ValidationError
 from datetime import datetime

@@ -84,6 +84,31 @@ class ExhibitForm(forms.ModelForm):
             Submit('submit', 'Submit', css_class='btn-success btn-lg btn-block')
         )
 
+class ExhibitParticipationForm(forms.ModelForm):
+    class Meta:
+        model = ExhibitParticipation
+        fields = ('exhibition_level', 'exhibition_name', 'points', 'medal', 'special_prize', 'felicitations')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout(
+            Row(
+                Column('exhibition_level', css_class='form-group col-md-3 mb-0'),
+                Column('exhibition_name', css_class='form-group col-md-5 mb-0'),
+                Column('points', css_class='form-group col-md-2 mb-0'),
+                Column('medal', css_class='form-group col-md-2 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('special_prize', css_class='form-group col-md-3 mb-0'),
+                Column('felicitations', css_class='form-group col-md-3 mb-0'),
+                css_class='form-row'
+            ),
+            Submit('submit', 'Submit', css_class='btn-success btn-lg btn-block')
+        )
+
 class TravelDetailsForm(forms.ModelForm):
     class Meta:
         model = TravelDetails
