@@ -80,9 +80,9 @@ class ExhibitForm(forms.ModelForm):
                     Column('price', css_class='form-group col-md-3 mb-0'),
                     css_class='form-row'
                 ),
-                Formset('formset'),
                 css_class='card card-body bg-light mb-3'
             ),
+            Formset('formset'),
             Submit('submit', 'Submit', css_class='btn-success btn-lg btn-block')
         )
 
