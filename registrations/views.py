@@ -27,11 +27,17 @@ def register(request, step='personal'):
                 participant.user = request.user
                 participant.save()
         elif step == 'exhibit':
-            form = ExhibitForm(request.POST, instance=participant.exhibits.first())
-            if form.is_valid():
+            # form = ExhibitForm(request.POST, instance=participant.exhibits.first())
+            form = ExhibitForm(request.POST, instance=participant.exhibits.first(), prefix='main')
+            ExhibitParticipationFormSet = inlineformset_factory(Exhibit, ExhibitParticipation, form=ExhibitParticipationForm, extra=1, max_num=6)
+            formset = ExhibitParticipationFormSet(request.POST, instance=participant.exhibits.first(), prefix='nested')
+
+            if form.is_valid() and formset.is_valid():
                 exhibit = form.save(commit=False)
                 exhibit.participant = participant
                 exhibit.save()
+                formset.save()
+
         elif step == 'travel':
             form = TravelDetailsForm(request.POST, instance=participant.travel_details.first())
             if form.is_valid():
@@ -52,7 +58,7 @@ def register(request, step='personal'):
         formset = None
     elif step == 'exhibit':
         form = ExhibitForm(instance=participant.exhibits.first(), prefix='main')
-        ExhibitParticipationFormSet = inlineformset_factory(Exhibit, ExhibitParticipation, form=ExhibitParticipationForm, extra=2, max_num=6)
+        ExhibitParticipationFormSet = inlineformset_factory(Exhibit, ExhibitParticipation, form=ExhibitParticipationForm, extra=1, max_num=6)
         formset = ExhibitParticipationFormSet(instance=participant.exhibits.first(), prefix='nested')
     elif step == 'travel':
         form = TravelDetailsForm(instance=participant.travel_details.first())

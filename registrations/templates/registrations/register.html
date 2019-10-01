@@ -4,6 +4,16 @@
 
 {% block header %}
 {{ form.media }}
+<style>
+  .card>table>tbody>.dynamic-form>td:nth-child(5)>.form-group>.form-check,
+  .card>table>tbody>.dynamic-form>td:nth-child(6)>.form-group>.form-check {
+    margin-top: 2em;
+  }
+  .card>table>tbody>.dynamic-form>td:last-child {
+    width: 20px;
+    text-align: right;
+  }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -11,7 +21,7 @@
   <div class="py-5 text-center">
     <img class="d-block mx-auto mb-4" src="{% static 'registrations/notos_2021.jpg' %}" alt="" width="200" height="200">
     <h2>Registration</h2>
-    <p class="lead">Please fill out the following information to register for <a class="text-secondary" href="http://hps.gr/notos2021/" target="_blank">NOTOS 2021</a>.</p>
+    <p class="lead">Please fill out the following information to register for <a class="text-dark" href="http://hps.gr/notos2021/" target="_blank">NOTOS 2021</a>.</p>
   </div>
 
   <div class="row">
@@ -41,16 +51,13 @@
       {% endfor %}
       </h4>
       {% crispy form %}
-<!--       {% if formset %}
-      {% crispy formset formset.form.helper %}
-      {% endif %}
- -->    </div>
+    </div>
   </div>
 
   <footer class="my-5 pt-5 text-muted text-center text-small">
     <ul class="list-inline">
       <li class="list-inline-item">Logged in as {{ user.username }}</li>
-      <li class="list-inline-item"><a class="text-secondary" href="{% url 'logout' %}">Logout</a></li>
+      <li class="list-inline-item"><a class="text-dark" href="{% url 'logout' %}">Logout</a></li>
     </ul>
   </footer>
 </div>
