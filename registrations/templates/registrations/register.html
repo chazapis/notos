@@ -29,10 +29,16 @@
       <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="text-muted">Steps</span>
       </h4>
+      {% if all_done %}
+      <div class="alert alert-success small" role="alert">
+        Thank you. All registration steps are complete!<br />
+        Click on the icons below to edit your information.
+      </div>
+      {% endif %}
       <ul class="list-group mb-3">
         {% for step in steps %}
         <li class="list-group-item d-flex justify-content-between {% if step.current %}bg-light{% else %}lh-condensed{% endif %}">
-          <div {% if step.current %}class="text-success"{% endif %}>
+          <div class="{% if step.current %}text-success{% else %}text-muted{% endif %}">
             <h6 class="my-0">{{ step.title }}</h6>
             <small>{{ step.description }}</small>
           </div>
