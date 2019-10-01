@@ -16,19 +16,19 @@ def register(request, step=None):
     except Participant.DoesNotExist:
         participant = None
 
-    if not participant:
+    if not participant and step != 'personal':
         return redirect('register', step='personal')
 
     if request.method == 'POST':
         if step == 'personal':
-            form = ParticipantForm(request.POST, instance=participant)
+            form = ParticipantForm(request.POST, request.FILES, instance=participant)
             if form.is_valid():
                 participant = form.save(commit=False)
                 participant.user = request.user
                 participant.save()
         elif step == 'exhibit':
             # form = ExhibitForm(request.POST, instance=participant.exhibits.first())
-            form = ExhibitForm(request.POST, instance=participant.exhibits.first(), prefix='main')
+            form = ExhibitForm(request.POST, request.FILES, instance=participant.exhibits.first(), prefix='main')
             ExhibitParticipationFormSet = inlineformset_factory(Exhibit, ExhibitParticipation, form=ExhibitParticipationForm, extra=1, max_num=6)
             formset = ExhibitParticipationFormSet(request.POST, instance=participant.exhibits.first(), prefix='nested')
             if form.is_valid() and formset.is_valid():

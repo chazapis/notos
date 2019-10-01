@@ -19,6 +19,7 @@ class Participant(models.Model):
     title = models.CharField(max_length=4, choices=TITLE_CHOICES, default='MR')
     surname = models.CharField(max_length=128)
     name = models.CharField(max_length=128, help_text='Include any middle names')
+    photo = models.ImageField(blank=True, upload_to='participant/')
     address = models.TextField()
     country = CountryField()
     commissioner_country = CountryField(blank=True, help_text='State here if you are a national commissioner for another country')
@@ -71,6 +72,7 @@ class Exhibit(models.Model):
     exhibit_class = models.CharField(max_length=4, choices=EXHIBIT_CLASS_CHOICES)
     date_of_birth = models.DateField(null=True, blank=True, help_text='Youth phiilately only')
     frames = models.IntegerField(choices=FRAME_CHOICES)
+    cover = models.FileField(upload_to='exhibit/', blank=True, help_text='Provisional introductory page or cover page if literature')
     remarks = models.TextField(blank=True)
 
     author = models.CharField(max_length=256, blank=True)

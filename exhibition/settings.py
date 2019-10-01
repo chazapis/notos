@@ -125,6 +125,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
+# Uploaded media files
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
 # Authentication with OAuth 2
 
 AUTHENTICATION_BACKENDS = (

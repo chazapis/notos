@@ -10,7 +10,7 @@ from .layout import Formset
 class ParticipantForm(forms.ModelForm):
     class Meta:
         model = Participant
-        fields = ('title', 'surname', 'name', 'address', 'country', 'commissioner_country', 'telephone', 'mobile', 'language', 'remarks')
+        fields = ('title', 'surname', 'name', 'photo', 'address', 'country', 'commissioner_country', 'telephone', 'mobile', 'language', 'remarks')
         widgets = {'address': forms.Textarea(attrs={'rows': 3}),
                    'remarks': forms.Textarea(attrs={'rows': 3})}
 
@@ -24,6 +24,8 @@ class ParticipantForm(forms.ModelForm):
                 Column('surname', css_class='form-group col-md-5 mb-0'),
                 css_class='form-row'
             ),
+            'photo',
+            # HTML("""{% if form.photo.value %}<img class="img-responsive" src="{{ MEDIA_URL }}{{ form.photo.value }}">{% endif %}""", ),
             'address',
             Row(
                 Column('country', css_class='form-group col-md-6 mb-0'),
@@ -43,7 +45,8 @@ class ParticipantForm(forms.ModelForm):
 class ExhibitForm(forms.ModelForm):
     class Meta:
         model = Exhibit
-        fields = ('title', 'short_description', 'exhibit_class', 'date_of_birth', 'frames', 'remarks', 'author', 'publisher', 'year_of_publication', 'pages', 'format', 'frequency', 'availability', 'price')
+        fields = ('title', 'short_description', 'exhibit_class', 'date_of_birth', 'frames', 'cover', 'remarks', 'author', 'publisher', 'year_of_publication', 'pages', 'format', 'frequency', 'availability', 'price')
+        labels = {'cover': 'Introductory page or cover'}
         widgets = {'short_description': forms.Textarea(attrs={'rows': 5}),
                    'remarks': forms.Textarea(attrs={'rows': 3})}
 
@@ -59,6 +62,7 @@ class ExhibitForm(forms.ModelForm):
                 Column('date_of_birth', css_class='form-group col-md-3 mb-0'),
                 css_class='form-row'
             ),
+            'cover',
             'remarks',
             Div(
                 HTML('<h6 class="mb-0">Previous Participations</h6>'),
@@ -94,7 +98,8 @@ class ExhibitParticipationForm(forms.ModelForm):
     class Meta:
         model = ExhibitParticipation
         fields = ('exhibition_level', 'exhibition_name', 'points', 'medal', 'special_prize', 'felicitations')
-        labels = {'special_prize': 'SP', 'felicitations': 'F'}
+        labels = {'special_prize': 'SP',
+                  'felicitations': 'F'}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -105,8 +110,6 @@ class TravelDetailsForm(forms.ModelForm):
     class Meta:
         model = TravelDetails
         fields = ('arrival', 'arrival_flight_number', 'departure', 'departure_flight_number', 'ticket_price', 'spouse', 'spouse_surname', 'spouse_name', 'remarks')
-        widgets = {'address': forms.Textarea(attrs={'rows': 3}),
-                   'remarks': forms.Textarea(attrs={'rows': 3})}
         widgets = {'arrival': DateTimePicker(options={'sideBySide': True},
                                              attrs={'append': 'fa fa-calendar'}),
                    'departure': DateTimePicker(options={'sideBySide': True},
