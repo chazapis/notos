@@ -23,7 +23,7 @@ python manage.py runserver
 
 And you are done.
 
-For deployment, assuming a Debian/Ubuntu system and the code checked out in `/srv/` (edit the scripts to change), instead of the above do:
+For deployment, assuming a Debian/Ubuntu system and the code checked out in `/srv/` (edit the scripts to change), instead of the above, do:
 
 ```
 export DJANGO_SETTINGS_MODULE=exhibition.settings.production
@@ -32,7 +32,7 @@ chown www-data:www-data media
 mkdir static
 python manage.py collectstatic
 python manage.py migrate
-chown www-data:www-data db.sqlite3
+chown www-data:www-data . db.sqlite3
 python manage.py createsuperuser
 ```
 
@@ -43,15 +43,24 @@ Edit `scripts/apache2/exhibition.conf` for your domain (you may also need to set
 Then:
 ```
 apt-get install supervisor
-cp scripts/supervisor/* /etc/supervisor/conf.d/
+cp scripts/supervisor/exhibition.conf /etc/supervisor/conf.d/
 supervisorctl reload
 
 apt-get install apache2
-cp scripts/apache2/* /etc/apache2/sites-available/
+cp scripts/apache2/exhibition.conf /etc/apache2/sites-available/
 a2enmod proxy_http
+a2enmod headers
 a2ensite exhibition
-service apache2 reload
+service apache2 restart
 ```
+
+Make sure it works, then enable SSL:
+```
+apt-get install python3-certbot-apache
+certbot --apache -d <your.domain>
+```
+
+`certbot` will get the certificate, update the Apache configuration to redirect all traffic to HTTPS, and even install a cron script to renew the certificate when necessary.
 
 ## Customizing
 

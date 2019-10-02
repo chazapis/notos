@@ -14,5 +14,5 @@ test -d $LOGDIR || mkdir -p $LOGDIR
 exec gunicorn $APPNAME.wsgi:application \
   -w $NUM_WORKERS -b 127.0.0.1:$PORT \
   --user=$USER --group=$GROUP \
-  --timeout=600 --log-level=debug --log-file=$LOGFILE 2>>$LOGFILE
+  --timeout=600 --log-level=info --log-file=$LOGFILE 2>>$LOGFILE
 exit 0
