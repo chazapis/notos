@@ -1,6 +1,7 @@
 venv
 db.sqlite3
 media
+static
 *.pyc
 oauth2.py
 production.py

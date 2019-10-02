@@ -21,15 +21,36 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-The following instructions are for deployment, assuming a Debian/Ubuntu system and the code checked out in `/srv/` (edit the scripts to change).
+And you are done.
+
+For deployment, assuming a Debian/Ubuntu system and the code checked out in `/srv/` (edit the scripts to change), instead of the above do:
+
+```
+export DJANGO_SETTINGS_MODULE=exhibition.settings.production
+mkdir media
+chown www-data:www-data media
+mkdir static
+python manage.py collectstatic
+python manage.py migrate
+chown www-data:www-data db.sqlite3
+python manage.py createsuperuser
+```
 
 Copy `exhibition/settings/production-empty.py` to `exhibition/settings/production.py` and fill in the settings (consult the [docs](https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/)).
+
+Edit `scripts/apache2/exhibition.conf` for your domain (you may also need to set a dummy `ServerName` in `/etc/apache2/sites-available/000-default.conf`).
 
 Then:
 ```
 apt-get install supervisor
 cp scripts/supervisor/* /etc/supervisor/conf.d/
 supervisorctl reload
+
+apt-get install apache2
+cp scripts/apache2/* /etc/apache2/sites-available/
+a2enmod proxy_http
+a2ensite exhibition
+service apache2 reload
 ```
 
 ## Customizing

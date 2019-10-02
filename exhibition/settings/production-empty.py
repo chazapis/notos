@@ -4,4 +4,7 @@ SECRET_KEY = ''
 
 DEBUG = False
 
-ALLOWED_HOSTS = []
+USE_X_FORWARDED_HOST = True
+ALLOWED_HOSTS = ['*']
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
