@@ -21,10 +21,15 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-For deployment, copy `exhibition/settings/production-empty.py` to `exhibition/settings/production.py` and fill in the settings (consult the [docs](https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/)).
+The following instructions are for deployment, assuming a Debian/Ubuntu system and the code checked out in `/srv/` (edit the scripts to change).
+
+Copy `exhibition/settings/production-empty.py` to `exhibition/settings/production.py` and fill in the settings (consult the [docs](https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/)).
 
 Then:
 ```
+apt-get install supervisor
+cp scripts/supervisor/* /etc/supervisor/conf.d/
+supervisorctl reload
 ```
 
 ## Customizing

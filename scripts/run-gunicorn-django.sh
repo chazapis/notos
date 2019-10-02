@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-APPNAME=notos
+APPNAME=exhibition
 PORT=8080
 APPDIR=/srv/notos
 LOGDIR=/var/log/gunicorn
@@ -14,6 +14,5 @@ test -d $LOGDIR || mkdir -p $LOGDIR
 exec gunicorn $APPNAME.wsgi:application \
   -w $NUM_WORKERS -b 127.0.0.1:$PORT \
   --user=$USER --group=$GROUP \
-  --settings=$APPNAME.settings.production \
   --timeout=600 --log-level=debug --log-file=$LOGFILE 2>>$LOGFILE
 exit 0
