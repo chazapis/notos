@@ -3,3 +3,4 @@ db.sqlite3
 media
 *.pyc
 oauth2.py
+production.py

@@ -4,3 +4,4 @@ social-auth-app-django==3.1.0
 django-crispy-forms==1.7.2
 django-tempus-dominus==5.1.2.8
 Pillow==6.1.0
+gunicorn==19.9.0
