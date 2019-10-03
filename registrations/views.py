@@ -47,6 +47,8 @@ def register(request, step=None):
                 travel_details = form.save(commit=False)
                 travel_details.participant = participant
                 travel_details.save()
+        else:
+            step = 'personal'
 
         return redirect('register', step=step)
 
