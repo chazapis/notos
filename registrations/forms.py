@@ -3,7 +3,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Row, Column, Submit, HTML
 from tempus_dominus.widgets import DateTimePicker
 
-from .models import Participant, Official, Exhibit, ExhibitParticipation, TravelDetails
+from .models import Participant, Appointments, Exhibit, ExhibitParticipation, TravelDetails
 from .layout import Formset
 
 
@@ -38,13 +38,12 @@ class ParticipantForm(forms.ModelForm):
                 css_class='form-row'
             ),
             'remarks',
-            HTML('<div class="alert alert-warning small" role="alert">By submitting this entry form the exhibitor accepts the Regulations listed in article 2.1. and confirms the truthfulness of all data entered.</div>'),
             Submit('submit', 'Submit', css_class='btn-success btn-lg btn-block')
         )
 
-class OfficialForm(forms.ModelForm):
+class AppointmentsForm(forms.ModelForm):
     class Meta:
-        model = Official
+        model = Appointments
         fields = ('federation', 'commissioner', 'jury', 'apprentice_jury', 'accredited_juror', 'accredited_juror_disciplines', 'team_leader', 'team_leader_disciplines')
         labels = {'federation': 'National federation name',
                   'commissioner': 'Appointed national commissioner',
@@ -65,15 +64,16 @@ class OfficialForm(forms.ModelForm):
             'accredited_juror_disciplines',
             'team_leader',
             'team_leader_disciplines',
-            HTML('<div class="alert alert-warning small" role="alert">By submitting this entry form the exhibitor accepts the Regulations listed in article 2.1. and confirms the truthfulness of all data entered.</div>'),
             Submit('submit', 'Submit', css_class='btn-success btn-lg btn-block')
         )
 
 class ExhibitForm(forms.ModelForm):
     class Meta:
         model = Exhibit
-        fields = ('title', 'short_description', 'exhibit_class', 'date_of_birth', 'frames', 'cover', 'remarks', 'author', 'publisher', 'year_of_publication', 'language', 'pages', 'format', 'frequency', 'availability', 'price')
-        labels = {'cover': 'Introductory page and Synopsis (Front cover and Short abstract if Philatelic Literature)'}
+        fields = ('title', 'short_description', 'exhibit_class', 'date_of_birth', 'frames', 'introductory_page', 'synopsis', 'remarks', 'author', 'publisher', 'year_of_publication', 'language', 'pages', 'format', 'frequency', 'availability', 'price')
+        labels = {'introductory_page': 'Introductory page (Front cover if Philatelic Literature)',
+                  'synopsis': 'Synopsis (Short abstract if Philatelic Literature)',
+                  'language': 'Language(s)'}
         widgets = {'short_description': forms.Textarea(attrs={'rows': 5}),
                    'remarks': forms.Textarea(attrs={'rows': 3})}
 
@@ -89,7 +89,8 @@ class ExhibitForm(forms.ModelForm):
                 Column('date_of_birth', css_class='form-group col-md-3 mb-0'),
                 css_class='form-row'
             ),
-            'cover',
+            'introductory_page',
+            'synopsis',
             'remarks',
             Div(
                 HTML('<h6 class="mb-0">Previous Participations</h6>'),
@@ -105,10 +106,10 @@ class ExhibitForm(forms.ModelForm):
                     Column('year_of_publication', css_class='form-group col-md-3 mb-0'),
                     css_class='form-row'
                 ),
+                'language',
                 Row(
-                    Column('language', css_class='form-group col-md-3 mb-0'),
-                    Column('pages', css_class='form-group col-md-2 mb-0'),
-                    Column('format', css_class='form-group col-md-4 mb-0'),
+                    Column('pages', css_class='form-group col-md-4 mb-0'),
+                    Column('format', css_class='form-group col-md-5 mb-0'),
                     Column('frequency', css_class='form-group col-md-3 mb-0'),
                     css_class='form-row'
                 ),
@@ -173,6 +174,5 @@ class TravelDetailsForm(forms.ModelForm):
                 css_class='form-row'
             ),
             'remarks',
-            HTML('<div class="alert alert-warning small" role="alert">By submitting this entry form the exhibitor accepts the Regulations listed in article 2.1. and confirms the truthfulness of all data entered.</div>'),
             Submit('submit', 'Submit', css_class='btn-success btn-lg btn-block')
         )

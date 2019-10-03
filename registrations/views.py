@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, reverse
 from django.forms import inlineformset_factory
 from django.contrib.auth import logout as auth_logout
 
-from .models import Participant, Official, Exhibit, ExhibitParticipation, TravelDetails
-from .forms import ParticipantForm, OfficialForm, ExhibitForm, ExhibitParticipationForm, TravelDetailsForm
+from .models import Participant, Appointments, Exhibit, ExhibitParticipation, TravelDetails
+from .forms import ParticipantForm, AppointmentsForm, ExhibitForm, ExhibitParticipationForm, TravelDetailsForm
 
 
 def register(request, step=None):
@@ -25,12 +25,12 @@ def register(request, step=None):
                 participant = form.save(commit=False)
                 participant.user = request.user
                 participant.save()
-        elif step == 'official':
-            form = OfficialForm(request.POST, instance=participant.official.first())
+        elif step == 'appointments':
+            form = AppointmentsForm(request.POST, instance=participant.appointments.first())
             if form.is_valid():
-                official = form.save(commit=False)
-                official.participant = participant
-                official.save()
+                appointments = form.save(commit=False)
+                appointments.participant = participant
+                appointments.save()
         elif step == 'exhibit':
             # form = ExhibitForm(request.POST, instance=participant.exhibits.first())
             form = ExhibitForm(request.POST, request.FILES, instance=participant.exhibits.first(), prefix='main')
@@ -53,8 +53,8 @@ def register(request, step=None):
     if step == 'personal':
         form = ParticipantForm(instance=participant)
         formset = None
-    elif step == 'official':
-        form = OfficialForm(instance=participant.official.first())
+    elif step == 'appointments':
+        form = AppointmentsForm(instance=participant.appointments.first())
         formset = None
     elif step == 'exhibit':
         form = ExhibitForm(instance=participant.exhibits.first(), prefix='main')
@@ -72,12 +72,12 @@ def register(request, step=None):
               'done': True if participant else False,
               'current': step == 'personal',
               'url': reverse('register', kwargs={'step': 'personal'})},
-             {'title': 'Official',
+             {'title': 'Appointments',
               'description': 'Commissioner/Jury data',
-              'done': participant and participant.official.count(),
-              'current': step == 'official',
-              'url': reverse('register', kwargs={'step': 'official'})},
-             {'title': 'Entries',
+              'done': participant and participant.appointments.count(),
+              'current': step == 'appointments',
+              'url': reverse('register', kwargs={'step': 'appointments'})},
+             {'title': 'Entry forms',
               'description': 'Exhibit(s) participating',
               'done': participant and participant.exhibits.count(),
               'current': step == 'exhibit',

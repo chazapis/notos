@@ -37,10 +37,14 @@ class Participant(models.Model):
     def __str__(self):
         return self.full_name()
 
-class Official(models.Model):
+class Appointments(models.Model):
     ACCREDITED_JUROR_CHOICES = [(f, f) for f in ('FIP', 'FEPA')]
 
-    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='official')
+    class Meta:
+        verbose_name = 'Appointments'
+        verbose_name_plural = 'Appointments'
+
+    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='appointments')
 
     federation = models.CharField(max_length=128)
     commissioner = models.BooleanField()
@@ -85,9 +89,10 @@ class Exhibit(models.Model):
     title = models.CharField(max_length=128)
     short_description = models.TextField()
     exhibit_class = models.CharField(max_length=4, choices=EXHIBIT_CLASS_CHOICES)
-    date_of_birth = models.DateField(null=True, blank=True, help_text='Youth phiilately only')
+    date_of_birth = models.DateField(null=True, blank=True, help_text='Youth philately only')
     frames = models.IntegerField(choices=FRAME_CHOICES)
-    cover = models.FileField(upload_to='exhibit/', blank=True, help_text='Provisional introductory page or cover page if literature')
+    introductory_page = models.FileField(upload_to='exhibit/')
+    synopsis = models.FileField(upload_to='exhibit/', blank=True)
     remarks = models.TextField(blank=True)
 
     author = models.CharField(max_length=256, blank=True)
