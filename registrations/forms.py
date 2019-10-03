@@ -25,7 +25,7 @@ class ParticipantForm(forms.ModelForm):
                 css_class='form-row'
             ),
             'photo',
-            # HTML("""{% if form.photo.value %}<img class="img-responsive" src="{{ MEDIA_URL }}{{ form.photo.value }}">{% endif %}""", ),
+            # HTML('{% if form.photo.value %}<img class="img-responsive" src="{{ MEDIA_URL }}{{ form.photo.value }}">{% endif %}'),
             'address',
             Row(
                 Column('country', css_class='form-group col-md-6 mb-0'),
@@ -64,7 +64,8 @@ class AppointmentsForm(forms.ModelForm):
             'accredited_juror_disciplines',
             'team_leader',
             'team_leader_disciplines',
-            Submit('submit', 'Submit', css_class='btn-success btn-lg btn-block')
+            HTML('{% if not required_done %}<div class="alert alert-warning small" role="alert">To enable this form, please fill in your personal information first.</div>{% endif %}'),
+            HTML('<input type="submit" class="btn btn-success btn-lg btn-block" value="Submit" {% if not required_done %}disabled{% endif %}>')
         )
 
 class ExhibitForm(forms.ModelForm):
@@ -120,8 +121,9 @@ class ExhibitForm(forms.ModelForm):
                 ),
                 css_class='card card-body bg-light mb-3'
             ),
-            HTML('<div class="alert alert-warning small" role="alert">By submitting this entry form the exhibitor accepts the Regulations listed in article 2.1. and confirms the truthfulness of all data entered.</div>'),
-            Submit('submit', 'Submit', css_class='btn-success btn-lg btn-block')
+            HTML('{% if required_done %}<div class="alert alert-warning small" role="alert">By submitting this entry form the exhibitor accepts the Regulations listed in article 2.1. and confirms the truthfulness of all data entered.</div>{% endif %}'),
+            HTML('{% if not required_done %}<div class="alert alert-warning small" role="alert">To enable this form, please fill in your personal information first.</div>{% endif %}'),
+            HTML('<input type="submit" class="btn btn-success btn-lg btn-block" value="Submit" {% if not required_done %}disabled{% endif %}>')
         )
 
 class ExhibitParticipationForm(forms.ModelForm):
@@ -174,5 +176,6 @@ class TravelDetailsForm(forms.ModelForm):
                 css_class='form-row'
             ),
             'remarks',
-            Submit('submit', 'Submit', css_class='btn-success btn-lg btn-block')
+            HTML('{% if not required_done %}<div class="alert alert-warning small" role="alert">To enable this form, please fill in your personal information first.</div>{% endif %}'),
+            HTML('<input type="submit" class="btn btn-success btn-lg btn-block" value="Submit" {% if not required_done %}disabled{% endif %}>')
         )

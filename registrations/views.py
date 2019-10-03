@@ -15,10 +15,10 @@ def register(request, step=None):
     except Participant.DoesNotExist:
         participant = None
 
-    if not participant and step != 'personal':
-        return redirect('register', step='personal')
-
     if request.method == 'POST':
+        if not participant and step != 'personal':
+            return redirect('register', step='personal')
+
         if step == 'personal':
             form = ParticipantForm(request.POST, request.FILES, instance=participant)
             if form.is_valid():
@@ -56,14 +56,17 @@ def register(request, step=None):
         form = ParticipantForm(instance=participant)
         formset = None
     elif step == 'appointments':
-        form = AppointmentsForm(instance=participant.appointments.first())
+        appointments = participant.appointments.first() if participant else None
+        form = AppointmentsForm(instance=appointments)
         formset = None
     elif step == 'exhibit':
-        form = ExhibitForm(instance=participant.exhibits.first(), prefix='main')
+        exhibit = participant.exhibits.first() if participant else None
+        form = ExhibitForm(instance=exhibit, prefix='main')
         ExhibitParticipationFormSet = inlineformset_factory(Exhibit, ExhibitParticipation, form=ExhibitParticipationForm, extra=1, max_num=6)
-        formset = ExhibitParticipationFormSet(instance=participant.exhibits.first(), prefix='nested')
+        formset = ExhibitParticipationFormSet(instance=exhibit, prefix='nested')
     elif step == 'travel':
-        form = TravelDetailsForm(instance=participant.travel_details.first())
+        travel_details = participant.travel_details.first() if participant else None
+        form = TravelDetailsForm(instance=travel_details)
         formset = None
     else:
         return redirect('register', step='personal')
