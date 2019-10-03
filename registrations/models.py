@@ -38,7 +38,9 @@ class Participant(models.Model):
         return self.full_name()
 
 class Appointments(models.Model):
-    ACCREDITED_JUROR_CHOICES = [(f, f) for f in ('FIP', 'FEPA')]
+    ACCREDITED_JUROR_CHOICES = [('FIP', 'FIP'),
+                                ('FEPA', 'FEPA'),
+                                ('NAT', 'National')]
 
     class Meta:
         verbose_name = 'Appointments'
