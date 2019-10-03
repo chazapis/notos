@@ -1,4 +1,4 @@
 # TODO
 
 * Multiple exhibits
-* Twitter and Facebook logins
+* Twitter and Facebook emails
