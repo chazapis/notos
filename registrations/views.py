@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect, reverse
 from django.forms import inlineformset_factory
-from django.http import HttpResponse
 from django.contrib.auth import logout as auth_logout
 
-from .models import Participant, Exhibit, ExhibitParticipation, TravelDetails
-from .forms import ParticipantForm, ExhibitForm, ExhibitParticipationForm, TravelDetailsForm
+from .models import Participant, Official, Exhibit, ExhibitParticipation, TravelDetails
+from .forms import ParticipantForm, OfficialForm, ExhibitForm, ExhibitParticipationForm, TravelDetailsForm
 
 
 def register(request, step=None):
@@ -26,6 +25,12 @@ def register(request, step=None):
                 participant = form.save(commit=False)
                 participant.user = request.user
                 participant.save()
+        elif step == 'official':
+            form = OfficialForm(request.POST, instance=participant.official.first())
+            if form.is_valid():
+                official = form.save(commit=False)
+                official.participant = participant
+                official.save()
         elif step == 'exhibit':
             # form = ExhibitForm(request.POST, instance=participant.exhibits.first())
             form = ExhibitForm(request.POST, request.FILES, instance=participant.exhibits.first(), prefix='main')
@@ -43,15 +48,13 @@ def register(request, step=None):
                 travel_details.participant = participant
                 travel_details.save()
 
-        next_step = step
-        if participant.exhibits.count() == 0:
-            next_step = 'exhibit'
-        elif participant.travel_details.count() == 0:
-            next_step = 'travel'
-        return redirect('register', step=next_step)
+        return redirect('register', step=step)
 
     if step == 'personal':
         form = ParticipantForm(instance=participant)
+        formset = None
+    elif step == 'official':
+        form = OfficialForm(instance=participant.official.first())
         formset = None
     elif step == 'exhibit':
         form = ExhibitForm(instance=participant.exhibits.first(), prefix='main')
@@ -61,12 +64,7 @@ def register(request, step=None):
         form = TravelDetailsForm(instance=participant.travel_details.first())
         formset = None
     else:
-        next_step = 'personal'
-        if participant.exhibits.count() == 0:
-            next_step = 'exhibit'
-        elif participant.travel_details.count() == 0:
-            next_step = 'travel'
-        return redirect('register', step=next_step)
+        return redirect('register', step='personal')
 
     form.helper.form_action = reverse('register', kwargs={'step': step})
     steps = [{'title': 'Personal',
@@ -74,6 +72,11 @@ def register(request, step=None):
               'done': True if participant else False,
               'current': step == 'personal',
               'url': reverse('register', kwargs={'step': 'personal'})},
+             {'title': 'Official',
+              'description': 'Commissioner/Jury data',
+              'done': participant and participant.official.count(),
+              'current': step == 'official',
+              'url': reverse('register', kwargs={'step': 'official'})},
              {'title': 'Entries',
               'description': 'Exhibit(s) participating',
               'done': participant and participant.exhibits.count(),
@@ -84,8 +87,8 @@ def register(request, step=None):
               'done': participant and participant.travel_details.count(),
               'current': step == 'travel',
               'url': reverse('register', kwargs={'step': 'travel'})}]
-    all_done = (participant and participant.exhibits.count() and participant.travel_details.count())
-    return render(request, 'registrations/register.html', {'form': form, 'formset': formset, 'steps': steps, 'all_done': all_done})
+    required_done = True if participant else False
+    return render(request, 'registrations/register.html', {'form': form, 'formset': formset, 'steps': steps, 'required_done': required_done})
 
 def logout(request, next_page):
     auth_logout(request)

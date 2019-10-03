@@ -1,9 +1,7 @@
 from django.db import models
 from django.conf import settings
-from django.forms.models import inlineformset_factory
 from django_countries.fields import CountryField
 from django.core.exceptions import ValidationError
-from datetime import datetime
 
 
 class Participant(models.Model):
@@ -22,7 +20,6 @@ class Participant(models.Model):
     photo = models.ImageField(blank=True, upload_to='participant/')
     address = models.TextField()
     country = CountryField()
-    commissioner_country = CountryField(blank=True, help_text='State here if you are a national commissioner for another country')
     telephone = models.CharField(max_length=32, blank=True)
     mobile = models.CharField(max_length=32)
     language = models.CharField(max_length=2, choices=LANGUAGE_CHOICES, default='EN', help_text='Communication language')
@@ -39,6 +36,23 @@ class Participant(models.Model):
 
     def __str__(self):
         return self.full_name()
+
+class Official(models.Model):
+    ACCREDITED_JUROR_CHOICES = [(f, f) for f in ('FIP', 'FEPA')]
+
+    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='official')
+
+    federation = models.CharField(max_length=128)
+    commissioner = models.BooleanField()
+    jury = models.BooleanField()
+    apprentice_jury = models.BooleanField()
+    accredited_juror = models.CharField(max_length=4, blank=True, choices=ACCREDITED_JUROR_CHOICES)
+    accredited_juror_disciplines = models.CharField(blank=True, max_length=128)
+    team_leader = models.BooleanField()
+    team_leader_disciplines = models.CharField(blank=True, max_length=128)
+
+    def __str__(self):
+        return str(self.participant)
 
 class Exhibit(models.Model):
     EXHIBIT_CLASS_CHOICES = [('B1', 'B1. Classe des Champions'),
@@ -62,8 +76,9 @@ class Exhibit(models.Model):
                              ('L8', 'L8. Philatelic Literature – Other digital works'),
                              ('Y1', 'Y1. Youth Philately - Exhibitor’s age (at 1.1.2021) 10-15 years'),
                              ('Y2', 'Y2. Youth Philately - Exhibitor’s age (at 1.1.2021) 16-18 years'),
-                             ('Y3', 'Y3. Youth Philately - Exhibitor’s age (at 1.1.2021) 19-21 years')]
-    FRAME_CHOICES = [(f, f) for f in (1, 2, 4, 6, 8)]
+                             ('Y3', 'Y3. Youth Philately - Exhibitor’s age (at 1.1.2021) 19-21 years'),
+                             ('Α4', 'A4. Other exhibits (non-competitive)')]
+    FRAME_CHOICES = [(f, f) for f in range(1, 9)]
 
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='exhibits')
 
@@ -78,6 +93,7 @@ class Exhibit(models.Model):
     author = models.CharField(max_length=256, blank=True)
     publisher = models.CharField(max_length=128, blank=True)
     year_of_publication = models.IntegerField(null=True, blank=True)
+    language = models.CharField(max_length=64, blank=True)
     pages = models.IntegerField(null=True, blank=True)
     format = models.CharField(max_length=64, blank=True)
     frequency = models.CharField(max_length=64, blank=True)
@@ -95,7 +111,10 @@ class ExhibitParticipation(models.Model):
                                 ('CONT', 'FEPA/FIAF/FIAP Continental'),
                                 ('INT', 'Other International'),
                                 ('NAT', 'National')]
-    MEDAL_CHOICES = [('LG', 'Large Gold'),
+    MEDAL_CHOICES = [('GPdH', 'GPd\'H Candidate'),
+                     ('GP', 'GP Winner'),
+                     ('GPC', 'GP Candidate'),
+                     ('LG', 'Large Gold'),
                      ('G', 'Gold'),
                      ('LV', 'Large Vermeil'),
                      ('V', 'Vermeil'),
@@ -113,7 +132,7 @@ class ExhibitParticipation(models.Model):
     exhibition_level = models.CharField(max_length=8, choices=EXHIBITION_LEVEL_CHOICES)
     exhibition_name = models.CharField(max_length=128)
     points = models.IntegerField()
-    medal = models.CharField(max_length=2, choices=MEDAL_CHOICES, blank=True)
+    medal = models.CharField(max_length=4, choices=MEDAL_CHOICES, blank=True)
     special_prize = models.BooleanField()
     felicitations = models.BooleanField()
 
@@ -139,6 +158,8 @@ class TravelDetails(models.Model):
     spouse = models.BooleanField()
     spouse_surname = models.CharField(max_length=128, blank=True)
     spouse_name = models.CharField(max_length=128, blank=True, help_text='Include any middle names')
+    hotel = models.CharField(max_length=128, blank=True)
+    hotel_website = models.CharField(max_length=256, blank=True)
     remarks = models.TextField(blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
