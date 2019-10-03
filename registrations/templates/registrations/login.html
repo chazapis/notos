@@ -37,7 +37,7 @@
         </div>
         <div class="col-6">
           <p><a class="btn btn-light btn-block" href="{% url 'social:begin' 'google-oauth2' %}"><span class="fa fa-google" aria-hidden="true"></span> Sign in with Google</a></p>
-          <p><button class="btn btn-light btn-block" type="submit"><span class="fa fa-twitter" aria-hidden="true"></span> Sign in with Twitter</button></p>
+          <p><a class="btn btn-light btn-block" href="{% url 'social:begin' 'twitter' %}"><span class="fa fa-twitter" aria-hidden="true"></span> Sign in with Twitter</a></p>
           <p><a class="btn btn-light btn-block" href="{% url 'social:begin' 'facebook' %}"><span class="fa fa-facebook" aria-hidden="true"></span> Sign in with Facebook</a></p>
         </div>
         <div class="col">
