@@ -1,6 +1,8 @@
 from django import forms
+from django.conf import settings
+from django.core.exceptions import ValidationError
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Div, Row, Column, Submit, HTML
+from crispy_forms.layout import Layout, Div, Row, Column, Field, Submit, HTML
 from tempus_dominus.widgets import DateTimePicker
 
 from .models import Participant, Appointments, Exhibit, ExhibitParticipation, TravelDetails
@@ -43,6 +45,8 @@ class ParticipantForm(forms.ModelForm):
         )
 
 class AppointmentsForm(forms.ModelForm):
+    authorization_key = forms.CharField(widget=forms.PasswordInput, help_text='As provided by your national federation')
+
     class Meta:
         model = Appointments
         fields = ('federation', 'commissioner', 'jury', 'apprentice_jury', 'accredited_juror', 'accredited_juror_disciplines', 'team_leader', 'team_leader_disciplines')
@@ -65,9 +69,16 @@ class AppointmentsForm(forms.ModelForm):
             'accredited_juror_disciplines',
             'team_leader',
             'team_leader_disciplines',
+            'authorization_key',
             HTML('{% if not required_done %}<div class="alert alert-warning small" role="alert">To enable this form, please fill in your personal information first.</div>{% endif %}'),
             HTML('<input type="submit" class="btn btn-success btn-lg btn-block" value="Submit" {% if not required_done %}disabled{% endif %}>')
         )
+
+    def clean_authorization_key(self):
+        key = self.cleaned_data['authorization_key']
+        if key != settings.APPOINTMENTS_AUTHORIZATION_KEY:
+            raise ValidationError('Invalid key')
+        return key
 
 class ExhibitForm(forms.ModelForm):
     class Meta:

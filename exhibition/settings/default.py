@@ -162,3 +162,7 @@ from .oauth2 import *
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+
+# Authorization key to register appointments
+
+APPOINTMENTS_AUTHORIZATION_KEY = 'KEY'

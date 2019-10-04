@@ -48,7 +48,7 @@
         {% endfor %}
       </ul>
       {% if required_done %}
-      <a href="{% url 'print' %}" class="btn btn-secondary btn-sm btn-block"><span class="fa fa-print" aria-hidden="true"></span></a>
+      <a class="btn btn-secondary btn-sm btn-block" href="{% url 'print' %}" target="_blank"><span class="fa fa-print" aria-hidden="true"></span></a>
       {% endif %}
     </div>
 
@@ -89,7 +89,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <a href="{{ remove_url }}" class="btn btn-danger">Remove</a>
+              <a class="btn btn-danger" href="{{ remove_url }}">Remove</a>
             </div>
           </div>
         </div>
