@@ -16,6 +16,33 @@ def register(request, step=None, exhibit_id=None):
     except Participant.DoesNotExist:
         participant = None
 
+    if step == 'personal':
+        form_title = 'Personal'
+        remove_url = None
+    elif step == 'appointments':
+        form_title = 'Appointments'
+        remove_url = None
+    elif step == 'exhibit':
+        if exhibit_id is not None:
+            try:
+                exhibit = participant.exhibits.get(id=exhibit_id)
+            except Exhibit.DoesNotExist:
+                return redirect('register', step='exhibit')
+        else:
+            exhibit = None
+
+        if exhibit is None:
+            form_title = 'Add entry'
+            remove_url = None
+        else:
+            form_title = '<a href="' + reverse('register', kwargs={'step': step}) + '" class="text-dark">Entry forms</a> &gt; Edit entry'
+            remove_url = reverse('remove_exhibit', kwargs={'exhibit_id': exhibit.id})
+    elif step == 'travel':
+        form_title = 'Travel details'
+        remove_url = None
+    else:
+        return redirect('register', step='personal')
+
     if request.method == 'POST':
         if not participant and step != 'personal':
             return redirect('register', step='personal')
@@ -26,85 +53,61 @@ def register(request, step=None, exhibit_id=None):
                 participant = form.save(commit=False)
                 participant.user = request.user
                 participant.save()
+                return redirect('register', step=step)
         elif step == 'appointments':
             form = AppointmentsForm(request.POST, instance=participant.appointments.first())
             if form.is_valid():
                 appointments = form.save(commit=False)
                 appointments.participant = participant
                 appointments.save()
+                return redirect('register', step=step)
         elif step == 'exhibit':
-            if exhibit_id is not None:
-                try:
-                    exhibit = participant.exhibits.get(id=exhibit_id)
-                except Exhibit.DoesNotExist:
-                    return redirect('register', step='exhibit')
-            else:
-                exhibit = None
-
             form = ExhibitForm(request.POST, request.FILES, instance=exhibit, prefix='main')
-            ExhibitParticipationFormSet = inlineformset_factory(Exhibit, ExhibitParticipation, form=ExhibitParticipationForm, extra=1, max_num=6)
-            formset = ExhibitParticipationFormSet(request.POST, instance=exhibit, prefix='nested')
-            if form.is_valid() and formset.is_valid():
+            if exhibit is None:
+                form.helper.form_action = reverse('register', kwargs={'step': step})
+            else:
+                form.helper.form_action = reverse('edit_exhibit', kwargs={'exhibit_id': exhibit.id})
+            if form.is_valid():
                 exhibit = form.save(commit=False)
                 exhibit.participant = participant
+            ExhibitParticipationFormSet = inlineformset_factory(Exhibit, ExhibitParticipation, form=ExhibitParticipationForm, extra=1, max_num=6)
+            formset = ExhibitParticipationFormSet(request.POST, instance=exhibit, prefix='nested')
+            if exhibit and formset.is_valid():
                 exhibit.save()
                 formset.save()
-
-            return redirect('edit_exhibit', exhibit_id=exhibit.id)
+                return redirect('edit_exhibit', exhibit_id=exhibit.id)
         elif step == 'travel':
             form = TravelDetailsForm(request.POST, instance=participant.travel_details.first())
             if form.is_valid():
                 travel_details = form.save(commit=False)
                 travel_details.participant = participant
                 travel_details.save()
-        else:
-            step = 'personal'
-
-        return redirect('register', step=step)
-
-    if step == 'personal':
-        form_title = 'Personal'
-        form = ParticipantForm(instance=participant, initial={'surname': request.user.last_name,
-                                                              'name': request.user.first_name,
-                                                              'email': request.user.email})
-        form.helper.form_action = reverse('register', kwargs={'step': step})
-        formset = None
-        remove_url = None
-    elif step == 'appointments':
-        form_title = 'Appointments'
-        appointments = participant.appointments.first() if participant else None
-        form = AppointmentsForm(instance=appointments)
-        form.helper.form_action = reverse('register', kwargs={'step': step})
-        formset = None
-        remove_url = None
-    elif step == 'exhibit':
-        if exhibit_id is not None:
-            try:
-                exhibit = participant.exhibits.get(id=exhibit_id)
-            except Exhibit.DoesNotExist:
-                return redirect('register', step='exhibit')
-        else:
-            exhibit = None
-        form = ExhibitForm(instance=exhibit, prefix='main')
-        if exhibit is None:
-            form_title = 'Add entry'
-            form.helper.form_action = reverse('register', kwargs={'step': step})
-            remove_url = None
-        else:
-            form_title = '<a href="' + reverse('register', kwargs={'step': step}) + '" class="text-dark">Entry forms</a> &gt; Edit entry'
-            form.helper.form_action = reverse('edit_exhibit', kwargs={'exhibit_id': exhibit.id})
-            remove_url = reverse('remove_exhibit', kwargs={'exhibit_id': exhibit.id})
-        ExhibitParticipationFormSet = inlineformset_factory(Exhibit, ExhibitParticipation, form=ExhibitParticipationForm, extra=1, max_num=6)
-        formset = ExhibitParticipationFormSet(instance=exhibit, prefix='nested')
-    elif step == 'travel':
-        form_title = 'Travel details'
-        travel_details = participant.travel_details.first() if participant else None
-        form = TravelDetailsForm(instance=travel_details)
-        form.helper.form_action = reverse('register', kwargs={'step': step})
-        formset = None
-        remove_url = None
+                return redirect('register', step=step)
     else:
-        return redirect('register', step='personal')
+        if step == 'personal':
+            form = ParticipantForm(instance=participant, initial={'surname': request.user.last_name,
+                                                                  'name': request.user.first_name,
+                                                                  'email': request.user.email})
+            form.helper.form_action = reverse('register', kwargs={'step': step})
+            formset = None
+        elif step == 'appointments':
+            appointments = participant.appointments.first() if participant else None
+            form = AppointmentsForm(instance=appointments)
+            form.helper.form_action = reverse('register', kwargs={'step': step})
+            formset = None
+        elif step == 'exhibit':
+            form = ExhibitForm(instance=exhibit, prefix='main')
+            if exhibit is None:
+                form.helper.form_action = reverse('register', kwargs={'step': step})
+            else:
+                form.helper.form_action = reverse('edit_exhibit', kwargs={'exhibit_id': exhibit.id})
+            ExhibitParticipationFormSet = inlineformset_factory(Exhibit, ExhibitParticipation, form=ExhibitParticipationForm, extra=1, max_num=6)
+            formset = ExhibitParticipationFormSet(instance=exhibit, prefix='nested')
+        elif step == 'travel':
+            travel_details = participant.travel_details.first() if participant else None
+            form = TravelDetailsForm(instance=travel_details)
+            form.helper.form_action = reverse('register', kwargs={'step': step})
+            formset = None
 
     exhibits = []
     if participant and step == 'exhibit' and exhibit_id is None:
