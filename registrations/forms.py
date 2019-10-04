@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Row, Column, Field, Submit, HTML
-from tempus_dominus.widgets import DateTimePicker
+from tempus_dominus.widgets import DatePicker, DateTimePicker
 
 from .models import Participant, Appointments, Exhibit, ExhibitParticipation, TravelDetails
 from .layout import Formset
@@ -88,6 +88,7 @@ class ExhibitForm(forms.ModelForm):
                   'synopsis': 'Synopsis (Short abstract if Philatelic Literature)',
                   'language': 'Language(s)'}
         widgets = {'short_description': forms.Textarea(attrs={'rows': 5}),
+                   'date_of_birth': DatePicker(attrs={'append': 'fa fa-calendar'}),
                    'remarks': forms.Textarea(attrs={'rows': 3})}
 
     def __init__(self, *args, **kwargs):
