@@ -49,6 +49,8 @@ def register(request, step=None, exhibit_id=None):
 
         if step == 'personal':
             form = ParticipantForm(request.POST, request.FILES, instance=participant)
+            form.helper.form_action = reverse('register', kwargs={'step': step})
+            formset = None
             if form.is_valid():
                 participant = form.save(commit=False)
                 participant.user = request.user
@@ -56,6 +58,8 @@ def register(request, step=None, exhibit_id=None):
                 return redirect('register', step=step)
         elif step == 'appointments':
             form = AppointmentsForm(request.POST, instance=participant.appointments.first())
+            form.helper.form_action = reverse('register', kwargs={'step': step})
+            formset = None
             if form.is_valid():
                 appointments = form.save(commit=False)
                 appointments.participant = participant
@@ -78,6 +82,8 @@ def register(request, step=None, exhibit_id=None):
                 return redirect('edit_exhibit', exhibit_id=exhibit.id)
         elif step == 'travel':
             form = TravelDetailsForm(request.POST, instance=participant.travel_details.first())
+            form.helper.form_action = reverse('register', kwargs={'step': step})
+            formset = None
             if form.is_valid():
                 travel_details = form.save(commit=False)
                 travel_details.participant = participant
