@@ -157,7 +157,7 @@ def remove_exhibit(request, exhibit_id=None):
 
     return redirect('register', step='exhibit')
 
-def print(request):
+def printout(request):
     if not request.user.is_authenticated:
         return render(request, 'registrations/login.html')
 
@@ -166,13 +166,27 @@ def print(request):
     except Participant.DoesNotExist:
         return redirect('register', step='personal')
 
-    printout = []
-    printout.append({'title': 'Personal', 'fields': participant.printout()})
+    sections = []
+    sections.append({'title': 'Personal',
+                     'fields': participant.printout(),
+                     'subsections': []})
     if participant.appointments.count():
-        printout.append({'title': 'Appointments', 'fields': participant.appointments.first().printout()})
+        sections.append({'title': 'Appointments',
+                         'fields': participant.appointments.first().printout(),
+                         'subsections': []})
+    for i, exhibit in enumerate(participant.exhibits.all()):
+        subsections = []
+        for j, participation in enumerate(exhibit.participations.all()):
+            subsections.append({'title': 'Previous participation #%d' % (j + 1),
+                                'fields': participation.printout()})
+        sections.append({'title': 'Entry #%d' % (i + 1),
+                         'fields': exhibit.printout(),
+                         'subsections': subsections})
     if participant.travel_details.count():
-        printout.append({'title': 'Travel details', 'fields': participant.travel_details.first().printout()})
-    return render(request, 'registrations/print.html', {'printout': printout})
+        sections.append({'title': 'Travel details',
+                         'fields': participant.travel_details.first().printout(),
+                         'subsections': []})
+    return render(request, 'registrations/print.html', {'sections': sections})
 
 def logout(request, next_page):
     auth_logout(request)
