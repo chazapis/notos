@@ -157,6 +157,23 @@ def remove_exhibit(request, exhibit_id=None):
 
     return redirect('register', step='exhibit')
 
+def print(request):
+    if not request.user.is_authenticated:
+        return render(request, 'registrations/login.html')
+
+    try:
+        participant = Participant.objects.get(user=request.user)
+    except Participant.DoesNotExist:
+        return redirect('register', step='personal')
+
+    printout = []
+    printout.append({'title': 'Personal', 'fields': participant.printout()})
+    if participant.appointments.count():
+        printout.append({'title': 'Appointments', 'fields': participant.appointments.first().printout()})
+    if participant.travel_details.count():
+        printout.append({'title': 'Travel details', 'fields': participant.travel_details.first().printout()})
+    return render(request, 'registrations/print.html', {'printout': printout})
+
 def logout(request, next_page):
     auth_logout(request)
     return redirect(next_page)

@@ -35,6 +35,18 @@ class Participant(models.Model):
                                dict(self.TITLE_CHOICES)[self.title])
     full_name.short_description = 'Full name'
 
+    def printout(self):
+        return {'Title': dict(self.TITLE_CHOICES)[self.title],
+                'Name': self.name,
+                'Surname': self.surname,
+                'Address': self.address,
+                'Country': self.country.name,
+                'Language': dict(self.LANGUAGE_CHOICES)[self.language],
+                'Email': self.email,
+                'Mobile': self.mobile,
+                'Telephone': self.telephone,
+                'Remarks': self.remarks}
+
     def __str__(self):
         return self.full_name()
 
@@ -102,6 +114,16 @@ class Appointments(models.Model):
     accredited_juror_disciplines = models.CharField(blank=True, max_length=128)
     team_leader = models.BooleanField()
     team_leader_disciplines = models.CharField(blank=True, max_length=128)
+
+    def printout(self):
+        return {'National federation name': dict(self.FEDERATION_CHOICES)[self.federation],
+                'Appointed national commissioner': 'Yes' if self.commissioner else '',
+                'Proposed as jury member': 'Yes' if self.jury else '',
+                'Proposed as apprentice jury member': 'Yes' if self.apprentice_jury else '',
+                'Accredited juror': dict(self.ACCREDITED_JUROR_CHOICES)[self.accredited_juror] if self.accredited_juror else '',
+                'Accredited juror discipline(s)': self.accredited_juror_disciplines,
+                'Team leader': 'Yes' if self.team_leader else '',
+                'Team leader discipline(s)': self.team_leader_disciplines}
 
     def __str__(self):
         return str(self.participant)
@@ -217,6 +239,19 @@ class TravelDetails(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     changed_at = models.DateTimeField(auto_now=True)
+
+    def printout(self):
+        return {'Arrival': self.arrival,
+                'Arrival flight number': self.arrival_flight_number,
+                'Departure': self.departure,
+                'Departure flight number': self.departure_flight_number,
+                'Ticket price': self.ticket_price,
+                'Spouse': 'Yes' if self.spouse else '',
+                'Spouse name': self.spouse_name,
+                'Spouse surname': self.spouse_surname,
+                'Hotel': self.hotel,
+                'Hotel website': self.hotel_website,
+                'Remarks': self.remarks}
 
     def __str__(self):
         return 'Travel Details for ' + self.participant.full_name()
