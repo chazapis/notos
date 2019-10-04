@@ -10,7 +10,7 @@ from .layout import Formset
 class ParticipantForm(forms.ModelForm):
     class Meta:
         model = Participant
-        fields = ('title', 'surname', 'name', 'photo', 'address', 'country', 'telephone', 'mobile', 'language', 'remarks')
+        fields = ('title', 'surname', 'name', 'photo', 'address', 'country', 'email', 'telephone', 'mobile', 'language', 'remarks')
         widgets = {'address': forms.Textarea(attrs={'rows': 3}),
                    'remarks': forms.Textarea(attrs={'rows': 3})}
 
@@ -32,6 +32,7 @@ class ParticipantForm(forms.ModelForm):
                 Column('language', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
+            'email',
             Row(
                 Column('mobile', css_class='form-group col-md-6 mb-0'),
                 Column('telephone', css_class='form-group col-md-6 mb-0'),

@@ -64,7 +64,9 @@ def register(request, step=None, exhibit_id=None):
 
     if step == 'personal':
         form_title = 'Personal'
-        form = ParticipantForm(instance=participant)
+        form = ParticipantForm(instance=participant, initial={'surname': request.user.last_name,
+                                                              'name': request.user.first_name,
+                                                              'email': request.user.email})
         form.helper.form_action = reverse('register', kwargs={'step': step})
         formset = None
         remove_url = None

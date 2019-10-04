@@ -20,6 +20,7 @@ class Participant(models.Model):
     photo = models.ImageField(blank=True, upload_to='participant/')
     address = models.TextField()
     country = CountryField()
+    email = models.CharField(max_length=128)
     telephone = models.CharField(max_length=32, blank=True)
     mobile = models.CharField(max_length=32)
     language = models.CharField(max_length=2, choices=LANGUAGE_CHOICES, default='EN', help_text='Communication language')
