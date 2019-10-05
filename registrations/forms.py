@@ -45,12 +45,12 @@ class ParticipantForm(forms.ModelForm):
         )
 
 class AppointmentsForm(forms.ModelForm):
-    authorization_key = forms.CharField(widget=forms.PasswordInput, help_text='As provided by your national federation')
+    authorization_key = forms.CharField(widget=forms.PasswordInput, help_text='As provided by your National Federation')
 
     class Meta:
         model = Appointments
         fields = ('federation', 'commissioner', 'jury', 'apprentice_jury', 'accredited_juror', 'accredited_juror_disciplines', 'team_leader', 'team_leader_disciplines')
-        labels = {'federation': 'National federation name',
+        labels = {'federation': 'National Federation name',
                   'commissioner': 'Appointed national commissioner',
                   'jury': 'Proposed as jury member',
                   'apprentice_jury': 'Proposed as apprentice jury member',
