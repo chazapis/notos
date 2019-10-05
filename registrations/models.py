@@ -4,6 +4,7 @@ from django.db import models
 from django.conf import settings
 from django_countries.fields import CountryField
 from django.core.exceptions import ValidationError
+from collections import OrderedDict
 
 
 class Participant(models.Model):
@@ -38,17 +39,18 @@ class Participant(models.Model):
     full_name.short_description = 'Full name'
 
     def printout(self):
-        result = {'Title': dict(self.TITLE_CHOICES)[self.title],
-                  'Name': self.name,
-                  'Surname': self.surname,
-                  'Photo': os.path.basename(self.photo.path) if self.photo else '',
-                  'Address': self.address,
-                  'Country': self.country.name,
-                  'Language': dict(self.LANGUAGE_CHOICES)[self.language],
-                  'Email': self.email,
-                  'Mobile': self.mobile,
-                  'Telephone': self.telephone,
-                  'Remarks': self.remarks}
+        result = OrderedDict()
+        result.update({'Title': dict(self.TITLE_CHOICES)[self.title],
+                        'Name': self.name,
+                        'Surname': self.surname,
+                        'Photo': os.path.basename(self.photo.path) if self.photo else '',
+                        'Address': self.address,
+                        'Country': self.country.name,
+                        'Language': dict(self.LANGUAGE_CHOICES)[self.language],
+                        'Email': self.email,
+                        'Mobile': self.mobile,
+                        'Telephone': self.telephone,
+                        'Remarks': self.remarks})
         return result
 
     def __str__(self):
@@ -120,14 +122,15 @@ class Appointments(models.Model):
     team_leader_disciplines = models.CharField(blank=True, max_length=128)
 
     def printout(self):
-        result = {'National federation name': dict(self.FEDERATION_CHOICES)[self.federation],
-                  'Appointed national commissioner': 'Yes' if self.commissioner else 'No',
-                  'Proposed as jury member': 'Yes' if self.jury else 'No',
-                  'Proposed as apprentice jury member': 'Yes' if self.apprentice_jury else 'No',
-                  'Accredited juror': dict(self.ACCREDITED_JUROR_CHOICES)[self.accredited_juror] if self.accredited_juror else '',
-                  'Accredited juror discipline(s)': self.accredited_juror_disciplines,
-                  'Team leader': 'Yes' if self.team_leader else 'No',
-                  'Team leader discipline(s)': self.team_leader_disciplines}
+        result = OrderedDict()
+        result.update({'National federation name': dict(self.FEDERATION_CHOICES)[self.federation],
+                       'Appointed national commissioner': 'Yes' if self.commissioner else 'No',
+                       'Proposed as jury member': 'Yes' if self.jury else 'No',
+                       'Proposed as apprentice jury member': 'Yes' if self.apprentice_jury else 'No',
+                       'Accredited juror': dict(self.ACCREDITED_JUROR_CHOICES)[self.accredited_juror] if self.accredited_juror else '',
+                       'Accredited juror discipline(s)': self.accredited_juror_disciplines,
+                       'Team leader': 'Yes' if self.team_leader else 'No',
+                       'Team leader discipline(s)': self.team_leader_disciplines})
         return result
 
     def __str__(self):
@@ -184,10 +187,11 @@ class Exhibit(models.Model):
     changed_at = models.DateTimeField(auto_now=True)
 
     def printout(self):
-        result = {'Title': self.title,
-                  'Short description': self.short_description,
-                  'Exhibit class': dict(self.EXHIBIT_CLASS_CHOICES)[self.exhibit_class],
-                  'Frames': self.frames}
+        result = OrderedDict()
+        result.update({'Title': self.title,
+                       'Short description': self.short_description,
+                       'Exhibit class': dict(self.EXHIBIT_CLASS_CHOICES)[self.exhibit_class],
+                       'Frames': self.frames})
         if self.exhibit_class.startswith('Y'):
             result.update({'Date of birth': self.date_of_birth})
         if self.exhibit_class.startswith('L'):
@@ -249,12 +253,13 @@ class ExhibitParticipation(models.Model):
             raise ValidationError('Please enter up to a maximum of 6 participations per exhibit')
 
     def printout(self):
-        result = {'Exhibition level': dict(self.EXHIBITION_LEVEL_CHOICES)[self.exhibition_level],
-                  'Exhibition name': self.exhibition_name,
-                  'Points': self.points,
-                  'Award/Medal': dict(self.MEDAL_CHOICES)[self.medal] if self.medal else '',
-                  'Special prize': 'Yes' if self.special_prize else 'No',
-                  'Felicitations': 'Yes' if self.felicitations else 'No'}
+        result = OrderedDict()
+        result.update({'Exhibition level': dict(self.EXHIBITION_LEVEL_CHOICES)[self.exhibition_level],
+                       'Exhibition name': self.exhibition_name,
+                       'Points': self.points,
+                       'Award/Medal': dict(self.MEDAL_CHOICES)[self.medal] if self.medal else '',
+                       'Special prize': 'Yes' if self.special_prize else 'No',
+                       'Felicitations': 'Yes' if self.felicitations else 'No'})
         return result
 
 class TravelDetails(models.Model):
@@ -280,12 +285,13 @@ class TravelDetails(models.Model):
     changed_at = models.DateTimeField(auto_now=True)
 
     def printout(self):
-        result = {'Arrival': self.arrival or '',
-                  'Arrival flight number': self.arrival_flight_number,
-                  'Departure': self.departure or '',
-                  'Departure flight number': self.departure_flight_number,
-                  'Ticket price': self.ticket_price,
-                  'Spouse': 'Yes' if self.spouse else 'No'}
+        result = OrderedDict()
+        result.update({'Arrival': self.arrival or '',
+                       'Arrival flight number': self.arrival_flight_number,
+                       'Departure': self.departure or '',
+                       'Departure flight number': self.departure_flight_number,
+                       'Ticket price': self.ticket_price,
+                       'Spouse': 'Yes' if self.spouse else 'No'})
         if self.spouse:
             result.update({'Spouse name': self.spouse_name,
                            'Spouse surname': self.spouse_surname})
