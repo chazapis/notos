@@ -1,5 +1,7 @@
 from .default import *
 
+import os
+
 SECRET_KEY = ''
 
 DEBUG = False

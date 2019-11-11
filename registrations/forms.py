@@ -2,7 +2,7 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Div, Row, Column, Field, Submit, HTML
+from crispy_forms.layout import Layout, Div, Row, Column, Submit, HTML
 from tempus_dominus.widgets import DatePicker, DateTimePicker
 
 from .models import Participant, Appointments, Exhibit, ExhibitParticipation, TravelDetails
