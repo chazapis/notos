@@ -273,7 +273,7 @@ class TravelDetails(models.Model):
     arrival_flight_number = models.CharField(max_length=8, blank=True)
     departure = models.DateTimeField(null=True, blank=True)
     departure_flight_number = models.CharField(max_length=8, blank=True)
-    ticket_price = models.CharField(max_length=64, blank=True, help_text='If to be paid by the Organizing Committee')
+    ticket_price = models.CharField(max_length=64, blank=True, help_text='If to be paid by the Organising Committee')
     spouse = models.BooleanField()
     spouse_surname = models.CharField(max_length=128, blank=True)
     spouse_name = models.CharField(max_length=128, blank=True, help_text='Include any middle names')

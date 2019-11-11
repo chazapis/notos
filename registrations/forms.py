@@ -156,6 +156,9 @@ class TravelDetailsForm(forms.ModelForm):
     class Meta:
         model = TravelDetails
         fields = ('arrival', 'arrival_flight_number', 'departure', 'departure_flight_number', 'ticket_price', 'spouse', 'spouse_surname', 'spouse_name', 'hotel', 'hotel_website', 'remarks')
+        labels = {'spouse': 'Spouse/Partner',
+                  'spouse_surname': 'Spouse/Partner surname',
+                  'spouse_name': 'Spouse/Partner name'}
         widgets = {'arrival': DateTimePicker(options={'sideBySide': True},
                                              attrs={'append': 'fa fa-calendar'}),
                    'departure': DateTimePicker(options={'sideBySide': True},
