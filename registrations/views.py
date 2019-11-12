@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, reverse
+from django.conf import settings
 from django.forms import inlineformset_factory
 from django.contrib.auth import logout as auth_logout
 from textwrap import shorten
@@ -10,6 +11,8 @@ from .forms import ParticipantForm, AppointmentsForm, ExhibitForm, ExhibitPartic
 def register(request, step=None, exhibit_id=None):
     if not request.user.is_authenticated:
         return render(request, 'registrations/login.html')
+    if step == 'exhibit' and settings.ENTRY_FORMS_HIDDEN:
+        return redirect('register', step='personal')
 
     try:
         participant = Participant.objects.get(user=request.user)
@@ -123,21 +126,25 @@ def register(request, step=None, exhibit_id=None):
     required_done = True if participant else False
     steps = [{'title': 'Personal',
               'description': 'Name and contact details',
+              'hidden': False,
               'done': True if participant else False,
               'current': step == 'personal',
               'url': reverse('register', kwargs={'step': 'personal'})},
              {'title': 'Appointments',
               'description': 'Commissioner/Jury data',
+              'hidden': False,
               'done': participant and participant.appointments.count(),
               'current': step == 'appointments',
               'url': reverse('register', kwargs={'step': 'appointments'})},
              {'title': 'Entry forms',
               'description': 'Participating exhibits',
+              'hidden': settings.ENTRY_FORMS_HIDDEN,
               'done': participant and participant.exhibits.count(),
               'current': step == 'exhibit',
               'url': reverse('register', kwargs={'step': 'exhibit'})},
              {'title': 'Travel details',
               'description': 'Flights, accommodation, etc.',
+              'hidden': False,
               'done': participant and participant.travel_details.count(),
               'current': step == 'travel',
               'url': reverse('register', kwargs={'step': 'travel'})}]

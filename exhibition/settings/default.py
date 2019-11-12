@@ -166,3 +166,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # Authorization key to register appointments
 
 APPOINTMENTS_AUTHORIZATION_KEY = 'KEY'
+
+
+# Hide exhibit entry forms
+
+ENTRY_FORMS_HIDDEN = False

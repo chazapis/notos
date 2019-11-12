@@ -38,7 +38,7 @@
       {% endif %}
       <ul class="list-group mb-3">
         {% for step in steps %}
-        <li class="list-group-item d-flex justify-content-between align-items-top {% if step.current %}bg-light{% else %}lh-condensed{% endif %}">
+        <li class="list-group-item d-flex justify-content-between align-items-top {% if step.current %}bg-light{% else %}lh-condensed{% endif %}" {% if step.hidden %}style="display: none !important;"{% endif %}>
           <div class="{% if step.current %}text-success{% else %}text-muted{% endif %}">
             <h6 class="my-0">{{ step.title }}</h6>
             <small>{{ step.description }}</small>
