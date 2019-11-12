@@ -82,7 +82,7 @@ def register(request, step=None, exhibit_id=None):
                     content = render_to_string('registrations/email.html', {'title': title,
                                                                             'message': message,
                                                                             'sections': sections})
-                    send_mail('NOTOS 2021 - %s' % title, '%s (in HTML format)' % title, settings.EMAIL_HOST_USER, ['chazapis@gmail.com'], html_message=content)
+                    send_mail('NOTOS 2021 - %s' % title, '%s (in HTML format)' % title, settings.EMAIL_HOST_USER, ['chazapis@gmail.com', 'info@california.gr'], html_message=content)
 
                 return redirect('register', step=step)
         elif step == 'exhibit':
@@ -104,7 +104,7 @@ def register(request, step=None, exhibit_id=None):
                 email_to = commissioner_appointments.participant.email if commissioner_appointments else settings.NO_COMMISSIONER_EMAIL
                 if email_to:
                     title = 'Exhibit Registration'
-                    message = 'Dear Commissioner,<br />This is the entry form data we received from the prospective exhibitor of your country.<br />(a) In case there are errors, please get in contact with the exhibitor and advise him/her to correct the errors and re-submit.<br />(b) If, however, you disapprove of the application, please e-mail the General Commissioner at andreas_n1k@hotmail.com'
+                    message = 'Dear Commissioner,<br />This is the entry form data we received from the prospective exhibitor of your country.<br />(a) In case there are errors, please get in contact with the exhibitor and advise him/her to correct the errors and re-submit.<br />(b) If, however, you disapprove of the application, please e-mail the General Commissioner at <a class="text-dark" href="mailto:andreas_n1k@hotmail.com">andreas_n1k@hotmail.com</a>.'
                     sections = [{'title': 'Personal',
                                  'fields': participant.printout(),
                                  'subsections': []},
@@ -115,7 +115,7 @@ def register(request, step=None, exhibit_id=None):
                     content = render_to_string('registrations/email.html', {'title': title,
                                                                             'message': message,
                                                                             'sections': sections})
-                    send_mail('NOTOS 2021 - %s' % title, '%s (in HTML format)' % title, settings.EMAIL_HOST_USER, ['chazapis@gmail.com'], html_message=content)
+                    send_mail('NOTOS 2021 - %s' % title, '%s (in HTML format)' % title, settings.EMAIL_HOST_USER, ['chazapis@gmail.com', 'info@california.gr'], html_message=content)
 
                 return redirect('edit_exhibit', exhibit_id=exhibit.id)
         elif step == 'travel':
