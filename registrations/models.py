@@ -60,59 +60,15 @@ class Federation(models.Model):
     name = models.CharField(max_length=128)
     email = models.CharField(max_length=128)
 
-    def short_name(self):
-        return 'FED ' + self.country
-    short_name.short_description = 'Short name'
+    def full_name(self):
+        return 'FED %s - %s' % (self.country,
+                                self.name)
+    full_name.short_description = 'Full name'
 
     def __str__(self):
-        return self.short_name()
+        return self.full_name()
 
 class Appointments(models.Model):
-    FEDERATION_CHOICES = [('FED Albania', 'FED Albania - Association of Collectors of Albania'),
-                          ('FED Armenia', 'FED Armenia - Armenian Union of Philatelists'),
-                          ('FED Austria', 'FED Austria - Verband Österreichischer Philatelisten-Vereine'),
-                          ('FED Belarus', 'FED Belarus - Byelorussian Union of Philatelists'),
-                          ('FED Belgium', 'FED Belgium - Fédération Royale des Cercles Philatéliques de Belgique'),
-                          ('FED Bulgaria', 'FED Bulgaria - Union of Bulgarian Philatelists'),
-                          ('FED Croatia', 'FED Croatia - Croatian Federation of Philatelists'),
-                          ('FED Cyprus', 'FED Cyprus - Cyprus Philatelic Society'),
-                          ('FED Czech Republic', 'FED Czech Republic - Union of Czech Philatelists'),
-                          ('FED Denmark', 'FED Denmark - Danmarks Filatelist Forbund'),
-                          ('FED Egypt', 'FED Egypt - Philatelic Society of Egypt'),
-                          ('FED Estonia', 'FED Estonia - Estnischer Philatelistenverband'),
-                          ('FED Finland', 'FED Finland - Suomen Filatelistiliitto'),
-                          ('FED France', 'FED France - Fédération Française des Ass. Philatéliques'),
-                          ('FED Germany', 'FED Germany - Bund Deutscher Philatelisten'),
-                          ('FED Greece', 'FED Greece - Hellenic Philatelic Federation'),
-                          ('FED Hungary', 'FED Hungary - National Federation of Hungarian Philatelists'),
-                          ('FED Iceland', 'FED Iceland - Icelandic Philatelic Federation'),
-                          ('FED Ireland', 'FED Ireland - Federation of Philatelic Societies of Ireland'),
-                          ('FED Israel', 'FED Israel - Israel Philatelic Federation'),
-                          ('FED Italy', 'FED Italy - Federazione fra le Società Filateliche Italiane'),
-                          ('FED Latvia', 'FED Latvia - Latvian Philatelic Society'),
-                          ('FED Liechtenstein', 'FED Liechtenstein - Liechtensteiner Philatelisten-Verein'),
-                          ('FED Lithuania', 'FED Lithuania - Union der Philatelisten Litauens'),
-                          ('FED Luxembourg', 'FED Luxembourg - Fédération des Sociétés Philatéliques du Grand-Duché de Luxembourg'),
-                          ('FED Malta', 'FED Malta - The Malta Philatelic Society'),
-                          ('FED Moldova', 'FED Moldova - Association of philatelists, maximaphilists and cartophilists from the Republic of Moldova'),
-                          ('FED Monaco', 'FED Monaco - Club de Monte-Carlo'),
-                          ('FED Montenegro', 'FED Montenegro - Union of Philatelists of Montenegro'),
-                          ('FED Netherlands', 'FED Netherlands - KNBF Bondsbureau'),
-                          ('FED North Macedonia', 'FED North Macedonia - Union of the Philatelists of Macedonia'),
-                          ('FED Norway', 'FED Norway - Norsk Filatelistforbund'),
-                          ('FED Poland', 'FED Poland - Polish Philatelist Union Main Board'),
-                          ('FED Portugal', 'FED Portugal - Federação Portuguesa de Filatelia'),
-                          ('FED Romania', 'FED Romania - Romanian Philatelic Federation'),
-                          ('FED Russia', 'FED Russia - Union of Philatelists of Russia SFR'),
-                          ('FED Serbia', 'FED Serbia - Union of Philatelists of Serbia'),
-                          ('FED Slovakia', 'FED Slovakia - Union of Philatelists of Slovakia'),
-                          ('FED Slovenia', 'FED Slovenia - Slovenian Philatelic Association'),
-                          ('FED Spain', 'FED Spain - Federación Española de Sociedades Filatelicas'),
-                          ('FED Sweden', 'FED Sweden - Sveriges Filatelist-Forbund'),
-                          ('FED Switzerland', 'FED Switzerland - Union of Swiss Philatelic Societies'),
-                          ('FED Turkey', 'FED Turkey - Fédération des Associations Philatéliques de Turquie'),
-                          ('FED UK', 'FED UK - Association of British Philatelic Societies'),
-                          ('FED Ukraine', 'FED Ukraine - Association Philatelists of Ukraine')]
     ACCREDITED_JUROR_CHOICES = [('FIP', 'FIP'),
                                 ('FEPA', 'FEPA'),
                                 ('NAT', 'National')]
@@ -123,7 +79,7 @@ class Appointments(models.Model):
 
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='appointments')
 
-    federation = models.CharField(max_length=32, choices=FEDERATION_CHOICES)
+    federation = models.ForeignKey(Federation, on_delete=models.SET_NULL, related_name='appointments', null=True)
     commissioner = models.BooleanField()
     jury = models.BooleanField()
     apprentice_jury = models.BooleanField()
@@ -133,7 +89,7 @@ class Appointments(models.Model):
     team_leader_disciplines = models.CharField(blank=True, max_length=128)
 
     def printout(self):
-        result = OrderedDict([('National federation name', dict(self.FEDERATION_CHOICES)[self.federation]),
+        result = OrderedDict([('National federation name', self.federation.full_name() if self.federation else ''),
                               ('Appointed national commissioner', 'Yes' if self.commissioner else 'No'),
                               ('Proposed as jury member', 'Yes' if self.jury else 'No'),
                               ('Proposed as apprentice jury member', 'Yes' if self.apprentice_jury else 'No'),
