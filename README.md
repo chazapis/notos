@@ -17,6 +17,7 @@ Then, if you are developing:
 ```
 mkdir media
 python manage.py migrate
+python manage.py loaddata registrations/fixtures/federations.json
 python manage.py createsuperuser
 python manage.py runserver
 ```

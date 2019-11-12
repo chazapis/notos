@@ -21,6 +21,7 @@ chown www-data:www-data media
 mkdir static
 python manage.py collectstatic
 python manage.py migrate
+python manage.py loaddata registrations/fixtures/federations.json
 chown www-data:www-data . db.sqlite3
 python manage.py createsuperuser
 ```

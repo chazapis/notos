@@ -55,6 +55,18 @@ class Participant(models.Model):
     def __str__(self):
         return self.full_name()
 
+class Federation(models.Model):
+    country = models.CharField(max_length=32)
+    name = models.CharField(max_length=128)
+    email = models.CharField(max_length=128)
+
+    def short_name(self):
+        return 'FED ' + self.country
+    short_name.short_description = 'Short name'
+
+    def __str__(self):
+        return self.short_name()
+
 class Appointments(models.Model):
     FEDERATION_CHOICES = [('FED Albania', 'FED Albania - Association of Collectors of Albania'),
                           ('FED Armenia', 'FED Armenia - Armenian Union of Philatelists'),

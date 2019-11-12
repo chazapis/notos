@@ -1,11 +1,15 @@
 from django.contrib import admin
 
-from .models import Participant, Exhibit, ExhibitParticipation, TravelDetails
+from .models import Participant, Federation, Exhibit, ExhibitParticipation, TravelDetails
 
 
 @admin.register(Participant)
 class ParticipantAdmin(admin.ModelAdmin):
     list_display = ('full_name', 'country', 'telephone', 'mobile', 'language')
+
+@admin.register(Federation)
+class FederationAdmin(admin.ModelAdmin):
+    list_display = ('short_name', 'name')
 
 class ExhibitParticipationAdmin(admin.TabularInline):
     model = ExhibitParticipation

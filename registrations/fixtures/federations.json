@@ -1,0 +1,407 @@
+[
+{
+  "model": "registrations.federation",
+  "pk": 1,
+  "fields": {
+    "country": "Albania",
+    "name": "Association of Collectors of Albania",
+    "email": "julian.demeti@gmail.com"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 2,
+  "fields": {
+    "country": "Armenia",
+    "name": "Armenian Union of Philatelists",
+    "email": "hovikm@synopsys.com"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 3,
+  "fields": {
+    "country": "Austria",
+    "name": "Verband \u00d6sterreichischer Philatelisten-Vereine",
+    "email": "office.voeph@voeph.at"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 4,
+  "fields": {
+    "country": "Belarus",
+    "name": "Byelorussian Union of Philatelists",
+    "email": "blits@tut.by"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 5,
+  "fields": {
+    "country": "Belgium",
+    "name": "F\u00e9d\u00e9ration Royale des Cercles Philat\u00e9liques de Belgique",
+    "email": "naviemmadnav@skynet.be"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 6,
+  "fields": {
+    "country": "Bulgaria",
+    "name": "Union of Bulgarian Philatelists",
+    "email": "spaspanchev@abv.bg"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 7,
+  "fields": {
+    "country": "Croatia",
+    "name": "Croatian Federation of Philatelists",
+    "email": "info@hsf.hr"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 8,
+  "fields": {
+    "country": "Cyprus",
+    "name": "Cyprus Philatelic Society",
+    "email": "a.christou@soloneion.com.cy"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 9,
+  "fields": {
+    "country": "Czech Republic",
+    "name": "Union of Czech Philatelists",
+    "email": "sekretariat@informace-scf.cz"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 10,
+  "fields": {
+    "country": "Denmark",
+    "name": "Danmarks Filatelist Forbund",
+    "email": "danfil@danfil.dk"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 11,
+  "fields": {
+    "country": "Egypt",
+    "name": "Philatelic Society of Egypt",
+    "email": "egyptianphilatelicsociety@gmail.com"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 12,
+  "fields": {
+    "country": "Estonia",
+    "name": "Estnischer Philatelistenverband",
+    "email": "kaido@erim.ee"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 13,
+  "fields": {
+    "country": "Finland",
+    "name": "Suomen Filatelistiliitto",
+    "email": "sfff@filatelisti.fi"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 14,
+  "fields": {
+    "country": "France",
+    "name": "F\u00e9d\u00e9ration Fran\u00e7aise des Ass. Philat\u00e9liques",
+    "email": "ffap.philatelie@laposte.net"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 15,
+  "fields": {
+    "country": "Germany",
+    "name": "Bund Deutscher Philatelisten",
+    "email": "info@bdph.de"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 16,
+  "fields": {
+    "country": "Greece",
+    "name": "Hellenic Philatelic Federation",
+    "email": "p_leoussis@hotmail.com"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 17,
+  "fields": {
+    "country": "Hungary",
+    "name": "National Federation of Hungarian Philatelists",
+    "email": "titkarsag@mabeosz.hu"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 18,
+  "fields": {
+    "country": "Iceland",
+    "name": "Icelandic Philatelic Federation",
+    "email": "stamps@internet.is"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 19,
+  "fields": {
+    "country": "Ireland",
+    "name": "Federation of Philatelic Societies of Ireland",
+    "email": "fedphilsocirl@gmail.com"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 20,
+  "fields": {
+    "country": "Israel",
+    "name": "Israel Philatelic Federation",
+    "email": "info@israelphilately.org.il"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 21,
+  "fields": {
+    "country": "Italy",
+    "name": "Federazione fra le Societ\u00e0 Filateliche Italiane",
+    "email": "pmacrelli@aicpm.net"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 22,
+  "fields": {
+    "country": "Latvia",
+    "name": "Latvian Philatelic Society",
+    "email": "raimonds.jonitis@gmail.com"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 23,
+  "fields": {
+    "country": "Liechtenstein",
+    "name": "Liechtensteiner Philatelisten-Verein",
+    "email": "lphv@lphv.li"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 24,
+  "fields": {
+    "country": "Lithuania",
+    "name": "Union der Philatelisten Litauens",
+    "email": "eugenijus.uspuras@lei.lt"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 25,
+  "fields": {
+    "country": "Luxembourg",
+    "name": "F\u00e9d\u00e9ration des Soci\u00e9t\u00e9s Philat\u00e9liques du Grand-Duch\u00e9 de Luxembourg",
+    "email": "wolffh@pt.lu"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 26,
+  "fields": {
+    "country": "Malta",
+    "name": "The Malta Philatelic Society",
+    "email": "johnacardona@gmail.com"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 27,
+  "fields": {
+    "country": "Moldova",
+    "name": "Association of philatelists, maximaphilists and cartophilists from the Republic of Moldova",
+    "email": "promarcosedit@gmail.com"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 28,
+  "fields": {
+    "country": "Monaco",
+    "name": "Club de Monte-Carlo",
+    "email": "patrick@maselis.be"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 29,
+  "fields": {
+    "country": "Montenegro",
+    "name": "Union of Philatelists of Montenegro",
+    "email": "tomokaturic@t-com.me"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 30,
+  "fields": {
+    "country": "Netherlands",
+    "name": "KNBF Bondsbureau",
+    "email": "knbf@knbf.nl"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 31,
+  "fields": {
+    "country": "North Macedonia",
+    "name": "Union of the Philatelists of Macedonia",
+    "email": "unionofphilatelists.mk@gmail.com"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 32,
+  "fields": {
+    "country": "Norway",
+    "name": "Norsk Filatelistforbund",
+    "email": "nf@filatelist.no"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 33,
+  "fields": {
+    "country": "Poland",
+    "name": "Polish Philatelist Union Main Board",
+    "email": "zgpzf@wp.pl"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 34,
+  "fields": {
+    "country": "Portugal",
+    "name": "Federa\u00e7\u00e3o Portuguesa de Filatelia",
+    "email": "fpf-portugal@netcabo.pt"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 35,
+  "fields": {
+    "country": "Romania",
+    "name": "Romanian Philatelic Federation",
+    "email": "federatia_filatelica@yahoo.com"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 36,
+  "fields": {
+    "country": "Russia",
+    "name": "Union of Philatelists of Russia SFR",
+    "email": "sergeevtushenk@yandex.ru"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 37,
+  "fields": {
+    "country": "Serbia",
+    "name": "Union of Philatelists of Serbia",
+    "email": "sfs@ptt.rs"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 38,
+  "fields": {
+    "country": "Slovakia",
+    "name": "Union of Philatelists of Slovakia",
+    "email": "zsfslov@gmail.com"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 39,
+  "fields": {
+    "country": "Slovenia",
+    "name": "Slovenian Philatelic Association",
+    "email": "predsednik@fzs.si"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 40,
+  "fields": {
+    "country": "Spain",
+    "name": "Federaci\u00f3n Espa\u00f1ola de Sociedades Filatelicas",
+    "email": "joseantonioarruego@gmail.com"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 41,
+  "fields": {
+    "country": "Sweden",
+    "name": "Sveriges Filatelist-Forbund",
+    "email": "info@sff.nu"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 42,
+  "fields": {
+    "country": "Switzerland",
+    "name": "Union of Swiss Philatelic Societies",
+    "email": "vsphv@bluewin.ch"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 43,
+  "fields": {
+    "country": "Turkey",
+    "name": "F\u00e9d\u00e9ration des Associations Philat\u00e9liques de Turquie",
+    "email": "arman_arikan@hotmail.com"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 44,
+  "fields": {
+    "country": "UK",
+    "name": "Association of British Philatelic Societies",
+    "email": "ewlhedley@gmail.com"
+  }
+},
+{
+  "model": "registrations.federation",
+  "pk": 45,
+  "fields": {
+    "country": "Ukraine",
+    "name": "Association Philatelists of Ukraine",
+    "email": "dmitry-f@ukr.net"
+  }
+}
+]
