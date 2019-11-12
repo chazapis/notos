@@ -71,18 +71,19 @@ def register(request, step=None, exhibit_id=None):
                 appointments.save()
 
                 if appointments.federation.email:
-                  sections = [{'title': 'Personal',
-                               'fields': participant.printout(),
-                               'subsections': []},
-                              {'title': 'Appointments',
-                               'fields': appointments.printout(),
-                               'subsections': []}]
-                  content = render_to_string('registrations/appointments.html', {'sections': sections})
-                  send_mail('NOTOS 2021 - Registration of Commissioner/Juror',
-                            'Registration of Commissioner/Juror (in HTML format)',
-                            'noreply@cometonotos.hps.gr',
-                            ['chazapis@gmail.com'],
-                            html_message=content)
+                    title = 'Commissioner/Juror Registration'
+                    message = 'Dear Mr President of the Federation,<br />This is the registration data we received from the appointed Commissioner or proposed Juror from your Federation. Please e-mail to us at <a class="text-dark" href="mailto:notos2021@hps.gr">notos2021@hps.gr</a> in case you find it inappropriate.'
+                    sections = [{'title': 'Personal',
+                                 'fields': participant.printout(),
+                                 'subsections': []},
+                                {'title': 'Appointments',
+                                 'fields': appointments.printout(),
+                                 'subsections': []}]
+                    content = render_to_string('registrations/email.html', {'title': title,
+                                                                            'message': message,
+                                                                            'sections': sections})
+                    send_mail('NOTOS 2021 - %s' % title, '%s (in HTML format)' % title, settings.EMAIL_HOST_USER, ['chazapis@gmail.com'], html_message=content)
+
                 return redirect('register', step=step)
         elif step == 'exhibit':
             form = ExhibitForm(request.POST, request.FILES, instance=exhibit, prefix='main')
@@ -98,6 +99,24 @@ def register(request, step=None, exhibit_id=None):
             if exhibit and formset.is_valid():
                 exhibit.save()
                 formset.save()
+
+                commissioner_appointments = Appointments.objects.filter(commissioner=True, federation__country_code=participant.country.code).first()
+                email_to = commissioner_appointments.participant.email if commissioner_appointments else settings.NO_COMMISSIONER_EMAIL
+                if email_to:
+                    title = 'Exhibit Registration'
+                    message = 'Dear Commissioner,<br />This is the entry form data we received from the prospective exhibitor of your country.<br />(a) In case there are errors, please get in contact with the exhibitor and advise him/her to correct the errors and re-submit.<br />(b) If, however, you disapprove of the application, please e-mail the General Commissioner at andreas_n1k@hotmail.com'
+                    sections = [{'title': 'Personal',
+                                 'fields': participant.printout(),
+                                 'subsections': []},
+                                {'title': 'Entry',
+                                 'fields': exhibit.printout(),
+                                 'subsections': [{'title': 'Previous participation #%d' % (j + 1),
+                                                  'fields': participation.printout()} for j, participation in enumerate(exhibit.participations.all())]}]
+                    content = render_to_string('registrations/email.html', {'title': title,
+                                                                            'message': message,
+                                                                            'sections': sections})
+                    send_mail('NOTOS 2021 - %s' % title, '%s (in HTML format)' % title, settings.EMAIL_HOST_USER, ['chazapis@gmail.com'], html_message=content)
+
                 return redirect('edit_exhibit', exhibit_id=exhibit.id)
         elif step == 'travel':
             form = TravelDetailsForm(request.POST, instance=participant.travel_details.first())
@@ -204,13 +223,10 @@ def printout(request):
                          'fields': participant.appointments.first().printout(),
                          'subsections': []})
     for i, exhibit in enumerate(participant.exhibits.all()):
-        subsections = []
-        for j, participation in enumerate(exhibit.participations.all()):
-            subsections.append({'title': 'Previous participation #%d' % (j + 1),
-                                'fields': participation.printout()})
         sections.append({'title': 'Entry #%d' % (i + 1),
                          'fields': exhibit.printout(),
-                         'subsections': subsections})
+                         'subsections': [{'title': 'Previous participation #%d' % (j + 1),
+                                          'fields': participation.printout()} for j, participation in enumerate(exhibit.participations.all())]})
     if participant.travel_details.count():
         sections.append({'title': 'Travel details',
                          'fields': participant.travel_details.first().printout(),

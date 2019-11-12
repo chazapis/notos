@@ -171,3 +171,8 @@ APPOINTMENTS_AUTHORIZATION_KEY = 'KEY'
 # Hide exhibit entry forms
 
 ENTRY_FORMS_HIDDEN = False
+
+
+# Send to this email if no commissioner for the exhibitors country
+
+NO_COMMISSIONER_EMAIL = ''

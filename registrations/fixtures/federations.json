@@ -4,6 +4,7 @@
   "pk": 1,
   "fields": {
     "country": "Albania",
+    "country_code": "AL",
     "name": "Association of Collectors of Albania",
     "email": "julian.demeti@gmail.com"
   }
@@ -13,6 +14,7 @@
   "pk": 2,
   "fields": {
     "country": "Armenia",
+    "country_code": "AM",
     "name": "Armenian Union of Philatelists",
     "email": "hovikm@synopsys.com"
   }
@@ -22,6 +24,7 @@
   "pk": 3,
   "fields": {
     "country": "Austria",
+    "country_code": "AT",
     "name": "Verband \u00d6sterreichischer Philatelisten-Vereine",
     "email": "office.voeph@voeph.at"
   }
@@ -31,6 +34,7 @@
   "pk": 4,
   "fields": {
     "country": "Belarus",
+    "country_code": "BY",
     "name": "Byelorussian Union of Philatelists",
     "email": "blits@tut.by"
   }
@@ -40,6 +44,7 @@
   "pk": 5,
   "fields": {
     "country": "Belgium",
+    "country_code": "BE",
     "name": "F\u00e9d\u00e9ration Royale des Cercles Philat\u00e9liques de Belgique",
     "email": "naviemmadnav@skynet.be"
   }
@@ -49,6 +54,7 @@
   "pk": 6,
   "fields": {
     "country": "Bulgaria",
+    "country_code": "BG",
     "name": "Union of Bulgarian Philatelists",
     "email": "spaspanchev@abv.bg"
   }
@@ -58,6 +64,7 @@
   "pk": 7,
   "fields": {
     "country": "Croatia",
+    "country_code": "HR",
     "name": "Croatian Federation of Philatelists",
     "email": "info@hsf.hr"
   }
@@ -67,6 +74,7 @@
   "pk": 8,
   "fields": {
     "country": "Cyprus",
+    "country_code": "CY",
     "name": "Cyprus Philatelic Society",
     "email": "a.christou@soloneion.com.cy"
   }
@@ -75,7 +83,8 @@
   "model": "registrations.federation",
   "pk": 9,
   "fields": {
-    "country": "Czech Republic",
+    "country": "Czechia",
+    "country_code": "CZ",
     "name": "Union of Czech Philatelists",
     "email": "sekretariat@informace-scf.cz"
   }
@@ -85,6 +94,7 @@
   "pk": 10,
   "fields": {
     "country": "Denmark",
+    "country_code": "DK",
     "name": "Danmarks Filatelist Forbund",
     "email": "danfil@danfil.dk"
   }
@@ -94,6 +104,7 @@
   "pk": 11,
   "fields": {
     "country": "Egypt",
+    "country_code": "EG",
     "name": "Philatelic Society of Egypt",
     "email": "egyptianphilatelicsociety@gmail.com"
   }
@@ -103,6 +114,7 @@
   "pk": 12,
   "fields": {
     "country": "Estonia",
+    "country_code": "EE",
     "name": "Estnischer Philatelistenverband",
     "email": "kaido@erim.ee"
   }
@@ -112,6 +124,7 @@
   "pk": 13,
   "fields": {
     "country": "Finland",
+    "country_code": "FI",
     "name": "Suomen Filatelistiliitto",
     "email": "sfff@filatelisti.fi"
   }
@@ -121,6 +134,7 @@
   "pk": 14,
   "fields": {
     "country": "France",
+    "country_code": "FR",
     "name": "F\u00e9d\u00e9ration Fran\u00e7aise des Ass. Philat\u00e9liques",
     "email": "ffap.philatelie@laposte.net"
   }
@@ -130,6 +144,7 @@
   "pk": 15,
   "fields": {
     "country": "Germany",
+    "country_code": "DE",
     "name": "Bund Deutscher Philatelisten",
     "email": "info@bdph.de"
   }
@@ -139,6 +154,7 @@
   "pk": 16,
   "fields": {
     "country": "Greece",
+    "country_code": "GR",
     "name": "Hellenic Philatelic Federation",
     "email": "p_leoussis@hotmail.com"
   }
@@ -148,6 +164,7 @@
   "pk": 17,
   "fields": {
     "country": "Hungary",
+    "country_code": "HU",
     "name": "National Federation of Hungarian Philatelists",
     "email": "titkarsag@mabeosz.hu"
   }
@@ -157,6 +174,7 @@
   "pk": 18,
   "fields": {
     "country": "Iceland",
+    "country_code": "IS",
     "name": "Icelandic Philatelic Federation",
     "email": "stamps@internet.is"
   }
@@ -166,6 +184,7 @@
   "pk": 19,
   "fields": {
     "country": "Ireland",
+    "country_code": "IE",
     "name": "Federation of Philatelic Societies of Ireland",
     "email": "fedphilsocirl@gmail.com"
   }
@@ -175,6 +194,7 @@
   "pk": 20,
   "fields": {
     "country": "Israel",
+    "country_code": "IL",
     "name": "Israel Philatelic Federation",
     "email": "info@israelphilately.org.il"
   }
@@ -184,6 +204,7 @@
   "pk": 21,
   "fields": {
     "country": "Italy",
+    "country_code": "IT",
     "name": "Federazione fra le Societ\u00e0 Filateliche Italiane",
     "email": "pmacrelli@aicpm.net"
   }
@@ -193,6 +214,7 @@
   "pk": 22,
   "fields": {
     "country": "Latvia",
+    "country_code": "LV",
     "name": "Latvian Philatelic Society",
     "email": "raimonds.jonitis@gmail.com"
   }
@@ -202,6 +224,7 @@
   "pk": 23,
   "fields": {
     "country": "Liechtenstein",
+    "country_code": "LI",
     "name": "Liechtensteiner Philatelisten-Verein",
     "email": "lphv@lphv.li"
   }
@@ -211,6 +234,7 @@
   "pk": 24,
   "fields": {
     "country": "Lithuania",
+    "country_code": "LT",
     "name": "Union der Philatelisten Litauens",
     "email": "eugenijus.uspuras@lei.lt"
   }
@@ -220,6 +244,7 @@
   "pk": 25,
   "fields": {
     "country": "Luxembourg",
+    "country_code": "LU",
     "name": "F\u00e9d\u00e9ration des Soci\u00e9t\u00e9s Philat\u00e9liques du Grand-Duch\u00e9 de Luxembourg",
     "email": "wolffh@pt.lu"
   }
@@ -229,6 +254,7 @@
   "pk": 26,
   "fields": {
     "country": "Malta",
+    "country_code": "MT",
     "name": "The Malta Philatelic Society",
     "email": "johnacardona@gmail.com"
   }
@@ -238,6 +264,7 @@
   "pk": 27,
   "fields": {
     "country": "Moldova",
+    "country_code": "MD",
     "name": "Association of philatelists, maximaphilists and cartophilists from the Republic of Moldova",
     "email": "promarcosedit@gmail.com"
   }
@@ -247,6 +274,7 @@
   "pk": 28,
   "fields": {
     "country": "Monaco",
+    "country_code": "MC",
     "name": "Club de Monte-Carlo",
     "email": "patrick@maselis.be"
   }
@@ -256,6 +284,7 @@
   "pk": 29,
   "fields": {
     "country": "Montenegro",
+    "country_code": "ME",
     "name": "Union of Philatelists of Montenegro",
     "email": "tomokaturic@t-com.me"
   }
@@ -265,6 +294,7 @@
   "pk": 30,
   "fields": {
     "country": "Netherlands",
+    "country_code": "NL",
     "name": "KNBF Bondsbureau",
     "email": "knbf@knbf.nl"
   }
@@ -274,6 +304,7 @@
   "pk": 31,
   "fields": {
     "country": "North Macedonia",
+    "country_code": "MK",
     "name": "Union of the Philatelists of Macedonia",
     "email": "unionofphilatelists.mk@gmail.com"
   }
@@ -283,6 +314,7 @@
   "pk": 32,
   "fields": {
     "country": "Norway",
+    "country_code": "NO",
     "name": "Norsk Filatelistforbund",
     "email": "nf@filatelist.no"
   }
@@ -292,6 +324,7 @@
   "pk": 33,
   "fields": {
     "country": "Poland",
+    "country_code": "PL",
     "name": "Polish Philatelist Union Main Board",
     "email": "zgpzf@wp.pl"
   }
@@ -301,6 +334,7 @@
   "pk": 34,
   "fields": {
     "country": "Portugal",
+    "country_code": "PT",
     "name": "Federa\u00e7\u00e3o Portuguesa de Filatelia",
     "email": "fpf-portugal@netcabo.pt"
   }
@@ -310,6 +344,7 @@
   "pk": 35,
   "fields": {
     "country": "Romania",
+    "country_code": "RO",
     "name": "Romanian Philatelic Federation",
     "email": "federatia_filatelica@yahoo.com"
   }
@@ -319,6 +354,7 @@
   "pk": 36,
   "fields": {
     "country": "Russia",
+    "country_code": "RU",
     "name": "Union of Philatelists of Russia SFR",
     "email": "sergeevtushenk@yandex.ru"
   }
@@ -328,6 +364,7 @@
   "pk": 37,
   "fields": {
     "country": "Serbia",
+    "country_code": "RS",
     "name": "Union of Philatelists of Serbia",
     "email": "sfs@ptt.rs"
   }
@@ -337,6 +374,7 @@
   "pk": 38,
   "fields": {
     "country": "Slovakia",
+    "country_code": "SK",
     "name": "Union of Philatelists of Slovakia",
     "email": "zsfslov@gmail.com"
   }
@@ -346,6 +384,7 @@
   "pk": 39,
   "fields": {
     "country": "Slovenia",
+    "country_code": "SI",
     "name": "Slovenian Philatelic Association",
     "email": "predsednik@fzs.si"
   }
@@ -355,6 +394,7 @@
   "pk": 40,
   "fields": {
     "country": "Spain",
+    "country_code": "ES",
     "name": "Federaci\u00f3n Espa\u00f1ola de Sociedades Filatelicas",
     "email": "joseantonioarruego@gmail.com"
   }
@@ -364,6 +404,7 @@
   "pk": 41,
   "fields": {
     "country": "Sweden",
+    "country_code": "SE",
     "name": "Sveriges Filatelist-Forbund",
     "email": "info@sff.nu"
   }
@@ -373,6 +414,7 @@
   "pk": 42,
   "fields": {
     "country": "Switzerland",
+    "country_code": "CH",
     "name": "Union of Swiss Philatelic Societies",
     "email": "vsphv@bluewin.ch"
   }
@@ -382,6 +424,7 @@
   "pk": 43,
   "fields": {
     "country": "Turkey",
+    "country_code": "TR",
     "name": "F\u00e9d\u00e9ration des Associations Philat\u00e9liques de Turquie",
     "email": "arman_arikan@hotmail.com"
   }
@@ -390,18 +433,20 @@
   "model": "registrations.federation",
   "pk": 44,
   "fields": {
-    "country": "UK",
-    "name": "Association of British Philatelic Societies",
-    "email": "ewlhedley@gmail.com"
+    "country": "Ukraine",
+    "country_code": "UA",
+    "name": "Association Philatelists of Ukraine",
+    "email": "dmitry-f@ukr.net"
   }
 },
 {
   "model": "registrations.federation",
   "pk": 45,
   "fields": {
-    "country": "Ukraine",
-    "name": "Association Philatelists of Ukraine",
-    "email": "dmitry-f@ukr.net"
+    "country": "United Kingdom",
+    "country_code": "GB",
+    "name": "Association of British Philatelic Societies",
+    "email": "ewlhedley@gmail.com"
   }
 }
 ]

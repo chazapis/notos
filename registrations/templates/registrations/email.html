@@ -8,13 +8,59 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    {% block header %}
-    {% endblock %}
+    <style>
+    td>table>tbody>tr:first-child>th,
+    td>table>tbody>tr:first-child>td {
+      border-top: 0px;
+    }
+    </style>
 
     <title>NOTOS 2021</title>
   </head>
   <body>
-    {% block content %}
-    {% endblock %}
+    <div class="container">
+      <div class="py-5 text-left">
+        <h2>{{ title }}</h2>
+        <p class="lead">{{ message|safe }}</p>
+      </div>
+      <table class="table">
+        <tbody>
+          {% for section in sections %}
+          <tr>
+            <th colspan="2" class="table-secondary">{{ section.title }}</td>
+          </tr>
+          {% for name, value in section.fields.items %}
+          <tr>
+            <th scope="row">{{ name }}</th>
+            <td>{{ value }}</td>
+          </tr>
+          {% endfor %}
+          {% for subsection in section.subsections %}
+          <tr>
+            <th scope="row">{{ subsection.title }}</th>
+            <td class="px-0 py-0">
+              <table class="table mb-0">
+                <tbody>
+                  {% for name, value in subsection.fields.items %}
+                  <tr>
+                    <th scope="row" style="width: 40%;">{{ name }}</th>
+                    <td>{{ value }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          {% endfor %}
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <footer class="my-5 pt-5 text-muted text-center text-small">
+        <ul class="list-inline">
+          <li class="list-inline-item">Generated at {% now 'r' %}</li>
+        </ul>
+      </footer>
+    </div>
   </body>
 </html>

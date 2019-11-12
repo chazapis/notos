@@ -9,7 +9,7 @@ class ParticipantAdmin(admin.ModelAdmin):
 
 @admin.register(Federation)
 class FederationAdmin(admin.ModelAdmin):
-    list_display = ('full_name',)
+    list_display = ('full_name', 'country_code')
 
 class ExhibitParticipationAdmin(admin.TabularInline):
     model = ExhibitParticipation
