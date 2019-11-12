@@ -1,0 +1,60 @@
+{% extends 'registrations/email.html' %}
+{% load static %}
+
+{% block header %}
+<style>
+td>table>tbody>tr:first-child>th,
+td>table>tbody>tr:first-child>td {
+  border-top: 0px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="py-5 text-center">
+    <img class="d-block mx-auto mb-4" src="{% static 'registrations/notos_2021.jpg' %}" alt="" width="200" height="200">
+    <h2>Commisioner/Jury Registration</h2>
+    <p class="lead">Dear Mr President of the Federation,<br /><br />This is the registration data we received from the appointed Commissioner or proposed Juror from your Federation. Please e-mail to us at <a class="text-dark" href="mailto:notos2021@hps.gr">notos2021@hps.gr</a> in case you find it inappropriate.</p>
+  </div>
+  <table class="table">
+    <tbody>
+      {% for section in sections %}
+      <tr>
+        <th colspan="2" class="table-secondary">{{ section.title }}</td>
+      </tr>
+      {% for name, value in section.fields.items %}
+      <tr>
+        <th scope="row">{{ name }}</th>
+        <td>{{ value }}</td>
+      </tr>
+      {% endfor %}
+      {% for subsection in section.subsections %}
+      <tr>
+        <th scope="row">{{ subsection.title }}</th>
+        <td class="px-0 py-0">
+          <table class="table mb-0">
+            <tbody>
+              {% for name, value in subsection.fields.items %}
+              <tr>
+                <th scope="row" style="width: 40%;">{{ name }}</th>
+                <td>{{ value }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      {% endfor %}
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <footer class="my-5 pt-5 text-muted text-center text-small">
+    <ul class="list-inline">
+      <li class="list-inline-item">Generated at {% now 'r' %}</li>
+    </ul>
+  </footer>
+</div>
+{% endblock %}
+

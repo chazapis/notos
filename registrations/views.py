@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, reverse
 from django.conf import settings
 from django.forms import inlineformset_factory
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
 from django.contrib.auth import logout as auth_logout
 from textwrap import shorten
 
@@ -67,6 +69,20 @@ def register(request, step=None, exhibit_id=None):
                 appointments = form.save(commit=False)
                 appointments.participant = participant
                 appointments.save()
+
+                if appointments.federation.email:
+                  sections = [{'title': 'Personal',
+                               'fields': participant.printout(),
+                               'subsections': []},
+                              {'title': 'Appointments',
+                               'fields': appointments.printout(),
+                               'subsections': []}]
+                  content = render_to_string('registrations/appointments.html', {'sections': sections})
+                  send_mail('NOTOS 2021 - Registration of Commissioner/Juror',
+                            'Registration of Commissioner/Juror (in HTML format)',
+                            'noreply@cometonotos.hps.gr',
+                            ['chazapis@gmail.com'],
+                            html_message=content)
                 return redirect('register', step=step)
         elif step == 'exhibit':
             form = ExhibitForm(request.POST, request.FILES, instance=exhibit, prefix='main')
