@@ -4,15 +4,15 @@ from django.forms import inlineformset_factory
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.decorators import login_required
 from textwrap import shorten
 
 from .models import Participant, Appointments, Exhibit, ExhibitParticipation, TravelDetails
 from .forms import ParticipantForm, AppointmentsForm, ExhibitForm, ExhibitParticipationForm, TravelDetailsForm
 
 
+@login_required
 def register(request, step=None, exhibit_id=None):
-    if not request.user.is_authenticated:
-        return render(request, 'registrations/login.html')
     if step == 'exhibit' and settings.ENTRY_FORMS_HIDDEN:
         return redirect('register', step='personal')
 
@@ -192,10 +192,8 @@ def register(request, step=None, exhibit_id=None):
                                                            'required_done': required_done,
                                                            'steps': steps})
 
+@login_required
 def remove_exhibit(request, exhibit_id=None):
-    if not request.user.is_authenticated:
-        return render(request, 'registrations/login.html')
-
     try:
         participant = Participant.objects.get(user=request.user)
         exhibit = participant.exhibits.get(id=exhibit_id)
@@ -205,10 +203,8 @@ def remove_exhibit(request, exhibit_id=None):
 
     return redirect('register', step='exhibit')
 
+@login_required
 def printout(request):
-    if not request.user.is_authenticated:
-        return render(request, 'registrations/login.html')
-
     try:
         participant = Participant.objects.get(user=request.user)
     except Participant.DoesNotExist:
@@ -233,6 +229,6 @@ def printout(request):
                          'subsections': []})
     return render(request, 'registrations/print.html', {'sections': sections})
 
-def logout(request, next_page):
+def logout(request, next):
     auth_logout(request)
-    return redirect(next_page)
+    return redirect(next)

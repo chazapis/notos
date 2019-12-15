@@ -1,15 +1,16 @@
 {% extends 'registrations/base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block header %}
 <style>
-.btn {
+.btn-social {
     position: relative;
     padding-left: 44px;
     text-align: left;
 }
 
-.btn > :first-child {
+.btn-social > :first-child {
     position: absolute;
     left: 0;
     top: 0;
@@ -31,16 +32,36 @@
       <img class="d-block mx-auto mb-4" src="{% static 'registrations/notos_2021.jpg' %}" alt="" width="200" height="200">
       <h2>Registration</h2>
       <p class="lead">Welcome to our prospective Exhibitors and Visitors, the appointed National Commissioners and the proposed Members of the Jury as well as anybody else involved in one way or the other with <a class="text-dark" href="http://hps.gr/notos2021/" target="_blank">NOTOS 2021</a>.</p>
-      <p class="lead">Please select one of the following to enter:</p>
       <div class="row">
-        <div class="col">
+        <div class="col-6 offset-3">
+          <p><a class="btn btn-light btn-block btn-social" href="{% url 'social:begin' 'google-oauth2' %}"><span class="fa fa-google" aria-hidden="true"></span> Sign in with Google</a></p>
+          <p><a class="btn btn-light btn-block btn-social" href="{% url 'social:begin' 'twitter' %}"><span class="fa fa-twitter" aria-hidden="true"></span> Sign in with Twitter</a></p>
+          <p><a class="btn btn-light btn-block btn-social" href="{% url 'social:begin' 'facebook' %}"><span class="fa fa-facebook" aria-hidden="true"></span> Sign in with Facebook</a></p>
         </div>
-        <div class="col-6">
-          <p><a class="btn btn-light btn-block" href="{% url 'social:begin' 'google-oauth2' %}"><span class="fa fa-google" aria-hidden="true"></span> Sign in with Google</a></p>
-          <p><a class="btn btn-light btn-block" href="{% url 'social:begin' 'twitter' %}"><span class="fa fa-twitter" aria-hidden="true"></span> Sign in with Twitter</a></p>
-          <p><a class="btn btn-light btn-block" href="{% url 'social:begin' 'facebook' %}"><span class="fa fa-facebook" aria-hidden="true"></span> Sign in with Facebook</a></p>
-        </div>
-        <div class="col">
+      </div>
+      <p class="lead">Or <a class="text-dark" href="">sign up</a> and use a local account:</p>
+      <div class="row">
+        <div class="col-6 offset-3">
+          <div class="mb-3">
+            {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+            <div class="alert alert-warning small" role="alert">{{ error|escape }}</div>
+            {% endfor %}
+            {% endif %}
+            <form method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <input type="text" name="username" class="form-control" placeholder="Username">
+              </div>
+              <div class="form-group">
+                <input type="password" name="password" class="form-control" placeholder="Password">
+              </div>
+              <button type="submit" class="btn btn-light btn-block">Login</button>
+            </form>
+          </div>
+          {% if form.non_field_errors %}
+          <p><a class="btn btn-secondary btn-block" href="">Forgot password</a></p>
+          {% endif %}
         </div>
       </div>
     </div>
