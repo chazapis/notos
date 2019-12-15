@@ -1,6 +1,8 @@
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Row, Column, Submit, HTML
 from tempus_dominus.widgets import DatePicker, DateTimePicker
@@ -195,3 +197,27 @@ class TravelDetailsForm(forms.ModelForm):
             HTML('{% if not required_done %}<div class="alert alert-warning small" role="alert">To enable this form, please fill in your personal information first.</div>{% endif %}'),
             HTML('<input type="submit" class="btn btn-success btn-lg btn-block" value="Submit" {% if not required_done %}disabled{% endif %}>')
         )
+
+class SignUpForm(UserCreationForm):
+    email = forms.EmailField(max_length=254, help_text='Required. Please use a valid email address, as you will be sent an email to validate your account.')
+
+    class Meta:
+        model = User
+        fields = ('username', 'password1', 'password2', 'email')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'username',
+            'password1',
+            'password2',
+            'email',
+            Submit('submit', 'Submit', css_class='btn-success btn-lg btn-block')
+        )
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise ValidationError('A user with that email already exists.')
+        return email

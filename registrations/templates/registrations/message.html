@@ -1,0 +1,18 @@
+{% extends 'registrations/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <div class="py-5 text-center">
+    <img class="d-block mx-auto mb-4" src="{% static 'registrations/notos_2021.jpg' %}" alt="" width="200" height="200">
+    <h2>Registration</h2>
+    <p class="lead">{{ message|safe }}</p>
+  </div>
+
+  <footer class="my-5 pt-5 text-muted text-center text-small">
+    <ul class="list-inline">
+      <li class="list-inline-item">Go <a class="text-dark" href="{% url 'login' %}">back</a></li>
+    </ul>
+  </footer>
+</div>
+{% endblock %}

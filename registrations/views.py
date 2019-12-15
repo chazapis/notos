@@ -3,12 +3,16 @@ from django.conf import settings
 from django.forms import inlineformset_factory
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
-from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import login, authenticate, logout as auth_logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from textwrap import shorten
 
 from .models import Participant, Appointments, Exhibit, ExhibitParticipation, TravelDetails
-from .forms import ParticipantForm, AppointmentsForm, ExhibitForm, ExhibitParticipationForm, TravelDetailsForm
+from .forms import ParticipantForm, AppointmentsForm, ExhibitForm, ExhibitParticipationForm, TravelDetailsForm, SignUpForm
+from .tokens import account_activation_token
 
 
 @login_required
@@ -228,6 +232,48 @@ def printout(request):
                          'fields': participant.travel_details.first().printout(),
                          'subsections': []})
     return render(request, 'registrations/print.html', {'sections': sections})
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+
+            activation_url = '%s://%s/activate/%s/%s' % ('https' if request.is_secure else 'http',
+                                                         request.get_host(),
+                                                         urlsafe_base64_encode(force_bytes(user.pk)),
+                                                         account_activation_token.make_token(user))
+            title = 'Account activation'
+            message = 'Dear %s,<br />Please activate your account by visiting the following link:<br /><a href="%s">%s</a>' % (user.username, activation_url, activation_url)
+            content = render_to_string('registrations/email.html', {'title': title,
+                                                                    'message': message,
+                                                                    'sections': None})
+            send_mail('NOTOS 2021 - %s' % title, '%s (in HTML format)' % title, settings.EMAIL_HOST_USER, [user.email], html_message=content)
+
+            message = 'Your account has been created, but in order to login you have to confirm your email address.<br />We have sent you an email with instructions on how to complete the sign up process.'
+            return render(request, 'registrations/message.html', {'message': message})
+    else:
+        form = SignUpForm()
+    return render(request, 'registrations/signup.html', {'form': form})
+
+def activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except:
+        user = None
+
+    if user is not None and account_activation_token.check_token(user, token):
+        if not user.is_active:
+            user.is_active = True
+            user.save()
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+        return redirect('register', step='personal')
+    else:
+        message = 'Invalid or expired activation link.'
+        return render(request, 'registrations/message.html', {'message': message})
 
 def logout(request, next):
     auth_logout(request)

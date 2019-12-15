@@ -23,6 +23,7 @@
         <h2>{{ title }}</h2>
         <p class="lead">{{ message|safe }}</p>
       </div>
+      {% if sections %}
       <table class="table">
         <tbody>
           {% for section in sections %}
@@ -61,6 +62,7 @@
           <li class="list-inline-item">Generated at {% now 'r' %}</li>
         </ul>
       </footer>
+      {% endif %}
     </div>
   </body>
 </html>

@@ -12,6 +12,8 @@ urlpatterns = [
     path('remove/exhibit/<int:exhibit_id>', views.remove_exhibit, name='remove_exhibit'),
     path('print', views.printout, name='print'),
     # path('account/', include('django.contrib.auth.urls')),
+    path('signup', views.signup, name='signup'),
+    path('activate/<slug:uidb64>/<slug:token>', views.activate, name='activate'),
     path('login', auth_views.LoginView.as_view(template_name='registrations/login.html'), name='login'),
     path('logout', views.logout, {'next': settings.LOGOUT_REDIRECT_URL}, name='logout'),
 ]
