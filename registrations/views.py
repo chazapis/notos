@@ -164,6 +164,8 @@ def register(request, step=None, exhibit_id=None):
         exhibits = [{'title': e.title,
                      'description': shorten(e.short_description, width=80, placeholder='...'),
                      'url': reverse('edit_exhibit', kwargs={'exhibit_id': e.id})} for e in participant.exhibits.all()]
+    if local_account and step == 'personal':
+        form.fields['email'].disabled = True
     required_done = True if participant else False
     steps = [{'title': 'Personal',
               'description': 'Name and contact details',
