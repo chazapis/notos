@@ -15,6 +15,7 @@ urlpatterns = [
     path('signup', views.signup, name='signup'),
     path('activate/<slug:uidb64>/<slug:token>', views.activate, name='activate'),
     path('login', auth_views.LoginView.as_view(template_name='registrations/login.html'), name='login'),
+    path('change_password', views.change_password, name='change_password'),
     path('logout', views.logout, {'next': settings.LOGOUT_REDIRECT_URL}, name='logout'),
 ]
 

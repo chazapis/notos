@@ -3,7 +3,7 @@ from django.conf import settings
 from django.forms import inlineformset_factory
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
-from django.contrib.auth import login, authenticate, logout as auth_logout
+from django.contrib.auth import login, authenticate, logout as auth_logout, BACKEND_SESSION_KEY, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.utils.encoding import force_bytes, force_text
@@ -11,7 +11,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from textwrap import shorten
 
 from .models import Participant, Appointments, Exhibit, ExhibitParticipation, TravelDetails
-from .forms import ParticipantForm, AppointmentsForm, ExhibitForm, ExhibitParticipationForm, TravelDetailsForm, SignUpForm
+from .forms import ParticipantForm, AppointmentsForm, ExhibitForm, ExhibitParticipationForm, TravelDetailsForm, SignUpForm, ChangePasswordForm
 from .tokens import account_activation_token
 
 
@@ -157,6 +157,8 @@ def register(request, step=None, exhibit_id=None):
             form.helper.form_action = reverse('register', kwargs={'step': step})
             formset = None
 
+    local_account = (request.session[BACKEND_SESSION_KEY] == 'django.contrib.auth.backends.ModelBackend')
+
     exhibits = []
     if participant and step == 'exhibit' and exhibit_id is None:
         exhibits = [{'title': e.title,
@@ -187,6 +189,7 @@ def register(request, step=None, exhibit_id=None):
               'done': participant and participant.travel_details.count(),
               'current': step == 'travel',
               'url': reverse('register', kwargs={'step': 'travel'})}]
+    can_change_password = local_account
 
     return render(request, 'registrations/register.html', {'exhibits': exhibits,
                                                            'form_title': form_title,
@@ -194,7 +197,8 @@ def register(request, step=None, exhibit_id=None):
                                                            'formset': formset,
                                                            'remove_url': remove_url,
                                                            'required_done': required_done,
-                                                           'steps': steps})
+                                                           'steps': steps,
+                                                           'can_change_password': can_change_password})
 
 @login_required
 def remove_exhibit(request, exhibit_id=None):
@@ -274,6 +278,19 @@ def activate(request, uidb64, token):
     else:
         message = 'Invalid or expired activation link.'
         return render(request, 'registrations/message.html', {'message': message})
+
+def change_password(request):
+    next = request.GET.get('next', settings.LOGIN_REDIRECT_URL)
+
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            return redirect(next)
+    else:
+        form = ChangePasswordForm(request.user)
+    return render(request, 'registrations/change_password.html', {'form': form, 'next': next})
 
 def logout(request, next):
     auth_logout(request)
