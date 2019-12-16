@@ -30,6 +30,9 @@
       <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="text-muted">Steps</span>
       </h4>
+      {% for message in messages %}
+      <div class="alert alert-{{ message.level_tag }} small" role="alert">{{ message }}</div>
+      {% endfor %}
       {% if required_done %}
       <div class="alert alert-success small" role="alert">
         Personal registration is complete!<br />

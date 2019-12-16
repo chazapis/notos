@@ -1,7 +1,7 @@
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Row, Column, Submit, Field, HTML
@@ -225,6 +225,25 @@ class ChangePasswordForm(PasswordChangeForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             'old_password',
+            'new_password1',
+            'new_password2',
+            Submit('submit', 'Submit', css_class='btn-success btn-lg btn-block')
+        )
+
+class ForgotPasswordForm(PasswordResetForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'email',
+            Submit('submit', 'Submit', css_class='btn-success btn-lg btn-block')
+        )
+
+class ResetPasswordForm(SetPasswordForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
             'new_password1',
             'new_password2',
             Submit('submit', 'Submit', css_class='btn-success btn-lg btn-block')

@@ -6,12 +6,14 @@ from django.core.mail import send_mail
 from django.contrib.auth import login, authenticate, logout as auth_logout, BACKEND_SESSION_KEY, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib import messages
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from textwrap import shorten
 
 from .models import Participant, Appointments, Exhibit, ExhibitParticipation, TravelDetails
-from .forms import ParticipantForm, AppointmentsForm, ExhibitForm, ExhibitParticipationForm, TravelDetailsForm, SignUpForm, ChangePasswordForm
+from .forms import ParticipantForm, AppointmentsForm, ExhibitForm, ExhibitParticipationForm, TravelDetailsForm, SignUpForm, ChangePasswordForm, ForgotPasswordForm, ResetPasswordForm
 from .tokens import account_activation_token
 
 
@@ -259,10 +261,13 @@ def signup(request):
             send_mail('NOTOS 2021 - %s' % title, '%s (in HTML format)' % title, settings.EMAIL_HOST_USER, [user.email], html_message=content)
 
             message = 'Your account has been created, but in order to login you have to confirm your email address.<br />We have sent you an email with instructions on how to complete the sign up process.'
-            return render(request, 'registrations/message.html', {'message': message})
+            return render(request, 'registrations/account.html', {'message': message,
+                                                                  'next': settings.LOGIN_REDIRECT_URL})
     else:
         form = SignUpForm()
-    return render(request, 'registrations/signup.html', {'form': form})
+    return render(request, 'registrations/account.html', {'message': 'Sign up by creating an account with us.',
+                                                          'form': form,
+                                                          'next': settings.LOGIN_REDIRECT_URL})
 
 def activate(request, uidb64, token):
     try:
@@ -277,10 +282,66 @@ def activate(request, uidb64, token):
             user.save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('register', step='personal')
-    else:
-        message = 'Invalid or expired activation link.'
-        return render(request, 'registrations/message.html', {'message': message})
 
+    return render(request, 'registrations/account.html', {'message': 'Invalid or expired activation link.',
+                                                          'next': settings.LOGIN_REDIRECT_URL})
+
+def forgot_password(request):
+    if request.method == 'POST':
+        form = ForgotPasswordForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            for user in User.objects.filter(email=email).all():
+                if user.social_auth.exists():
+                    continue
+                if not user.email:
+                    continue
+
+                reset_url = '%s://%s/reset_password/%s/%s' % ('https' if request.is_secure else 'http',
+                                                              request.get_host(),
+                                                              urlsafe_base64_encode(force_bytes(user.pk)),
+                                                              default_token_generator.make_token(user))
+                title = 'Password reset'
+                message = 'Dear %s,<br />Please reset the password to your account by visiting the following link:<br /><a href="%s">%s</a>' % (user.username, reset_url, reset_url)
+                content = render_to_string('registrations/email.html', {'title': title,
+                                                                        'message': message,
+                                                                        'sections': None})
+                send_mail('NOTOS 2021 - %s' % title, '%s (in HTML format)' % title, settings.EMAIL_HOST_USER, [user.email], html_message=content)
+
+            message = 'If the email belongs to a valid local account, we will send you instructions <br />on how to proceed with resetting the password.'
+            return render(request, 'registrations/account.html', {'message': message,
+                                                                  'next': settings.LOGIN_REDIRECT_URL})
+    else:
+        form = ForgotPasswordForm()
+    return render(request, 'registrations/account.html', {'message': 'Enter your email address below to reset your password.',
+                                                          'form': form,
+                                                          'next': settings.LOGIN_REDIRECT_URL})
+
+def reset_password(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except:
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        if request.method == 'POST':
+            form = ResetPasswordForm(user, request.POST)
+            if form.is_valid():
+                user = form.save()
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+                messages.success(request, 'Password successfully reset.')
+                return redirect(settings.LOGIN_REDIRECT_URL)
+        else:
+            form = ResetPasswordForm(user)
+        return render(request, 'registrations/account.html', {'message': 'Reset your password.',
+                                                              'form': form,
+                                                              'next': settings.LOGIN_REDIRECT_URL})
+
+    return render(request, 'registrations/account.html', {'message': 'Invalid or expired password reset link.',
+                                                          'next': settings.LOGIN_REDIRECT_URL})
+
+@login_required
 def change_password(request):
     next = request.GET.get('next', settings.LOGIN_REDIRECT_URL)
 
@@ -289,11 +350,15 @@ def change_password(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
+            messages.success(request, 'Password successfully changed.')
             return redirect(next)
     else:
         form = ChangePasswordForm(request.user)
-    return render(request, 'registrations/change_password.html', {'form': form, 'next': next})
+    return render(request, 'registrations/account.html', {'message': 'Change your password.',
+                                                          'form': form,
+                                                          'next': next})
 
+@login_required
 def logout(request, next):
     auth_logout(request)
     return redirect(next)
