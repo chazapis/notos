@@ -202,6 +202,10 @@ class TravelDetailsForm(forms.ModelForm):
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254, help_text='Required. Please use a valid email address, as you will be sent an email to validate your account.')
 
+    class Meta:
+        model = User
+        fields = ('username', 'password1', 'password2', 'email')
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
