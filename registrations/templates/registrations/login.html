@@ -32,14 +32,16 @@
       <img class="d-block mx-auto mb-4" src="{% static 'registrations/notos_2021.jpg' %}" alt="" width="200" height="200">
       <h2>Registration</h2>
       <p class="lead">Welcome to our prospective Exhibitors and Visitors, the appointed National Commissioners and the proposed Members of the Jury as well as anybody else involved in one way or the other with <a class="text-dark" href="http://hps.gr/notos2021/" target="_blank">NOTOS 2021</a>.</p>
+      {% if auth_social %}
       <div class="row">
         <div class="col-6 offset-3">
-          <p><a class="btn btn-light btn-block btn-social" href="{% url 'social:begin' 'google-oauth2' %}"><span class="fa fa-google" aria-hidden="true"></span> Sign in with Google</a></p>
-          <p><a class="btn btn-light btn-block btn-social" href="{% url 'social:begin' 'twitter' %}"><span class="fa fa-twitter" aria-hidden="true"></span> Sign in with Twitter</a></p>
-          <p><a class="btn btn-light btn-block btn-social" href="{% url 'social:begin' 'facebook' %}"><span class="fa fa-facebook" aria-hidden="true"></span> Sign in with Facebook</a></p>
+          {% if auth_google %}<p><a class="btn btn-light btn-block btn-social" href="{% url 'social:begin' 'google-oauth2' %}"><span class="fa fa-google" aria-hidden="true"></span> Sign in with Google</a></p>{% endif %}
+          {% if auth_twitter %}<p><a class="btn btn-light btn-block btn-social" href="{% url 'social:begin' 'twitter' %}"><span class="fa fa-twitter" aria-hidden="true"></span> Sign in with Twitter</a></p>{% endif %}
+          {% if auth_facebook %}<p><a class="btn btn-light btn-block btn-social" href="{% url 'social:begin' 'facebook' %}"><span class="fa fa-facebook" aria-hidden="true"></span> Sign in with Facebook</a></p>{% endif %}
         </div>
       </div>
       <p class="lead">Or <a class="text-dark" href="{% url 'signup' %}">sign up</a> and use a local account:</p>
+      {% endif %}
       <div class="row">
         <div class="col-6 offset-3">
           <div class="mb-3">
