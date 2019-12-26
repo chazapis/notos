@@ -3,7 +3,7 @@ from django.conf import settings
 from django.forms import inlineformset_factory
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
-from django.contrib.auth import login, authenticate, logout as auth_logout, BACKEND_SESSION_KEY, update_session_auth_hash
+from django.contrib.auth import login, logout as auth_logout, BACKEND_SESSION_KEY, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
@@ -114,7 +114,7 @@ def register(request, step=None, exhibit_id=None):
                     recipients = ([] if settings.EMAIL_ONLY_ADDITIONAL_RECIPIENTS else [email_to]) + settings.EMAIL_ADDITIONAL_RECIPIENTS
                     message = 'Dear Commissioner,<br />This is the entry form data we received from the prospective exhibitor of your country.<br />(a) In case there are errors, please get in contact with the exhibitor and advise him/her to correct the errors and re-submit.<br />(b) If, however, you disapprove of the application, please '
                     if settings.GENERAL_COMMISSIONER_EMAIL:
-                        messasge += 'email the General Commissioner at <a class="text-dark" href="mailto:%s">%s</a>.' % (settings.GENERAL_COMMISSIONER_EMAIL, settings.GENERAL_COMMISSIONER_EMAIL)
+                        message += 'email the General Commissioner at <a class="text-dark" href="mailto:%s">%s</a>.' % (settings.GENERAL_COMMISSIONER_EMAIL, settings.GENERAL_COMMISSIONER_EMAIL)
                     else:
                         message += 'email us at <a class="text-dark" href="mailto:%s">%s</a>.' % (settings.EXHIBITION_EMAIL, settings.EXHIBITION_EMAIL)
                     sections = [{'title': 'Personal',
