@@ -1,3 +1,19 @@
+# Copyright (C) 2019 Antony Chazapis
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
 """
 Django settings for exhibition project.
 
@@ -11,6 +27,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -198,16 +215,20 @@ ENTRY_FORMS_HIDDEN = False
 # president of the respective federation. Whenever a new exhibitor
 # is registered, we email the commissioner of the exhibitors country.
 # If we have no commissioner contact, we email to this address (if it exists).
+
 NO_COMMISSIONER_EMAIL = ''
 
 
 # We note to emails sent to commissioners that any objections should be directed to this email
+
 GENERAL_COMMISSIONER_EMAIL = ''
 
 
 # Add these recipients to any emails sent
+
 EMAIL_ADDITIONAL_RECIPIENTS = []
 
 
 # Send all emails only to the additional recipients list
+
 EMAIL_ONLY_ADDITIONAL_RECIPIENTS = False
