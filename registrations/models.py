@@ -13,7 +13,7 @@ class Participant(models.Model):
                      ('MISS', 'Miss'),
                      ('DR', 'Dr')]
     LANGUAGE_CHOICES = [('EN', 'English'),
-                        ('EL', 'Greek')]
+                        settings.NATIVE_COMMUNICATION_LANGUAGE]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
 

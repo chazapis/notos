@@ -67,6 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'registrations.context_processors.exhibition',
                 'registrations.context_processors.oauth'
             ],
         },
@@ -155,12 +156,32 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {'fields': 'id, name, email'}
 SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [('name', 'name'),
                                    ('email', 'email')]
 
-from .oauth2 import *
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
+
+SOCIAL_AUTH_TWITTER_KEY = ''
+SOCIAL_AUTH_TWITTER_SECRET = ''
+
+SOCIAL_AUTH_FACEBOOK_KEY = ''
+SOCIAL_AUTH_FACEBOOK_SECRET = ''
 
 
 # Form styling with crispy-forms
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+# Exhibition name and details
+
+EXHIBITION_NAME = 'NOTOS 2021'
+EXHIBITION_URL = 'http://hps.gr/notos2021/'
+EXHIBITION_EMAIL = 'notos2021@hps.gr'
+EXHIBITION_LOGO = 'notos_2021.jpg'
+
+
+# Communication language in addition to English
+
+NATIVE_COMMUNICATION_LANGUAGE = ('EL', 'Greek')
 
 
 # Authorization key to register appointments
@@ -173,6 +194,13 @@ APPOINTMENTS_AUTHORIZATION_KEY = 'KEY'
 ENTRY_FORMS_HIDDEN = False
 
 
-# Send to this email if no commissioner for the exhibitors country
-
+# Whenever a new commissioner or juror is registered, we email the
+# president of the respective federation. Whenever a new exhibitor
+# is registered, we email the commissioner of the exhibitors country.
+# If we have no commissioner contact, we email to this address (if it exists).
 NO_COMMISSIONER_EMAIL = ''
+
+
+# We note to emails sent to commissioners that any objections should
+# be directed to this email.
+GENERAL_COMMISSIONER_EMAIL = ''

@@ -1,5 +1,27 @@
 # INSTALL
 
+## Development
+
+Start from the repository directory and create the Python environment:
+```
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+Then:
+```
+mkdir media
+python manage.py migrate
+python manage.py loaddata registrations/fixtures/federations.json
+python manage.py createsuperuser
+python manage.py runserver
+```
+
+And you are done. Consult `exhibition/settings/default.py` for available configuration options.
+
+## Production
+
 What follows are some notes on how to deploy NOTOS for "production". They will most surely need adjustments depending on your actual environment and needs.
 
 I assume a Debian/Ubuntu system and the code checked out in `/srv/` (edit the scripts to change).
@@ -11,7 +33,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Copy `exhibition/settings/oauth2-empty.py` to `exhibition/settings/oauth2.py` and fill in the required keys and secrets. You have to create the appropriate applications in Google, Twitter, and Facebook.
+Copy `exhibition/settings/production-empty.py` to `exhibition/settings/production.py` and fill in the settings (consult the [docs](https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/)). To enable external authentication you have to create the appropriate applications in Google, Twitter, or Facebook and fill in the required keys and secrets.
 
 Then:
 ```
@@ -25,8 +47,6 @@ python manage.py loaddata registrations/fixtures/federations.json
 chown www-data:www-data . db.sqlite3
 python manage.py createsuperuser
 ```
-
-Copy `exhibition/settings/production-empty.py` to `exhibition/settings/production.py` and fill in the settings (consult the [docs](https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/)).
 
 Edit `scripts/apache2/exhibition.conf` for your domain (you may also need to set a dummy `ServerName` in `/etc/apache2/sites-available/000-default.conf`).
 
