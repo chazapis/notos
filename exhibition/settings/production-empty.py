@@ -67,3 +67,9 @@ NO_COMMISSIONER_EMAIL = ''
 # We note to emails sent to commissioners that any objections should
 # be directed to this email.
 GENERAL_COMMISSIONER_EMAIL = ''
+
+# Add these recipients to any emails sent.
+EMAIL_ADDITIONAL_RECIPIENTS = []
+
+# Send all emails only to the additional recipients list
+EMAIL_ONLY_ADDITIONAL_RECIPIENTS = False

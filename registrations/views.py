@@ -78,6 +78,7 @@ def register(request, step=None, exhibit_id=None):
 
                 if appointments.federation.email:
                     title = 'Commissioner/Juror Registration'
+                    recipients = ([] if settings.EMAIL_ONLY_ADDITIONAL_RECIPIENTS else [appointments.federation.email]) + settings.EMAIL_ADDITIONAL_RECIPIENTS
                     message = 'Dear Mr President of the Federation,<br />This is the registration data we received from the appointed Commissioner or proposed Juror from your Federation. Please email us at <a class="text-dark" href="mailto:%s">%s</a> in case you find it inappropriate.' % (settings.EXHIBITION_EMAIL, settings.EXHIBITION_EMAIL)
                     sections = [{'title': 'Personal',
                                  'fields': participant.printout(),
@@ -88,7 +89,7 @@ def register(request, step=None, exhibit_id=None):
                     content = render_to_string('registrations/email.html', {'title': title,
                                                                             'message': message,
                                                                             'sections': sections})
-                    send_mail('%s - %s' % (settings.EXHIBITION_NAME, title), '%s (in HTML format)' % title, settings.EMAIL_HOST_USER, ['chazapis@gmail.com', 'info@california.gr'], html_message=content)
+                    send_mail('%s - %s' % (settings.EXHIBITION_NAME, title), '%s (in HTML format)' % title, settings.EMAIL_HOST_USER, recipients, html_message=content)
 
                 return redirect('register', step=step)
         elif step == 'exhibit':
@@ -110,6 +111,7 @@ def register(request, step=None, exhibit_id=None):
                 email_to = commissioner_appointments.participant.email if commissioner_appointments else settings.NO_COMMISSIONER_EMAIL
                 if email_to:
                     title = 'Exhibit Registration'
+                    recipients = ([] if settings.EMAIL_ONLY_ADDITIONAL_RECIPIENTS else [email_to]) + settings.EMAIL_ADDITIONAL_RECIPIENTS
                     message = 'Dear Commissioner,<br />This is the entry form data we received from the prospective exhibitor of your country.<br />(a) In case there are errors, please get in contact with the exhibitor and advise him/her to correct the errors and re-submit.<br />(b) If, however, you disapprove of the application, please '
                     if settings.GENERAL_COMMISSIONER_EMAIL:
                         messasge += 'email the General Commissioner at <a class="text-dark" href="mailto:%s">%s</a>.' % (settings.GENERAL_COMMISSIONER_EMAIL, settings.GENERAL_COMMISSIONER_EMAIL)
@@ -125,7 +127,7 @@ def register(request, step=None, exhibit_id=None):
                     content = render_to_string('registrations/email.html', {'title': title,
                                                                             'message': message,
                                                                             'sections': sections})
-                    send_mail('%s - %s' % (settings.EXHIBITION_NAME, title), '%s (in HTML format)' % title, settings.EMAIL_HOST_USER, ['chazapis@gmail.com', 'info@california.gr'], html_message=content)
+                    send_mail('%s - %s' % (settings.EXHIBITION_NAME, title), '%s (in HTML format)' % title, settings.EMAIL_HOST_USER, recipients, html_message=content)
 
                 return redirect('edit_exhibit', exhibit_id=exhibit.id)
         elif step == 'travel':
