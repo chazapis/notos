@@ -16,7 +16,7 @@
 
 from django.contrib import admin
 
-from .models import Participant, Federation, Exhibit, ExhibitParticipation, TravelDetails
+from .models import Participant, Federation, Appointments, Exhibit, ExhibitParticipation, TravelDetails
 
 
 @admin.register(Participant)
@@ -26,6 +26,10 @@ class ParticipantAdmin(admin.ModelAdmin):
 @admin.register(Federation)
 class FederationAdmin(admin.ModelAdmin):
     list_display = ('full_name', 'country_code')
+
+@admin.register(Appointments)
+class AppointmentsAdmin(admin.ModelAdmin):
+    list_display = ('participant', 'federation', 'commissioner', 'jury')
 
 class ExhibitParticipationAdmin(admin.TabularInline):
     model = ExhibitParticipation
