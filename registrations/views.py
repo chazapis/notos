@@ -14,7 +14,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-from django.shortcuts import render, redirect, reverse
+import io
+import zipfile
+
+from django.shortcuts import render, redirect, reverse, HttpResponse
 from django.conf import settings
 from django.forms import inlineformset_factory
 from django.template.loader import render_to_string
@@ -23,12 +26,14 @@ from django.contrib.auth import login, logout as auth_logout, BACKEND_SESSION_KE
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from textwrap import shorten
+from datetime import datetime
 
-from .models import Participant, Appointments, Exhibit, ExhibitParticipation, TravelDetails
+from .models import Participant, Federation, Appointments, Exhibit, ExhibitParticipation, TravelDetails
 from .forms import ParticipantForm, AppointmentsForm, ExhibitForm, ExhibitParticipationForm, TravelDetailsForm, SignUpForm, ChangePasswordForm, ForgotPasswordForm, ResetPasswordForm
 from .tokens import account_activation_token
 
@@ -188,7 +193,7 @@ def register(request, step=None, exhibit_id=None):
         exhibits = [{'title': e.title,
                      'description': shorten(e.short_description, width=80, placeholder='...'),
                      'url': reverse('edit_exhibit', kwargs={'exhibit_id': e.id})} for e in participant.exhibits.all()]
-    if local_account and step == 'personal':
+    if local_account and step == 'personal' and request.user.email:
         form.fields['email'].disabled = True
     required_done = True if participant else False
     steps = [{'title': 'Personal',
@@ -262,6 +267,27 @@ def printout(request):
                          'fields': participant.travel_details.first().printout(),
                          'subsections': []})
     return render(request, 'registrations/print.html', {'sections': sections})
+
+@staff_member_required
+def export(request):
+    export_name = '%s-export-%s' % (settings.EXHIBITION_NAME.replace(' ', '-'), datetime.now().strftime('%Y%m%d%H%M%S'))
+    zip_stream = io.BytesIO()
+    with zipfile.ZipFile(zip_stream, mode="w", compression=zipfile.ZIP_DEFLATED) as zip_file:
+        zip_file.writestr('%s/registrants.csv' % export_name, Participant.export_to_csv())
+        zip_file.writestr('%s/exhibits.csv' % export_name, Exhibit.export_to_csv())
+        zip_file.writestr('%s/exhibit_participations.csv' % export_name, ExhibitParticipation.export_to_csv())
+        zip_file.writestr('%s/federations.csv' % export_name, Federation.export_to_csv())
+        zip_file.writestr('%s/countries.csv' % export_name, Participant.export_countries_to_csv())
+        zip_file.writestr('%s/titles.csv' % export_name, Participant.export_choices_to_csv(Participant.TITLE_CHOICES))
+        zip_file.writestr('%s/languages.csv' % export_name, Participant.export_choices_to_csv(Participant.LANGUAGE_CHOICES))
+        zip_file.writestr('%s/accredited_jurors.csv' % export_name, Appointments.export_choices_to_csv(Appointments.ACCREDITED_JUROR_CHOICES))
+        zip_file.writestr('%s/exhibit_classes.csv' % export_name, Exhibit.export_choices_to_csv(Exhibit.EXHIBIT_CLASS_CHOICES))
+        zip_file.writestr('%s/exhibition_levels.csv' % export_name, ExhibitParticipation.export_choices_to_csv(ExhibitParticipation.EXHIBITION_LEVEL_CHOICES))
+        zip_file.writestr('%s/medals.csv' % export_name, ExhibitParticipation.export_choices_to_csv(ExhibitParticipation.MEDAL_CHOICES))
+
+    response = HttpResponse(zip_stream.getvalue(), content_type='application/zip')
+    response['Content-Disposition'] = 'attachment; filename="%s.zip"' % export_name
+    return response
 
 def signup(request):
     if request.method == 'POST':

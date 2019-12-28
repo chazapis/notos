@@ -15,15 +15,48 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import os
+import io
+import csv
 
 from django.db import models
 from django.conf import settings
+from django_countries import countries
 from django_countries.fields import CountryField
 from django.core.exceptions import ValidationError
 from collections import OrderedDict
 
 
-class Participant(models.Model):
+class ExportMixin():
+    @classmethod
+    def export_keys(cls):
+        return list(cls._export_fields.keys())
+
+    @classmethod
+    def export_to_csv(cls):
+        stream = io.StringIO()
+        writer = csv.writer(stream)
+        writer.writerow(cls.export_keys())
+        for instance in cls.objects.all():
+            writer.writerow(instance.export_values())
+        return stream.getvalue()
+
+    @classmethod
+    def export_choices_to_csv(cls, choices):
+        stream = io.StringIO()
+        writer = csv.writer(stream)
+        writer.writerow(['id', 'value'])
+        for key, value in choices:
+            writer.writerow([key, value])
+        return stream.getvalue()
+
+    @classmethod
+    def export_countries_to_csv(cls):
+        return cls.export_choices_to_csv(list(countries))
+
+    def export_values(self):
+        return [getattr(self, field) for field in self.__class__._export_fields.values()]
+
+class Participant(models.Model, ExportMixin):
     TITLE_CHOICES = [('MR', 'Mr'),
                      ('MRS', 'Mrs'),
                      ('MISS', 'Miss'),
@@ -48,6 +81,29 @@ class Participant(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     changed_at = models.DateTimeField(auto_now=True)
 
+    _export_fields = OrderedDict([('id', 'id'),
+                                  ('title_id', 'title'),
+                                  ('surname', 'surname'),
+                                  ('name', 'name'),
+                                  ('address', 'address'),
+                                  ('country_id', 'country'),
+                                  ('email', 'email'),
+                                  ('telephone', 'telephone'),
+                                  ('mobile', 'mobile'),
+                                  ('language_id', 'language'),
+                                  ('remarks', 'remarks')])
+
+    @classmethod
+    def export_to_csv(cls):
+        stream = io.StringIO()
+        writer = csv.writer(stream)
+        writer.writerow(cls.export_keys() + Appointments.export_keys() + TravelDetails.export_keys())
+        for participant in Participant.objects.all():
+            appointments = participant.appointments.first() if participant.appointments.count() else Appointments()
+            travel_details = participant.travel_details.first() if participant.travel_details.count() else TravelDetails()
+            writer.writerow(participant.export_values() + appointments.export_values() + travel_details.export_values())
+        return stream.getvalue()
+
     def full_name(self):
         return '%s, %s, %s' % (self.surname,
                                self.name,
@@ -71,11 +127,17 @@ class Participant(models.Model):
     def __str__(self):
         return self.full_name()
 
-class Federation(models.Model):
+class Federation(models.Model, ExportMixin):
     country = models.CharField(max_length=32)
     country_code = models.CharField(max_length=2)
     name = models.CharField(max_length=128)
     email = models.CharField(max_length=128)
+
+    _export_fields = OrderedDict([('id', 'id'),
+                                  ('country', 'country'),
+                                  ('country_code', 'country_code'),
+                                  ('name', 'name'),
+                                  ('email', 'email')])
 
     def full_name(self):
         return 'FED %s - %s' % (self.country,
@@ -85,7 +147,7 @@ class Federation(models.Model):
     def __str__(self):
         return self.full_name()
 
-class Appointments(models.Model):
+class Appointments(models.Model, ExportMixin):
     ACCREDITED_JUROR_CHOICES = [('FIP', 'FIP'),
                                 ('FEPA', 'FEPA'),
                                 ('NAT', 'National')]
@@ -105,6 +167,18 @@ class Appointments(models.Model):
     team_leader = models.BooleanField()
     team_leader_disciplines = models.CharField(blank=True, max_length=128)
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    changed_at = models.DateTimeField(auto_now=True)
+
+    _export_fields = OrderedDict([('federation_id', 'federation_id'),
+                                  ('commissioner', 'commissioner'),
+                                  ('jury', 'jury'),
+                                  ('apprentice_jury', 'apprentice_jury'),
+                                  ('accredited_juror_id', 'accredited_juror'),
+                                  ('accredited_juror_disciplines', 'accredited_juror_disciplines'),
+                                  ('team_leader', 'team_leader'),
+                                  ('team_leader_disciplines', 'team_leader_disciplines')])
+
     def printout(self):
         result = OrderedDict([('National federation name', self.federation.full_name() if self.federation else ''),
                               ('Appointed national commissioner', 'Yes' if self.commissioner else 'No'),
@@ -119,7 +193,7 @@ class Appointments(models.Model):
     def __str__(self):
         return str(self.participant)
 
-class Exhibit(models.Model):
+class Exhibit(models.Model, ExportMixin):
     EXHIBIT_CLASS_CHOICES = [('B1', 'B1. Classe des Champions'),
                              ('C1', 'C1. Traditional Philately'),
                              ('C2', 'C2. Postal History'),
@@ -169,6 +243,26 @@ class Exhibit(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     changed_at = models.DateTimeField(auto_now=True)
 
+    _export_fields = OrderedDict([('id', 'id'),
+                                  ('registrant_id', 'participant_id'),
+                                  ('title', 'title'),
+                                  ('short_description', 'short_description'),
+                                  ('exhibit_class', 'exhibit_class'),
+                                  ('date_of_birth', 'date_of_birth'),
+                                  ('frames', 'frames'),
+                                  ('introductory_page', 'introductory_page'),
+                                  ('synopsis', 'synopsis'),
+                                  ('remarks', 'remarks'),
+                                  ('author', 'author'),
+                                  ('publisher', 'publisher'),
+                                  ('year_of_publication', 'year_of_publication'),
+                                  ('language', 'language'),
+                                  ('pages', 'pages'),
+                                  ('format', 'format'),
+                                  ('frequency', 'frequency'),
+                                  ('availability', 'availability'),
+                                  ('price', 'price')])
+
     def printout(self):
         result = OrderedDict([('Title', self.title),
                               ('Short description', self.short_description),
@@ -197,7 +291,7 @@ class Exhibit(models.Model):
     def __str__(self):
         return self.title
 
-class ExhibitParticipation(models.Model):
+class ExhibitParticipation(models.Model, ExportMixin):
     EXHIBITION_LEVEL_CHOICES = [('WORLD', 'FIP World'),
                                 ('CONT', 'FEPA/FIAF/FIAP Continental'),
                                 ('INT', 'Other International'),
@@ -230,6 +324,15 @@ class ExhibitParticipation(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     changed_at = models.DateTimeField(auto_now=True)
 
+    _export_fields = OrderedDict([('id', 'id'),
+                                  ('exhibit_id', 'exhibit_id'),
+                                  ('exhibition_level_id', 'exhibition_level'),
+                                  ('exhibition_name', 'exhibition_name'),
+                                  ('points', 'points'),
+                                  ('medal_id', 'medal'),
+                                  ('special_prize', 'special_prize'),
+                                  ('felicitations', 'felicitations')])
+
     def clean(self):
         if self.exhibit.participations.count() >= 6:
             raise ValidationError('Please enter up to a maximum of 6 participations per exhibit')
@@ -243,7 +346,7 @@ class ExhibitParticipation(models.Model):
                               ('Felicitations', 'Yes' if self.felicitations else 'No')])
         return result
 
-class TravelDetails(models.Model):
+class TravelDetails(models.Model, ExportMixin):
     class Meta:
         verbose_name = 'Travel Details'
         verbose_name_plural = 'Travel Details'
@@ -264,6 +367,18 @@ class TravelDetails(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     changed_at = models.DateTimeField(auto_now=True)
+
+    _export_fields = OrderedDict([('arrival', 'arrival'),
+                                  ('arrival_flight_number', 'arrival_flight_number'),
+                                  ('departure', 'departure'),
+                                  ('departure_flight_number', 'departure_flight_number'),
+                                  ('ticket_price', 'ticket_price'),
+                                  ('spouse', 'spouse'),
+                                  ('spouse_surname', 'spouse_surname'),
+                                  ('spouse_name', 'spouse_name'),
+                                  ('hotel', 'hotel'),
+                                  ('hotel_website', 'hotel_website'),
+                                  ('travel_remarks', 'remarks')])
 
     def printout(self):
         result = OrderedDict([('Arrival', self.arrival or ''),
