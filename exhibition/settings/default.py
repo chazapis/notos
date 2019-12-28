@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'social_django',
     'tempus_dominus',
     'crispy_forms',
+    'admin_views',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

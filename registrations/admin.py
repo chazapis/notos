@@ -15,13 +15,19 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 from django.contrib import admin
+from django.shortcuts import redirect
+from admin_views.admin import AdminViews
 
 from .models import Participant, Federation, Appointments, Exhibit, ExhibitParticipation, TravelDetails
 
 
 @admin.register(Participant)
-class ParticipantAdmin(admin.ModelAdmin):
+class ParticipantAdmin(AdminViews):
     list_display = ('full_name', 'country', 'telephone', 'mobile', 'language')
+    admin_views = (('Export to CSV', 'export_to_csv'),)
+
+    def export_to_csv(self, *args, **kwargs):
+        return redirect('export')
 
 @admin.register(Federation)
 class FederationAdmin(admin.ModelAdmin):
