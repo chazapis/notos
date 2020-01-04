@@ -99,7 +99,8 @@ def register(request, step=None, exhibit_id=None):
 
                 if appointments.federation.email:
                     title = 'Commissioner/Juror Registration'
-                    recipients = ([] if settings.EMAIL_ONLY_ADDITIONAL_RECIPIENTS else [appointments.federation.email]) + settings.EMAIL_ADDITIONAL_RECIPIENTS
+                    federation_recipients = [address.strip() for address in appointments.federation.email.split(',')]
+                    recipients = ([] if settings.EMAIL_ONLY_ADDITIONAL_RECIPIENTS else federation_recipients) + settings.EMAIL_ADDITIONAL_RECIPIENTS
                     message = 'Dear Mr President of the Federation,<br />This is the registration data we received from the appointed Commissioner or proposed Juror from your Federation. Please email us at <a class="text-dark" href="mailto:%s">%s</a> in case you find it inappropriate.' % (settings.EXHIBITION_EMAIL, settings.EXHIBITION_EMAIL)
                     sections = [{'title': 'Personal',
                                  'fields': participant.printout(),
