@@ -160,7 +160,8 @@ class ExhibitForm(forms.ModelForm):
         if settings.ENTRY_FORMS_DISABLED_MESSAGE:
             self.helper.layout.insert(0, HTML('<div class="alert alert-warning small" role="alert">' + settings.ENTRY_FORMS_DISABLED_MESSAGE + '</div>'))
             self.helper.layout.pop(9)
-            self.helper.layout[10] = HTML('<input type="submit" class="btn btn-success btn-lg btn-block" value="Submit" disabled>')
+            self.helper.layout.pop(9)
+            self.helper.layout[9] = HTML('<input type="submit" class="btn btn-success btn-lg btn-block" value="Submit" disabled>')
             for field in ('title', 'short_description', 'date_of_birth', 'remarks', 'author', 'publisher', 'year_of_publication', 'language', 'pages', 'format', 'frequency', 'availability', 'price'):
                 self.fields[field].disabled = True
 
