@@ -99,8 +99,7 @@ def register(request, step=None, exhibit_id=None):
 
                 if appointments.federation.email:
                     title = 'Commissioner/Juror Registration'
-                    federation_recipients = [address.strip() for address in appointments.federation.email.split(',')]
-                    recipients = ([] if settings.EMAIL_ONLY_ADDITIONAL_RECIPIENTS else federation_recipients) + settings.EMAIL_ADDITIONAL_RECIPIENTS
+                    recipients = ([] if settings.EMAIL_ONLY_ADDITIONAL_RECIPIENTS else appointments.federation.email_list()) + settings.EMAIL_ADDITIONAL_RECIPIENTS
                     message = 'Dear Mr President of the Federation,<br />This is the registration data we received from the appointed Commissioner or proposed Juror from your Federation. Please email us at <a class="text-dark" href="mailto:%s">%s</a> in case you find it inappropriate.' % (settings.EXHIBITION_EMAIL, settings.EXHIBITION_EMAIL)
                     sections = [{'title': 'Personal',
                                  'fields': participant.printout(),
@@ -129,11 +128,20 @@ def register(request, step=None, exhibit_id=None):
                 exhibit.save()
                 formset.save()
 
+                email_to = None
                 commissioner_appointments = Appointments.objects.filter(commissioner=True, federation__country_code=participant.country.code).first()
-                email_to = commissioner_appointments.participant.email if commissioner_appointments else settings.NO_COMMISSIONER_EMAIL
+                if commissioner_appointments:
+                    email_to = [commissioner_appointments.participant.email]
+                else:
+                    federation = Federation.objects.filter(country_code=participant.country.code).first()
+                    if federation:
+                        email_to = federation.email_list()
+                if not email_to and settings.NO_COMMISSIONER_EMAIL:
+                    email_to = [settings.NO_COMMISSIONER_EMAIL]
+
                 if email_to:
                     title = 'Exhibit Registration'
-                    recipients = ([] if settings.EMAIL_ONLY_ADDITIONAL_RECIPIENTS else [email_to]) + settings.EMAIL_ADDITIONAL_RECIPIENTS
+                    recipients = ([] if settings.EMAIL_ONLY_ADDITIONAL_RECIPIENTS else email_to) + settings.EMAIL_ADDITIONAL_RECIPIENTS
                     message = 'Dear Commissioner,<br />This is the entry form data we received from the prospective exhibitor of your country.<br />(a) In case there are errors, please get in contact with the exhibitor and advise him/her to correct the errors and re-submit.<br />(b) If, however, you disapprove of the application, please '
                     if settings.GENERAL_COMMISSIONER_EMAIL:
                         message += 'email the General Commissioner at <a class="text-dark" href="mailto:%s">%s</a>.' % (settings.GENERAL_COMMISSIONER_EMAIL, settings.GENERAL_COMMISSIONER_EMAIL)

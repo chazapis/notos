@@ -144,6 +144,11 @@ class Federation(models.Model, ExportMixin):
                                 self.name)
     full_name.short_description = 'Full name'
 
+    def email_list(self):
+        if not self.email:
+            return []
+        return [address.strip() for address in self.email.split(',')]
+
     def __str__(self):
         return self.full_name()
 
