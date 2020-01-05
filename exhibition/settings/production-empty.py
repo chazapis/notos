@@ -69,8 +69,11 @@ NATIVE_COMMUNICATION_LANGUAGE = ('EL', 'Greek')
 # Authorization key to register appointments
 APPOINTMENTS_AUTHORIZATION_KEY = 'KEY'
 
-# Hide exhibit entry forms
-ENTRY_FORMS_HIDDEN = False
+# Disable exhibit entry forms by explaining why
+ENTRY_FORMS_DISABLED_MESSAGE = ''
+
+# Entry forms submit warning
+ENTRY_FORMS_SUBMIT_MESSAGE = 'By submitting this Entry Form the Exhibitor accepts the Regulations listed in article 2.1. and confirms the truthfulness of all data entered.'
 
 # Whenever a new commissioner or juror is registered, we email the
 # president of the respective federation. Whenever a new exhibitor

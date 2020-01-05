@@ -40,7 +40,7 @@ from .tokens import account_activation_token
 
 @login_required
 def register(request, step=None, exhibit_id=None):
-    if step == 'exhibit' and settings.ENTRY_FORMS_HIDDEN:
+    if step == 'exhibit' and request.method == 'POST' and settings.ENTRY_FORMS_DISABLED_MESSAGE:
         return redirect('register', step='personal')
 
     try:
@@ -207,25 +207,21 @@ def register(request, step=None, exhibit_id=None):
     required_done = True if participant else False
     steps = [{'title': 'Personal',
               'description': 'Name and contact details',
-              'hidden': False,
               'done': True if participant else False,
               'current': step == 'personal',
               'url': reverse('register', kwargs={'step': 'personal'})},
              {'title': 'Appointments',
               'description': 'Commissioner/Jury data',
-              'hidden': False,
               'done': participant and participant.appointments.count(),
               'current': step == 'appointments',
               'url': reverse('register', kwargs={'step': 'appointments'})},
              {'title': 'Entry forms',
               'description': 'Participating exhibits',
-              'hidden': settings.ENTRY_FORMS_HIDDEN,
               'done': participant and participant.exhibits.count(),
               'current': step == 'exhibit',
               'url': reverse('register', kwargs={'step': 'exhibit'})},
              {'title': 'Travel details',
               'description': 'Flights, accommodation, etc.',
-              'hidden': False,
               'done': participant and participant.travel_details.count(),
               'current': step == 'travel',
               'url': reverse('register', kwargs={'step': 'travel'})}]
