@@ -234,7 +234,8 @@ def register(request, step=None, exhibit_id=None):
                                                            'remove_url': remove_url,
                                                            'required_done': required_done,
                                                            'steps': steps,
-                                                           'can_change_password': can_change_password})
+                                                           'can_change_password': can_change_password,
+                                                           'privacy_policy_message': settings.PRIVACY_POLICY_MESSAGE})
 
 @login_required
 def remove_exhibit(request, exhibit_id=None):
@@ -320,7 +321,9 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'registrations/account.html', {'message': 'Sign up by creating an account with us.',
                                                           'form': form,
-                                                          'next': settings.LOGIN_REDIRECT_URL})
+                                                          'next': settings.LOGIN_REDIRECT_URL,
+                                                          'show_privacy_policy': True,
+                                                          'privacy_policy_message': settings.PRIVACY_POLICY_MESSAGE})
 
 def activate(request, uidb64, token):
     try:

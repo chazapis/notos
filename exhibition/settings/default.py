@@ -207,6 +207,11 @@ NATIVE_COMMUNICATION_LANGUAGE = ('EL', 'Greek')
 APPOINTMENTS_AUTHORIZATION_KEY = 'KEY'
 
 
+# Privacy policy note shown when creating an account or submiting any form
+
+PRIVACY_POLICY_MESSAGE = 'We shall treat the data you enter with respect. Further details are in our <a href="http://hps.gr/notos2021/index.php/privacy-policy/" target="_blank">Privacy Policy Page</a>. By filling in the form and clicking the SUBMIT button you agree to the terms provided therein as well as to receiving emails from us.'
+
+
 # Disable exhibit entry forms by explaining why
 
 ENTRY_FORMS_DISABLED_MESSAGE = ''

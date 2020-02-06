@@ -15,7 +15,7 @@
     <div class="col-md-8 offset-md-2">
       <h4 class="mb-3">Account</h4>
       {% crispy form %}
-      {% if show_privacy_policy %}<div class="text-muted mt-1"><small>We shall treat the data you enter with respect. Further details are in our Privacy Policy Page. By filling in the form and clicking the SUBMIT button you agree to the terms provided therein as well as to receiving emails from us.</small></div>{% endif %}
+      {% if show_privacy_policy %}<div class="text-muted mt-1"><small>{{ privacy_policy_message|safe }}</small></div>{% endif %}
     </div>
   </div>
   {% endif %}

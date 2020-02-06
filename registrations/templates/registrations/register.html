@@ -75,7 +75,7 @@
       {% endif %}
       <h4 class="mb-3">{{ form_title|safe }}</h4>
       {% crispy form %}
-      <div class="text-muted mt-1"><small>We shall treat the data you enter with respect. Further details are in our Privacy Policy Page. By filling in the form and clicking the SUBMIT button you agree to the terms provided therein as well as to receiving emails from us.</small></div>
+      <div class="text-muted mt-1"><small>{{ privacy_policy_message|safe }}</small></div>
       {% if remove_url %}
       <button type="button" class="btn btn-secondary btn-lg btn-block mt-3" data-toggle="modal" data-target="#removeExhibitModal">Remove</button>
 
