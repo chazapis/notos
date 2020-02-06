@@ -203,7 +203,7 @@ def register(request, step=None, exhibit_id=None):
                      'description': shorten(e.short_description, width=80, placeholder='...'),
                      'url': reverse('edit_exhibit', kwargs={'exhibit_id': e.id})} for e in participant.exhibits.all()]
     if local_account and step == 'personal' and request.user.email:
-        form.fields['email'].disabled = True
+        form.fields['email'].widget.attrs['readonly'] = True
     required_done = True if participant else False
     steps = [{'title': 'Personal',
               'description': 'Name and contact details',
