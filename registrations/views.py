@@ -135,7 +135,10 @@ def register(request, step=None, exhibit_id=None):
                 else:
                     federation = Federation.objects.filter(country_code=participant.country.code).first()
                     if federation:
-                        email_to = federation.email_list()
+                        if federation.commissioner_email:
+                            email_to = [federation.commissioner_email]
+                        else:
+                            email_to = federation.email_list()
                 if not email_to and settings.NO_COMMISSIONER_EMAIL:
                     email_to = [settings.NO_COMMISSIONER_EMAIL]
 

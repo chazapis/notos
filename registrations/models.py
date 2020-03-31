@@ -131,12 +131,14 @@ class Federation(models.Model, ExportMixin):
     country = models.CharField(max_length=32)
     country_code = models.CharField(max_length=2)
     name = models.CharField(max_length=128)
+    commissioner_email = models.CharField(max_length=128, null=True, blank=True, help_text='Used if no commissioner has registered')
     email = models.CharField(max_length=128)
 
     _export_fields = OrderedDict([('id', 'id'),
                                   ('country', 'country'),
                                   ('country_code', 'country_code'),
                                   ('name', 'name'),
+                                  ('commissioner_email', 'commissioner_email'),
                                   ('email', 'email')])
 
     def full_name(self):
