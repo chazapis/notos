@@ -176,9 +176,9 @@ def register(request, step=None, exhibit_id=None):
                 return redirect('register', step=step)
     else:
         if step == 'personal':
-            initial_surname = participant.surname if participant.surname else request.user.last_name
-            initial_name = participant.name if participant.name else request.user.first_name
-            initial_email = participant.email if participant.email else request.user.email
+            initial_surname = participant.surname if (participant and participant.surname) else request.user.last_name
+            initial_name = participant.name if (participant and participant.name) else request.user.first_name
+            initial_email = participant.email if (participant and participant.email) else request.user.email
             form = ParticipantForm(instance=participant, initial={'surname': initial_surname,
                                                                   'name': initial_name,
                                                                   'email': initial_email})
