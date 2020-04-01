@@ -81,10 +81,12 @@ def register(request, step=None, exhibit_id=None):
 
         if step == 'personal':
             form = ParticipantForm(request.POST, request.FILES, instance=participant)
+            print(participant.printout())
             form.helper.form_action = reverse('register', kwargs={'step': step})
             formset = None
             if form.is_valid():
                 participant = form.save(commit=False)
+                print(participant.printout())
                 participant.user = request.user
                 participant.save()
                 return redirect('register', step=step)
@@ -174,9 +176,12 @@ def register(request, step=None, exhibit_id=None):
                 return redirect('register', step=step)
     else:
         if step == 'personal':
-            form = ParticipantForm(instance=participant, initial={'surname': request.user.last_name,
-                                                                  'name': request.user.first_name,
-                                                                  'email': request.user.email})
+            initial_surname = participant.surname if participant.surname else request.user.last_name
+            initial_name = participant.name if participant.name else request.user.first_name
+            initial_email = participant.email if participant.email else request.user.email
+            form = ParticipantForm(instance=participant, initial={'surname': initial_surname,
+                                                                  'name': initial_name,
+                                                                  'email': initial_email})
             form.helper.form_action = reverse('register', kwargs={'step': step})
             formset = None
         elif step == 'appointments':
