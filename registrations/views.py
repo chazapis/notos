@@ -81,12 +81,10 @@ def register(request, step=None, exhibit_id=None):
 
         if step == 'personal':
             form = ParticipantForm(request.POST, request.FILES, instance=participant)
-            print(participant.printout())
             form.helper.form_action = reverse('register', kwargs={'step': step})
             formset = None
             if form.is_valid():
                 participant = form.save(commit=False)
-                print(participant.printout())
                 participant.user = request.user
                 participant.save()
                 return redirect('register', step=step)
