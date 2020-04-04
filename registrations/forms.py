@@ -108,7 +108,9 @@ class ExhibitForm(forms.ModelForm):
                   'language': 'Language(s)'}
         widgets = {'short_description': forms.Textarea(attrs={'rows': 5}),
                    'date_of_birth': DatePicker(attrs={'append': 'fa fa-calendar'}),
-                   'remarks': forms.Textarea(attrs={'rows': 3})}
+                   'remarks': forms.Textarea(attrs={'rows': 3}),
+                   'year_of_publication': forms.TextInput(),
+                   'pages': forms.TextInput()}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -172,6 +174,7 @@ class ExhibitParticipationForm(forms.ModelForm):
         labels = {'medal': 'Award/Medal',
                   'special_prize': 'SP',
                   'felicitations': 'F'}
+        widgets = {'points': forms.TextInput()}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
