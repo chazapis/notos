@@ -241,6 +241,7 @@ class Exhibit(models.Model, ExportMixin):
     publisher = models.CharField(max_length=128, blank=True)
     year_of_publication = models.IntegerField(null=True, blank=True)
     language = models.CharField(max_length=64, blank=True)
+    isbn = models.CharField(max_length=32, blank=True)
     pages = models.IntegerField(null=True, blank=True)
     format = models.CharField(max_length=64, blank=True)
     frequency = models.CharField(max_length=64, blank=True)
@@ -264,6 +265,7 @@ class Exhibit(models.Model, ExportMixin):
                                   ('publisher', 'publisher'),
                                   ('year_of_publication', 'year_of_publication'),
                                   ('language', 'language'),
+                                  ('isbn', 'isbn'),
                                   ('pages', 'pages'),
                                   ('format', 'format'),
                                   ('frequency', 'frequency'),
@@ -284,6 +286,7 @@ class Exhibit(models.Model, ExportMixin):
                                        ('Publisher', self.publisher),
                                        ('Year of publication', self.year_of_publication or ''),
                                        ('Language(s)', self.language),
+                                       ('ISBN/ISSN', self.isbn),
                                        ('Pages', self.pages or ''),
                                        ('Format', self.format),
                                        ('Frequency', self.frequency),

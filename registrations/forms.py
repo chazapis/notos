@@ -102,10 +102,11 @@ class AppointmentsForm(forms.ModelForm):
 class ExhibitForm(forms.ModelForm):
     class Meta:
         model = Exhibit
-        fields = ('title', 'short_description', 'exhibit_class', 'date_of_birth', 'frames', 'introductory_page', 'synopsis', 'remarks', 'author', 'publisher', 'year_of_publication', 'language', 'pages', 'format', 'frequency', 'availability', 'price')
+        fields = ('title', 'short_description', 'exhibit_class', 'date_of_birth', 'frames', 'introductory_page', 'synopsis', 'remarks', 'author', 'publisher', 'year_of_publication', 'language', 'isbn', 'pages', 'format', 'frequency', 'availability', 'price')
         labels = {'introductory_page': 'Introductory page (Front cover if Philatelic Literature)',
                   'synopsis': 'Synopsis (Short abstract if Philatelic Literature)',
-                  'language': 'Language(s)'}
+                  'language': 'Language(s)',
+                  'isbn': 'ISBN/ISSN'}
         widgets = {'short_description': forms.Textarea(attrs={'rows': 5}),
                    'date_of_birth': DatePicker(attrs={'append': 'fa fa-calendar'}),
                    'remarks': forms.Textarea(attrs={'rows': 3}),
@@ -141,7 +142,11 @@ class ExhibitForm(forms.ModelForm):
                     Column('year_of_publication', css_class='form-group col-md-3 mb-0'),
                     css_class='form-row'
                 ),
-                'language',
+                Row(
+                    Column('language', css_class='form-group col-md-9 mb-0'),
+                    Column('isbn', css_class='form-group col-md-3 mb-0'),
+                    css_class='form-row'
+                ),
                 Row(
                     Column('pages', css_class='form-group col-md-4 mb-0'),
                     Column('format', css_class='form-group col-md-5 mb-0'),
@@ -164,7 +169,7 @@ class ExhibitForm(forms.ModelForm):
             self.helper.layout.pop(9)
             self.helper.layout.pop(9)
             self.helper.layout[9] = HTML('<input type="submit" class="btn btn-success btn-lg btn-block" value="Submit" disabled>')
-            for field in ('title', 'short_description', 'date_of_birth', 'remarks', 'author', 'publisher', 'year_of_publication', 'language', 'pages', 'format', 'frequency', 'availability', 'price'):
+            for field in ('title', 'short_description', 'date_of_birth', 'remarks', 'author', 'publisher', 'year_of_publication', 'language', 'isbn', 'pages', 'format', 'frequency', 'availability', 'price'):
                 self.fields[field].disabled = True
 
 class ExhibitParticipationForm(forms.ModelForm):
