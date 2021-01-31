@@ -326,6 +326,52 @@ def export(request):
         response['Content-Disposition'] = 'attachment; filename="%s.xlsx"' % export_name
         return response
 
+@staff_member_required
+def report(request):
+    report_name = '%s-report-%s' % (settings.EXHIBITION_NAME.replace(' ', '-'), datetime.now().strftime('%Y%m%d%H%M%S'))
+
+    def write_entries(worksheet, entries):
+        next_column = 0
+        for section in entries[0].keys():
+            row = 0
+            column = next_column
+            next_column = 0
+            titles_written = False
+            for entry in [e[section] for e in entries]:
+                row += 1
+                if not entry:
+                    continue
+                if not titles_written:
+                    worksheet.write_row(0, column, entry.keys())
+                    next_column = column + len(entry)
+                    titles_written = True
+                worksheet.write_row(row, column, ['\n'.join(str(v).splitlines()) for v in entry.values()])
+
+    xlsx_stream = io.BytesIO()
+    xlsx_options = {'strings_to_numbers': False,
+                    'strings_to_formulas': False,
+                    'strings_to_urls': False}
+    with xlsxwriter.Workbook(xlsx_stream, xlsx_options) as workbook:
+        worksheet = workbook.add_worksheet('Registrants')
+        entries = []
+        for participant in Participant.objects.all():
+            entries.append({'id': {'ID': participant.id},
+                            'participant': participant.printout(all_fields=True),
+                            'appointments': participant.appointments.first().printout(all_fields=True) if participant.appointments.count() else None,
+                            'travel_details': participant.travel_details.first().printout(all_fields=True) if participant.travel_details.count() else None})
+        write_entries(worksheet, entries)
+
+        worksheet = workbook.add_worksheet('Exhibits')
+        entries = []
+        for exhibit in Exhibit.objects.all():
+            entries.append({'id': {'ID': exhibit.id},
+                            'exhibit': exhibit.printout(all_fields=True),
+                            'participant': exhibit.participant.printout(all_fields=True)})
+        write_entries(worksheet, entries)
+
+    response = HttpResponse(xlsx_stream.getvalue(), content_type='application/xlsx')
+    response['Content-Disposition'] = 'attachment; filename="%s.xlsx"' % report_name
+    return response
 
 def signup(request):
     if request.method == 'POST':

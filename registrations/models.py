@@ -82,8 +82,7 @@ class ExportMixin():
             if not value:
                 value = ''
             else:
-                value = str(value)
-                value = '\n'.join(value.splitlines())
+                value = '\n'.join(str(value).splitlines())
             values.append(value)
         return values
 
@@ -152,7 +151,7 @@ class Participant(models.Model, ExportMixin):
                                dict(self.TITLE_CHOICES)[self.title])
     full_name.short_description = 'Full name'
 
-    def printout(self):
+    def printout(self, all_fields=False):
         result = OrderedDict([('Title', dict(self.TITLE_CHOICES)[self.title]),
                               ('Name', self.name),
                               ('Surname', self.surname),
@@ -228,7 +227,7 @@ class Appointments(models.Model, ExportMixin):
                                   ('team_leader', 'team_leader'),
                                   ('team_leader_disciplines', 'team_leader_disciplines')])
 
-    def printout(self):
+    def printout(self, all_fields=False):
         result = OrderedDict([('National federation name', self.federation.full_name() if self.federation else ''),
                               ('Appointed national commissioner', 'Yes' if self.commissioner else 'No'),
                               ('Proposed as jury member', 'Yes' if self.jury else 'No'),
@@ -314,14 +313,14 @@ class Exhibit(models.Model, ExportMixin):
                                   ('availability', 'availability'),
                                   ('price', 'price')])
 
-    def printout(self):
+    def printout(self, all_fields=False):
         result = OrderedDict([('Title', self.title),
                               ('Short description', self.short_description),
                               ('Exhibit class', dict(self.EXHIBIT_CLASS_CHOICES)[self.exhibit_class]),
                               ('Frames', self.frames)])
-        if self.exhibit_class.startswith('Y'):
+        if all_fields or self.exhibit_class.startswith('Y'):
             result.update(OrderedDict([('Date of birth', self.date_of_birth)]))
-        if self.exhibit_class.startswith('L'):
+        if all_fields or self.exhibit_class.startswith('L'):
             result.update(OrderedDict([('Front cover', os.path.basename(self.introductory_page.path)),
                                        ('Short abstract', os.path.basename(self.synopsis.path) if self.synopsis else ''),
                                        ('Author', self.author),
@@ -389,7 +388,7 @@ class ExhibitParticipation(models.Model, ExportMixin):
         if self.exhibit.participations.count() >= 6:
             raise ValidationError('Please enter up to a maximum of 6 participations per exhibit')
 
-    def printout(self):
+    def printout(self, all_fields=False):
         result = OrderedDict([('Exhibition level', dict(self.EXHIBITION_LEVEL_CHOICES)[self.exhibition_level]),
                               ('Exhibition name', self.exhibition_name),
                               ('Points', self.points),
@@ -432,14 +431,14 @@ class TravelDetails(models.Model, ExportMixin):
                                   ('hotel_website', 'hotel_website'),
                                   ('travel_remarks', 'remarks')])
 
-    def printout(self):
+    def printout(self, all_fields=False):
         result = OrderedDict([('Arrival', self.arrival or ''),
                               ('Arrival flight number', self.arrival_flight_number),
                               ('Departure', self.departure or ''),
                               ('Departure flight number', self.departure_flight_number),
                               ('Ticket price', self.ticket_price),
                               ('Spouse/Partner', 'Yes' if self.spouse else 'No')])
-        if self.spouse:
+        if all_fields or self.spouse:
             result.update(OrderedDict([('Spouse/Partner name', self.spouse_name),
                                        ('Spouse/Partner surname', self.spouse_surname)]))
         result.update(OrderedDict([('Hotel', self.hotel),

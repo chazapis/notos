@@ -29,6 +29,7 @@ urlpatterns = [
     path('remove/exhibit/<int:exhibit_id>', views.remove_exhibit, name='remove_exhibit'),
     path('print', views.printout, name='print'),
     path('export', views.export, name='export'),
+    path('report', views.report, name='report'),
 
     path('signup', views.signup, name='signup'),
     path('activate/<slug:uidb64>/<slug:token>', views.activate, name='activate'),

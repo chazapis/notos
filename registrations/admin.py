@@ -26,13 +26,17 @@ from .models import Participant, Federation, Appointments, Exhibit, ExhibitParti
 class ParticipantAdmin(AdminViews):
     list_display = ('full_name', 'country', 'telephone', 'mobile', 'language')
     admin_views = (('Export to CSV', 'export_to_csv'),
-                   ('Export to XLSX', 'export_to_xlsx'))
+                   ('Export to XLSX', 'export_to_xlsx'),
+                   ('Download XLSX report', 'report_to_xlsx'))
 
     def export_to_csv(self, *args, **kwargs):
         return redirect('{}?{}'.format(reverse('export'), urlencode({'type': 'csv'})))
 
     def export_to_xlsx(self, *args, **kwargs):
         return redirect('{}?{}'.format(reverse('export'), urlencode({'type': 'xlsx'})))
+
+    def report_to_xlsx(self, *args, **kwargs):
+        return redirect('report')
 
 @admin.register(Federation)
 class FederationAdmin(admin.ModelAdmin):
