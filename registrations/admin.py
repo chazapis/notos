@@ -15,7 +15,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 from django.contrib import admin
-from django.shortcuts import redirect
+from django.shortcuts import redirect, reverse
+from django.utils.http import urlencode
 from admin_views.admin import AdminViews
 
 from .models import Participant, Federation, Appointments, Exhibit, ExhibitParticipation, TravelDetails
@@ -24,10 +25,14 @@ from .models import Participant, Federation, Appointments, Exhibit, ExhibitParti
 @admin.register(Participant)
 class ParticipantAdmin(AdminViews):
     list_display = ('full_name', 'country', 'telephone', 'mobile', 'language')
-    admin_views = (('Export to CSV', 'export_to_csv'),)
+    admin_views = (('Export to CSV', 'export_to_csv'),
+                   ('Export to XLSX', 'export_to_xlsx'))
 
     def export_to_csv(self, *args, **kwargs):
-        return redirect('export')
+        return redirect('{}?{}'.format(reverse('export'), urlencode({'type': 'csv'})))
+
+    def export_to_xlsx(self, *args, **kwargs):
+        return redirect('{}?{}'.format(reverse('export'), urlencode({'type': 'xlsx'})))
 
 @admin.register(Federation)
 class FederationAdmin(admin.ModelAdmin):

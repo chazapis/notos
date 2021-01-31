@@ -6,4 +6,5 @@ django-crispy-forms==1.7.2
 django-tempus-dominus==5.1.2.8
 django-admin-views==0.8.0
 Pillow==6.2.2
+xlsxwriter==1.3.7
 gunicorn==19.9.0

@@ -16,6 +16,7 @@
 
 import io
 import zipfile
+import xlsxwriter
 
 from django.shortcuts import render, redirect, reverse, HttpResponse
 from django.conf import settings
@@ -282,24 +283,49 @@ def printout(request):
 
 @staff_member_required
 def export(request):
+    export_type = request.GET.get('type', 'csv')
     export_name = '%s-export-%s' % (settings.EXHIBITION_NAME.replace(' ', '-'), datetime.now().strftime('%Y%m%d%H%M%S'))
-    zip_stream = io.BytesIO()
-    with zipfile.ZipFile(zip_stream, mode="w", compression=zipfile.ZIP_DEFLATED) as zip_file:
-        zip_file.writestr('%s/registrants.csv' % export_name, Participant.export_to_csv())
-        zip_file.writestr('%s/exhibits.csv' % export_name, Exhibit.export_to_csv())
-        zip_file.writestr('%s/exhibit_participations.csv' % export_name, ExhibitParticipation.export_to_csv())
-        zip_file.writestr('%s/federations.csv' % export_name, Federation.export_to_csv())
-        zip_file.writestr('%s/countries.csv' % export_name, Participant.export_countries_to_csv())
-        zip_file.writestr('%s/titles.csv' % export_name, Participant.export_choices_to_csv(Participant.TITLE_CHOICES))
-        zip_file.writestr('%s/languages.csv' % export_name, Participant.export_choices_to_csv(Participant.LANGUAGE_CHOICES))
-        zip_file.writestr('%s/accredited_jurors.csv' % export_name, Appointments.export_choices_to_csv(Appointments.ACCREDITED_JUROR_CHOICES))
-        zip_file.writestr('%s/exhibit_classes.csv' % export_name, Exhibit.export_choices_to_csv(Exhibit.EXHIBIT_CLASS_CHOICES))
-        zip_file.writestr('%s/exhibition_levels.csv' % export_name, ExhibitParticipation.export_choices_to_csv(ExhibitParticipation.EXHIBITION_LEVEL_CHOICES))
-        zip_file.writestr('%s/medals.csv' % export_name, ExhibitParticipation.export_choices_to_csv(ExhibitParticipation.MEDAL_CHOICES))
 
-    response = HttpResponse(zip_stream.getvalue(), content_type='application/zip')
-    response['Content-Disposition'] = 'attachment; filename="%s.zip"' % export_name
-    return response
+    if export_type == 'csv':
+        zip_stream = io.BytesIO()
+        with zipfile.ZipFile(zip_stream, mode="w", compression=zipfile.ZIP_DEFLATED) as zip_file:
+            zip_file.writestr('%s/registrants.csv' % export_name, Participant.export_to_csv())
+            zip_file.writestr('%s/exhibits.csv' % export_name, Exhibit.export_to_csv())
+            zip_file.writestr('%s/exhibit_participations.csv' % export_name, ExhibitParticipation.export_to_csv())
+            zip_file.writestr('%s/federations.csv' % export_name, Federation.export_to_csv())
+            zip_file.writestr('%s/countries.csv' % export_name, Participant.export_countries_to_csv())
+            zip_file.writestr('%s/titles.csv' % export_name, Participant.export_choices_to_csv(Participant.TITLE_CHOICES))
+            zip_file.writestr('%s/languages.csv' % export_name, Participant.export_choices_to_csv(Participant.LANGUAGE_CHOICES))
+            zip_file.writestr('%s/accredited_jurors.csv' % export_name, Appointments.export_choices_to_csv(Appointments.ACCREDITED_JUROR_CHOICES))
+            zip_file.writestr('%s/exhibit_classes.csv' % export_name, Exhibit.export_choices_to_csv(Exhibit.EXHIBIT_CLASS_CHOICES))
+            zip_file.writestr('%s/exhibition_levels.csv' % export_name, ExhibitParticipation.export_choices_to_csv(ExhibitParticipation.EXHIBITION_LEVEL_CHOICES))
+            zip_file.writestr('%s/medals.csv' % export_name, ExhibitParticipation.export_choices_to_csv(ExhibitParticipation.MEDAL_CHOICES))
+
+        response = HttpResponse(zip_stream.getvalue(), content_type='application/zip')
+        response['Content-Disposition'] = 'attachment; filename="%s.zip"' % export_name
+        return response
+    else:
+        xlsx_stream = io.BytesIO()
+        xlsx_options = {'strings_to_numbers': False,
+                        'strings_to_formulas': False,
+                        'strings_to_urls': False}
+        with xlsxwriter.Workbook(xlsx_stream, xlsx_options) as workbook:
+            Participant.export_to_xlsx(workbook, 'registrants')
+            Exhibit.export_to_xlsx(workbook, 'exhibits')
+            ExhibitParticipation.export_to_xlsx(workbook, 'exhibit_participations')
+            Federation.export_to_xlsx(workbook, 'federations')
+            Participant.export_countries_to_xlsx(workbook, 'countries')
+            Participant.export_choices_to_xlsx(workbook, 'titles', Participant.TITLE_CHOICES)
+            Participant.export_choices_to_xlsx(workbook, 'languages', Participant.LANGUAGE_CHOICES)
+            Appointments.export_choices_to_xlsx(workbook, 'accredited_jurors', Appointments.ACCREDITED_JUROR_CHOICES)
+            Exhibit.export_choices_to_xlsx(workbook, 'exhibit_classes', Exhibit.EXHIBIT_CLASS_CHOICES)
+            ExhibitParticipation.export_choices_to_xlsx(workbook, 'exhibition_levels', ExhibitParticipation.EXHIBITION_LEVEL_CHOICES)
+            ExhibitParticipation.export_choices_to_xlsx(workbook, 'medals', ExhibitParticipation.MEDAL_CHOICES)
+
+        response = HttpResponse(xlsx_stream.getvalue(), content_type='application/xlsx')
+        response['Content-Disposition'] = 'attachment; filename="%s.xlsx"' % export_name
+        return response
+
 
 def signup(request):
     if request.method == 'POST':

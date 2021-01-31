@@ -53,8 +53,39 @@ class ExportMixin():
     def export_countries_to_csv(cls):
         return cls.export_choices_to_csv(list(countries))
 
+    @classmethod
+    def export_to_xlsx(cls, workbook, name):
+        row = 0
+        worksheet = workbook.add_worksheet(name)
+        worksheet.write_row(row, 0, cls.export_keys())
+        for instance in cls.objects.all():
+            row += 1
+            worksheet.write_row(row, 0, instance.export_values())
+
+    @classmethod
+    def export_choices_to_xlsx(cls, workbook, name, choices):
+        row = 0
+        worksheet = workbook.add_worksheet(name)
+        worksheet.write_row(row, 0, ['id', 'value'])
+        for key, value in choices:
+            row += 1
+            worksheet.write_row(row, 0, [key, value])
+
+    @classmethod
+    def export_countries_to_xlsx(cls, workbook, name):
+        return cls.export_choices_to_xlsx(workbook, name, list(countries))
+
     def export_values(self):
-        return [getattr(self, field) for field in self.__class__._export_fields.values()]
+        values = []
+        for field in self.__class__._export_fields.values():
+            value = getattr(self, field)
+            if not value:
+                value = ''
+            else:
+                value = str(value)
+                value = '\n'.join(value.splitlines())
+            values.append(value)
+        return values
 
 class Participant(models.Model, ExportMixin):
     TITLE_CHOICES = [('MR', 'Mr'),
@@ -103,6 +134,17 @@ class Participant(models.Model, ExportMixin):
             travel_details = participant.travel_details.first() if participant.travel_details.count() else TravelDetails()
             writer.writerow(participant.export_values() + appointments.export_values() + travel_details.export_values())
         return stream.getvalue()
+
+    @classmethod
+    def export_to_xlsx(cls, workbook, name):
+        row = 0
+        worksheet = workbook.add_worksheet(name)
+        worksheet.write_row(row, 0, cls.export_keys() + Appointments.export_keys() + TravelDetails.export_keys())
+        for participant in Participant.objects.all():
+            row += 1
+            appointments = participant.appointments.first() if participant.appointments.count() else Appointments()
+            travel_details = participant.travel_details.first() if participant.travel_details.count() else TravelDetails()
+            worksheet.write_row(row, 0, participant.export_values() + appointments.export_values() + travel_details.export_values())
 
     def full_name(self):
         return '%s, %s, %s' % (self.surname,
