@@ -27,17 +27,21 @@ class ParticipantAdmin(AdminViews):
     list_display = ('full_name', 'country', 'telephone', 'mobile', 'language', 'changed_at')
     admin_views = (('Export to CSV', 'export_to_csv'),
                    ('Export to XLSX', 'export_to_xlsx'),
-                   ('Download XLSX report', 'report_to_xlsx'))
+                   ('Download XLSX report', 'report_to_xlsx'),
+                   ('Download exhibits in HTML', 'exhibits_in_html'))
     readonly_fields = ('created_at', 'changed_at')
 
     def export_to_csv(self, *args, **kwargs):
-        return redirect('{}?{}'.format(reverse('export'), urlencode({'type': 'csv'})))
+        return redirect('{}?{}'.format(reverse('export_raw'), urlencode({'type': 'csv'})))
 
     def export_to_xlsx(self, *args, **kwargs):
-        return redirect('{}?{}'.format(reverse('export'), urlencode({'type': 'xlsx'})))
+        return redirect('{}?{}'.format(reverse('export_raw'), urlencode({'type': 'xlsx'})))
 
     def report_to_xlsx(self, *args, **kwargs):
-        return redirect('report')
+        return redirect('export_report')
+
+    def exhibits_in_html(self, *args, **kwargs):
+        return redirect('export_exhibits')
 
 @admin.register(Federation)
 class FederationAdmin(admin.ModelAdmin):

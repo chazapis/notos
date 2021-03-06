@@ -28,8 +28,10 @@ urlpatterns = [
     path('register/exhibit/<int:exhibit_id>', views.register, {'step': 'exhibit'}, name='edit_exhibit'),
     path('remove/exhibit/<int:exhibit_id>', views.remove_exhibit, name='remove_exhibit'),
     path('print', views.printout, name='print'),
-    path('export', views.export, name='export'),
-    path('report', views.report, name='report'),
+
+    path('export_raw', views.export_raw, name='export_raw'),
+    path('export_report', views.export_report, name='export_report'),
+    path('export_exhibits', views.export_exhibits, name='export_exhibits'),
 
     path('signup', views.signup, name='signup'),
     path('activate/<slug:uidb64>/<slug:token>', views.activate, name='activate'),

@@ -33,6 +33,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from textwrap import shorten
 from datetime import datetime
+from collections import OrderedDict
 
 from .models import Participant, Federation, Appointments, Exhibit, ExhibitParticipation, TravelDetails
 from .forms import ParticipantForm, AppointmentsForm, ExhibitForm, ExhibitParticipationForm, TravelDetailsForm, SignUpForm, ChangePasswordForm, ForgotPasswordForm, ResetPasswordForm
@@ -282,7 +283,7 @@ def printout(request):
     return render(request, 'registrations/print.html', {'sections': sections})
 
 @staff_member_required
-def export(request):
+def export_raw(request):
     export_type = request.GET.get('type', 'csv')
     export_name = '%s-export-%s' % (settings.EXHIBITION_NAME.replace(' ', '-'), datetime.now().strftime('%Y%m%d%H%M%S'))
 
@@ -327,7 +328,7 @@ def export(request):
         return response
 
 @staff_member_required
-def report(request):
+def export_report(request):
     report_name = '%s-report-%s' % (settings.EXHIBITION_NAME.replace(' ', '-'), datetime.now().strftime('%Y%m%d%H%M%S'))
 
     def write_entries(worksheet, entries):
@@ -372,6 +373,28 @@ def report(request):
     response = HttpResponse(xlsx_stream.getvalue(), content_type='application/xlsx')
     response['Content-Disposition'] = 'attachment; filename="%s.xlsx"' % report_name
     return response
+
+@staff_member_required
+def export_exhibits(request):
+    # exhibits_name = '%s-exhibits-%s' % (settings.EXHIBITION_NAME.replace(' ', '-'), datetime.now().strftime('%Y%m%d%H%M%S'))
+
+    exhibit_sections = OrderedDict({'non-competitive': {'title': 'Non-Competitive Classes',
+                                                        'classes': []},
+                                    'competitive': {'title': 'Competitive Classes',
+                                                    'classes': []}})
+    for exhibit_class, exhibit_class_title in Exhibit.EXHIBIT_CLASS_CHOICES:
+        section = 'non-competitive' if exhibit_class_title.startswith('A') else 'competitive'
+        exhibits = Exhibit.objects.filter(exhibit_class=exhibit_class).order_by('participant__surname')
+        if len(exhibits) == 0:
+            continue
+        exhibit_sections[section]['classes'].append({'title': exhibit_class_title,
+                                                     'exhibits': exhibits})
+
+    # content = render_to_string('registrations/exhibits.html', {'exhibit_sections': exhibit_sections})
+    # response = HttpResponse(content, content_type='application/html')
+    # response['Content-Disposition'] = 'attachment; filename="%s.html"' % exhibits_name
+    # return response
+    return render(request, 'registrations/exhibits.html', {'exhibit_sections': exhibit_sections})
 
 def signup(request):
     if request.method == 'POST':
