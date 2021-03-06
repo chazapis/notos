@@ -248,11 +248,11 @@ class SignUpForm(UserCreationForm):
             Submit('submit', 'Submit', css_class='btn-success btn-lg btn-block')
         )
 
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        if User.objects.filter(email=email).exists():
-            raise ValidationError('A user with that email already exists.')
-        return email
+    # def clean_email(self):
+    #     email = self.cleaned_data['email']
+    #     if User.objects.filter(email=email).exists():
+    #         raise ValidationError('A user with that email already exists.')
+    #     return email
 
 class ChangePasswordForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
