@@ -24,10 +24,11 @@ from .models import Participant, Federation, Appointments, Exhibit, ExhibitParti
 
 @admin.register(Participant)
 class ParticipantAdmin(AdminViews):
-    list_display = ('full_name', 'country', 'telephone', 'mobile', 'language')
+    list_display = ('full_name', 'country', 'telephone', 'mobile', 'language', 'changed_at')
     admin_views = (('Export to CSV', 'export_to_csv'),
                    ('Export to XLSX', 'export_to_xlsx'),
                    ('Download XLSX report', 'report_to_xlsx'))
+    readonly_fields = ('created_at', 'changed_at')
 
     def export_to_csv(self, *args, **kwargs):
         return redirect('{}?{}'.format(reverse('export'), urlencode({'type': 'csv'})))
@@ -44,14 +45,17 @@ class FederationAdmin(admin.ModelAdmin):
 
 @admin.register(Appointments)
 class AppointmentsAdmin(admin.ModelAdmin):
-    list_display = ('participant', 'federation', 'commissioner', 'jury')
+    list_display = ('participant', 'federation', 'commissioner', 'jury', 'changed_at')
+    readonly_fields = ('created_at', 'changed_at')
 
 class ExhibitParticipationAdmin(admin.TabularInline):
     model = ExhibitParticipation
+    readonly_fields = ('created_at', 'changed_at')
 
 @admin.register(Exhibit)
 class ExhibitAdmin(admin.ModelAdmin):
-    list_display = ('title', 'exhibit_class', 'frames')
+    list_display = ('title', 'exhibit_class', 'frames', 'changed_at')
+    readonly_fields = ('created_at', 'changed_at')
     inlines = [ExhibitParticipationAdmin]
     fieldsets = ((None, {'fields': ('participant',
                                     'title',
@@ -61,7 +65,9 @@ class ExhibitAdmin(admin.ModelAdmin):
                                     'frames',
                                     'introductory_page',
                                     'synopsis',
-                                    'remarks')}),
+                                    'remarks',
+                                    'created_at',
+                                    'changed_at')}),
                  ('PHILATELIC LITERATURE APPENDIX', {'fields': ('author',
                                                                 'publisher',
                                                                 'year_of_publication',
@@ -75,4 +81,5 @@ class ExhibitAdmin(admin.ModelAdmin):
 
 @admin.register(TravelDetails)
 class TravelDetailsAdmin(admin.ModelAdmin):
-    list_display = ('participant', 'arrival', 'arrival_flight_number', 'departure', 'departure_flight_number')
+    list_display = ('participant', 'arrival', 'arrival_flight_number', 'departure', 'departure_flight_number', 'changed_at')
+    readonly_fields = ('created_at', 'changed_at')
