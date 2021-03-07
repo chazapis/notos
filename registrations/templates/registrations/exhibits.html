@@ -10,24 +10,24 @@
     </tr>
     {% for exhibit_section in exhibit_sections.values %}
     {% if exhibit_section.classes|length != 0 %}
-    <tr>
+    <tr style="border-top: 1px solid #ededed;">
       <td></td>
       <td colspan="5"><span style="color: #ff6600;">{{ exhibit_section.title }}</span></td>
     </tr>
     {% for exhibit_class in exhibit_section.classes %}
-    <tr>
+    <tr style="border-top: 1px solid #ededed;">
       <td><span style="color: #ffffff;">.</span></td>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
-    <tr>
+    <tr style="border-top: 1px solid #ededed;">
       <td></td>
       <td colspan="5"><span style="color: #3366ff;">{{ exhibit_class.title }}<br></span></td>
     </tr>
     {% for exhibit in exhibit_class.exhibits %}
-    <tr>
+    <tr style="border-top: 1px solid #ededed;">
       <td></td>
       <td>{{ exhibit.participant.surname|title }}, {{ exhibit.participant.name|title }}</td>
       <td>{{ exhibit.participant.country.unicode_flag }}</td>
@@ -39,6 +39,12 @@
     {% endfor %}
     {% endif %}
     {% endfor %}
-    <tr>
+    <tr style="border-top: 1px solid #ededed;">
+      <td><span style="color: #ffffff;">.</span></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
   </tbody>
 </table>
