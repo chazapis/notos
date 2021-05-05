@@ -31,6 +31,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django_countries import countries
 from textwrap import shorten
 from datetime import datetime
 from collections import OrderedDict
@@ -376,24 +377,38 @@ def export_report(request):
 
 @staff_member_required
 def export_exhibits(request):
-    # exhibits_name = '%s-exhibits-%s' % (settings.EXHIBITION_NAME.replace(' ', '-'), datetime.now().strftime('%Y%m%d%H%M%S'))
+    export_sort = request.GET.get('sort', 'class')
 
-    exhibit_sections = OrderedDict({'non-competitive': {'title': 'Non-Competitive Classes',
-                                                        'classes': []},
-                                    'competitive': {'title': 'Competitive Classes',
-                                                    'classes': []}})
-    for exhibit_class, exhibit_class_title in Exhibit.EXHIBIT_CLASS_CHOICES:
-        section = 'non-competitive' if exhibit_class_title.startswith('A') else 'competitive'
-        exhibits = Exhibit.objects.filter(exhibit_class=exhibit_class).order_by('participant__surname')
-        if len(exhibits) == 0:
-            continue
-        exhibit_sections[section]['classes'].append({'title': exhibit_class_title,
-                                                     'exhibits': exhibits})
+    if export_sort == 'class':
+        exhibit_sections = OrderedDict({'non-competitive': {'title': 'Non-Competitive Classes',
+                                                            'classes': []},
+                                        'competitive': {'title': 'Competitive Classes',
+                                                        'classes': []}})
+        for exhibit_class, exhibit_class_title in Exhibit.EXHIBIT_CLASS_CHOICES:
+            section = 'non-competitive' if exhibit_class_title.startswith('A') else 'competitive'
+            exhibits = Exhibit.objects.filter(exhibit_class=exhibit_class).order_by('participant__surname')
+            if len(exhibits) == 0:
+                continue
+            exhibit_sections[section]['classes'].append({'title': exhibit_class_title,
+                                                         'exhibits': exhibits})
+    else:
+        exhibit_countries = set()
+        for exhibit in Exhibit.objects.all():
+            exhibit_countries.add(exhibit.participant.country.code)
+        exhibit_countries = sorted(list(exhibit_countries))
 
-    # content = render_to_string('registrations/exhibits.html', {'exhibit_sections': exhibit_sections})
-    # response = HttpResponse(content, content_type='application/html')
-    # response['Content-Disposition'] = 'attachment; filename="%s.html"' % exhibits_name
-    # return response
+        exhibit_sections = OrderedDict()
+        for country in exhibit_countries:
+            exhibit_classes = []
+            for exhibit_class, exhibit_class_title in Exhibit.EXHIBIT_CLASS_CHOICES:
+                exhibits = Exhibit.objects.filter(exhibit_class=exhibit_class, participant__country=country).order_by('participant__surname')
+                if len(exhibits) == 0:
+                    continue
+                exhibit_classes.append({'title': exhibit_class_title,
+                                        'exhibits': exhibits})
+            exhibit_sections[country] = {'title': dict(countries)[country],
+                                         'classes': exhibit_classes}
+
     return render(request, 'registrations/exhibits.html', {'exhibit_sections': exhibit_sections})
 
 def signup(request):
