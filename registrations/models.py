@@ -90,7 +90,8 @@ class Participant(models.Model, ExportMixin):
     TITLE_CHOICES = [('MR', 'Mr'),
                      ('MRS', 'Mrs'),
                      ('MISS', 'Miss'),
-                     ('DR', 'Dr')]
+                     ('DR', 'Dr'),
+                     ('NONE', 'None')]
     LANGUAGE_CHOICES = [('EN', 'English'),
                         settings.NATIVE_COMMUNICATION_LANGUAGE]
 
