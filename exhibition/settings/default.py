@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'tempus_dominus',
     'crispy_forms',
     'admin_views',
+    'impersonate',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -70,6 +71,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'impersonate.middleware.ImpersonateMiddleware',
 ]
 
 ROOT_URLCONF = 'exhibition.urls'

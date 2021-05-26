@@ -15,12 +15,22 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 from django.contrib import admin
+from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
 from django.shortcuts import redirect, reverse
 from django.utils.http import urlencode
 from admin_views.admin import AdminViews
+from impersonate.admin import UserAdminImpersonateMixin
 
 from .models import Participant, Federation, Appointments, Exhibit, ExhibitParticipation, TravelDetails
 
+
+class NewUserAdmin(UserAdminImpersonateMixin, UserAdmin):
+    open_new_window = True
+    pass
+
+admin.site.unregister(User)
+admin.site.register(User, NewUserAdmin)
 
 @admin.register(Participant)
 class ParticipantAdmin(AdminViews):

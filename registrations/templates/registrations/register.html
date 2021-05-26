@@ -104,7 +104,9 @@
 
   <footer class="my-5 pt-5 text-muted text-center text-small">
     <ul class="list-inline">
-      <li class="list-inline-item">Logged in as {{ user.username }}</li>
+      <li class="list-inline-item">Logged in as {% if user.is_impersonate %}{{ request.impersonator }} acting  on behalf of {% endif %}{{ user.username }}</li>
+      {% if user.is_impersonate %}
+      <li class="list-inline-item"><a class="text-dark" href="{% url 'impersonate-stop' %}?next={{ request.path }}">Stop impersonating</a></li>{% endif %}
       {% if can_change_password %}
       <li class="list-inline-item"><a class="text-dark" href="{% url 'change_password' %}?next={{ request.path }}">Change password</a></li>
       {% endif %}
