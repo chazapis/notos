@@ -290,6 +290,8 @@ class Exhibit(models.Model, ExportMixin):
     availability = models.CharField(max_length=64, blank=True)
     price = models.CharField(max_length=64, blank=True)
 
+    rejected = models.BooleanField(default=False)
+
     created_at = models.DateTimeField(auto_now_add=True)
     changed_at = models.DateTimeField(auto_now=True)
 

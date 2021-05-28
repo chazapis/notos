@@ -386,7 +386,7 @@ def export_exhibits(request):
                                                         'classes': []}})
         for exhibit_class, exhibit_class_title in Exhibit.EXHIBIT_CLASS_CHOICES:
             section = 'non-competitive' if exhibit_class_title.startswith('A') else 'competitive'
-            exhibits = Exhibit.objects.filter(exhibit_class=exhibit_class).order_by('participant__surname')
+            exhibits = Exhibit.objects.filter(exhibit_class=exhibit_class, rejected=False).order_by('participant__surname')
             if len(exhibits) == 0:
                 continue
             exhibit_sections[section]['classes'].append({'title': exhibit_class_title,
@@ -394,19 +394,19 @@ def export_exhibits(request):
     else:
         exhibit_countries = set()
         for exhibit in Exhibit.objects.all():
-            exhibit_countries.add(exhibit.participant.country.code)
+            exhibit_countries.add(exhibit.participant.country.name)
         exhibit_countries = sorted(list(exhibit_countries))
 
         exhibit_sections = OrderedDict()
         for country in exhibit_countries:
             exhibit_classes = []
             for exhibit_class, exhibit_class_title in Exhibit.EXHIBIT_CLASS_CHOICES:
-                exhibits = Exhibit.objects.filter(exhibit_class=exhibit_class, participant__country=country).order_by('participant__surname')
+                exhibits = Exhibit.objects.filter(exhibit_class=exhibit_class, participant__country=countries.by_name(country), rejected=False).order_by('participant__surname')
                 if len(exhibits) == 0:
                     continue
                 exhibit_classes.append({'title': exhibit_class_title,
                                         'exhibits': exhibits})
-            exhibit_sections[country] = {'title': dict(countries)[country],
+            exhibit_sections[country] = {'title': country,
                                          'classes': exhibit_classes}
 
     return render(request, 'registrations/exhibits.html', {'exhibit_sections': exhibit_sections})

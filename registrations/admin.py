@@ -84,6 +84,7 @@ class ExhibitAdmin(admin.ModelAdmin):
                                     'introductory_page',
                                     'synopsis',
                                     'remarks',
+                                    'rejected',
                                     'created_at',
                                     'changed_at')}),
                  ('PHILATELIC LITERATURE APPENDIX', {'fields': ('author',
