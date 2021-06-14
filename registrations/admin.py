@@ -69,6 +69,7 @@ class AppointmentsAdmin(admin.ModelAdmin):
 class ExhibitParticipationAdmin(admin.TabularInline):
     model = ExhibitParticipation
     readonly_fields = ('created_at', 'changed_at')
+    extra = 0
 
 @admin.register(Exhibit)
 class ExhibitAdmin(admin.ModelAdmin):
