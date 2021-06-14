@@ -33,7 +33,7 @@
       <td>{{ exhibit.participant.country.unicode_flag }}</td>
       <!-- <td><img class="no-box wp-image-299" src="{{ exhibit.participant.country.flag }}" alt=""></td> -->
       <td>{% if exhibit_class.title|first not in 'L' %}{{ exhibit.frames }}{% endif %}</td>
-      <td>{{ exhibit.title|title }}</td>
+      <td>{{ exhibit.title }}</td>
     </tr>
     {% endfor %}
     {% endfor %}
