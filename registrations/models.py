@@ -387,9 +387,9 @@ class ExhibitParticipation(models.Model, ExportMixin):
                                   ('special_prize', 'special_prize'),
                                   ('felicitations', 'felicitations')])
 
-    def clean(self):
-        if self.exhibit.participations.count() >= 6:
-            raise ValidationError('Please enter up to a maximum of 6 participations per exhibit')
+    # def clean(self):
+    #     if self.exhibit.participations.count() >= 6:
+    #         raise ValidationError('Please enter up to a maximum of 6 participations per exhibit')
 
     def printout(self, all_fields=False):
         result = OrderedDict([('Exhibition level', dict(self.EXHIBITION_LEVEL_CHOICES)[self.exhibition_level]),
