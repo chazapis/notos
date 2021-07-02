@@ -265,6 +265,9 @@ class Exhibit(models.Model, ExportMixin):
                              ('Y1', 'Y1. Youth Philately - Exhibitor’s age (at 1.1.2021) 10-15 years'),
                              ('Y2', 'Y2. Youth Philately - Exhibitor’s age (at 1.1.2021) 16-18 years'),
                              ('Y3', 'Y3. Youth Philately - Exhibitor’s age (at 1.1.2021) 19-21 years'),
+                             ('A1', 'A1. Court of Honour (non-competitive)'),
+                             ('A2', 'A2. Official Class (non-competitive)'),
+                             ('A3', 'A3. Jury Class (non-competitive)'),
                              ('A4', 'A4. Other exhibits (non-competitive)')]
     FRAME_CHOICES = [(0, 'None')] + [(f, f) for f in range(1, 9)]
 
