@@ -29,7 +29,7 @@
     {% for exhibit in exhibit_class.exhibits %}
     <tr style="border-top: 1px solid #ededed;">
       <td></td>
-      <td>{{ exhibit.participant.surname|title }}, {{ exhibit.participant.name|title }}</td>
+      <td>{{ exhibit.participant.surname }}, {{ exhibit.participant.name }}</td>
       <td>{{ exhibit.participant.country.unicode_flag }}</td>
       <!-- <td><img class="no-box wp-image-299" src="{{ exhibit.participant.country.flag }}" alt=""></td> -->
       <td>{% if exhibit_class.title|first not in 'L' %}{{ exhibit.frames }}{% endif %}</td>

@@ -99,7 +99,7 @@ class Participant(models.Model, ExportMixin):
 
     title = models.CharField(max_length=4, choices=TITLE_CHOICES, default='MR')
     surname = models.CharField(max_length=128)
-    name = models.CharField(max_length=128, help_text='Include any middle names')
+    name = models.CharField(max_length=128, blank=True, help_text='Include any middle names')
     photo = models.ImageField(blank=True, upload_to='participant/')
     address = models.TextField()
     country = CountryField()
