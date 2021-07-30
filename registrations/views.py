@@ -378,6 +378,7 @@ def export_report(request):
 @staff_member_required
 def export_exhibits(request):
     export_sort = request.GET.get('sort', 'class')
+    include_extras = True if request.GET.get('extras', '') else False
 
     if export_sort == 'class':
         exhibit_sections = OrderedDict({'non-competitive': {'title': 'Non-Competitive Classes',
@@ -409,7 +410,8 @@ def export_exhibits(request):
             exhibit_sections[country] = {'title': country,
                                          'classes': exhibit_classes}
 
-    return render(request, 'registrations/exhibits.html', {'exhibit_sections': exhibit_sections})
+    return render(request, 'registrations/exhibits.html', {'exhibit_sections': exhibit_sections,
+                                                           'include_extras': include_extras})
 
 def signup(request):
     if request.method == 'POST':
