@@ -276,6 +276,7 @@ class Exhibit(models.Model, ExportMixin):
     title = models.CharField(max_length=128)
     short_description = models.TextField()
     exhibit_class = models.CharField(max_length=4, choices=EXHIBIT_CLASS_CHOICES)
+    jury_group = models.IntegerField(null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True, help_text='Youth philately only')
     frames = models.IntegerField(choices=FRAME_CHOICES)
     introductory_page = models.FileField(upload_to='exhibit/')

@@ -390,6 +390,17 @@ def export_exhibits(request):
             exhibits = Exhibit.objects.filter(exhibit_class=exhibit_class, rejected=False).order_by('participant__surname')
             if len(exhibits) == 0:
                 continue
+            if include_extras:
+                jury_groups = set([exhibit.jury_group for exhibit in exhibits])
+                if len(jury_groups) > 1:
+                    for jury_group in sorted([(j if j else 0) for j in jury_groups]):
+                        if jury_group:
+                            jury_group_title_suffix = ' (jury group %d)' % jury_group
+                        else:
+                            jury_group_title_suffix = ' (empty jury group)'
+                        exhibit_sections[section]['classes'].append({'title': exhibit_class_title + jury_group_title_suffix,
+                                                                     'exhibits': exhibits.filter(jury_group=jury_group if jury_group else None)})
+                    continue
             exhibit_sections[section]['classes'].append({'title': exhibit_class_title,
                                                          'exhibits': exhibits})
     else:

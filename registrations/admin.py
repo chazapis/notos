@@ -77,13 +77,16 @@ class ExhibitParticipationAdmin(admin.TabularInline):
 
 @admin.register(Exhibit)
 class ExhibitAdmin(admin.ModelAdmin):
-    list_display = ('title', 'exhibit_class', 'frames', 'changed_at')
+    list_display = ('title', 'exhibit_class', 'frames', 'jury_group', 'changed_at')
+    list_filter = ('exhibit_class',)
+    search_fields = ('title',)
     readonly_fields = ('created_at', 'changed_at')
     inlines = [ExhibitParticipationAdmin]
     fieldsets = ((None, {'fields': ('participant',
                                     'title',
                                     'short_description',
                                     'exhibit_class',
+                                    'jury_group',
                                     'date_of_birth',
                                     'frames',
                                     'introductory_page',
