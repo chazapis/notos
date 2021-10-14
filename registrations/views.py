@@ -378,7 +378,8 @@ def export_report(request):
 @staff_member_required
 def export_exhibits(request):
     export_sort = request.GET.get('sort', 'class')
-    include_extras = True if request.GET.get('extras', '') else False
+    extras = request.GET.get('extras', '')
+    extras = int(extras) if extras.isdigit() else 0
 
     if export_sort == 'class':
         exhibit_sections = OrderedDict({'non-competitive': {'title': 'Non-Competitive Classes',
@@ -390,7 +391,7 @@ def export_exhibits(request):
             exhibits = Exhibit.objects.filter(exhibit_class=exhibit_class, rejected=False).order_by('participant__surname')
             if len(exhibits) == 0:
                 continue
-            if include_extras:
+            if extras:
                 jury_groups = set([exhibit.jury_group for exhibit in exhibits])
                 if len(jury_groups) > 1:
                     for jury_group in sorted([(j if j else 0) for j in jury_groups]):
@@ -422,7 +423,7 @@ def export_exhibits(request):
                                          'classes': exhibit_classes}
 
     return render(request, 'registrations/exhibits.html', {'exhibit_sections': exhibit_sections,
-                                                           'include_extras': include_extras})
+                                                           'extras': extras})
 
 def signup(request):
     if request.method == 'POST':

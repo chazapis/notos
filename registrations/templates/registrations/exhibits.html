@@ -30,10 +30,10 @@
     <tr style="border-top: 1px solid #ededed;">
       <td></td>
       <td>{{ exhibit.participant.surname }}{% if exhibit.participant.name %}, {{ exhibit.participant.name }}{% endif %}</td>
-      <td>{{ exhibit.participant.country.unicode_flag }}</td>
+      <td>{% if extras == 1 %}{{ exhibit.participant.country.code }}{% else %}{{ exhibit.participant.country.unicode_flag }}{% endif %}</td>
       <!-- <td><img class="no-box wp-image-299" src="{{ exhibit.participant.country.flag }}" alt=""></td> -->
       <td>{% if exhibit_class.title|first not in 'L' %}{{ exhibit.frames }}{% endif %}</td>
-      <td>{{ exhibit.title }}{% if include_extras %}{% if exhibit.introductory_page %} <a href="{{ request.scheme }}://{{ request.get_host }}{{ MEDIA_URL }}{{ exhibit.introductory_page }}" target="_blank">[&#128196; Intro]</a>{% endif %}{% if exhibit.synopsis %} <a href="{{ request.scheme }}://{{ request.get_host }}{{ MEDIA_URL }}{{ exhibit.synopsis }}" target="_blank">[&#128196; Synopsis]</a>{% endif %}{% endif %}</td>
+      <td>{{ exhibit.title }}{% if extras == 2 %}{% if exhibit.introductory_page %} <a href="{{ request.scheme }}://{{ request.get_host }}{{ MEDIA_URL }}{{ exhibit.introductory_page }}" target="_blank">[&#128196; Intro]</a>{% endif %}{% if exhibit.synopsis %} <a href="{{ request.scheme }}://{{ request.get_host }}{{ MEDIA_URL }}{{ exhibit.synopsis }}" target="_blank">[&#128196; Synopsis]</a>{% endif %}{% endif %}</td>
     </tr>
     {% endfor %}
     {% endfor %}

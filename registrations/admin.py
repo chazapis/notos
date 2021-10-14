@@ -39,7 +39,8 @@ class ParticipantAdmin(AdminViews):
                    ('Export to XLSX', 'export_to_xlsx'),
                    ('Download XLSX report', 'report_to_xlsx'),
                    ('Download exhibits in HTML (per class)', 'exhibits_in_html_per_class'),
-                   ('Download exhibits in HTML (per class, plus introductory page/synopsis)', 'exhibits_in_html_per_class_plus_extras'),
+                   ('Download exhibits in HTML (per class, plus jury groups)', 'exhibits_in_html_per_class_plus_jury_groups'),
+                   ('Download exhibits in HTML (per class, plus jury groups and intro/synopsis)', 'exhibits_in_html_per_class_plus_intro'),
                    ('Download exhibits in HTML (per country)', 'exhibits_in_html_per_country'))
     readonly_fields = ('created_at', 'changed_at')
 
@@ -55,8 +56,11 @@ class ParticipantAdmin(AdminViews):
     def exhibits_in_html_per_class(self, *args, **kwargs):
         return redirect('{}?{}'.format(reverse('export_exhibits'), urlencode({'sort': 'class'})))
 
-    def exhibits_in_html_per_class_plus_extras(self, *args, **kwargs):
+    def exhibits_in_html_per_class_plus_jury_groups(self, *args, **kwargs):
         return redirect('{}?{}'.format(reverse('export_exhibits'), urlencode({'sort': 'class', 'extras': '1'})))
+
+    def exhibits_in_html_per_class_plus_intro(self, *args, **kwargs):
+        return redirect('{}?{}'.format(reverse('export_exhibits'), urlencode({'sort': 'class', 'extras': '2'})))
 
     def exhibits_in_html_per_country(self, *args, **kwargs):
         return redirect('{}?{}'.format(reverse('export_exhibits'), urlencode({'sort': 'country'})))
