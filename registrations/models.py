@@ -243,7 +243,11 @@ class Appointments(models.Model, ExportMixin):
         return str(self.participant)
 
 class Exhibit(models.Model, ExportMixin):
-    EXHIBIT_CLASS_CHOICES = [('B1', 'B1. Classe des Champions'),
+    EXHIBIT_CLASS_CHOICES = [('A1', 'A1. Court of Honour'),
+                             ('A2', 'A2. Official Class'),
+                             ('A3', 'A3. Jury Class'),
+                             ('A4', 'A4. Other exhibits'),
+                             ('B1', 'B1. Classe des Champions'),
                              ('C1', 'C1. Traditional Philately'),
                              ('C2', 'C2. Postal History'),
                              ('C3', 'C3. Postal Stationery'),
@@ -254,6 +258,9 @@ class Exhibit(models.Model, ExportMixin):
                              ('C8', 'C8. Maximaphily'),
                              ('C9', 'C9. Open Philately'),
                              ('C10', 'C10. Picture Postcards'),
+                             ('Y1', 'Y1. Youth Philately - Exhibitor’s age (at 1.1.2021) 10-15 years'),
+                             ('Y2', 'Y2. Youth Philately - Exhibitor’s age (at 1.1.2021) 16-18 years'),
+                             ('Y3', 'Y3. Youth Philately - Exhibitor’s age (at 1.1.2021) 19-21 years'),
                              ('L1', 'L1. Philatelic Literature – Books of research nature, specialised catalogues'),
                              ('L2', 'L2. Philatelic Literature – Books of promotional and documentary character'),
                              ('L3', 'L3. Philatelic Literature – General catalogues'),
@@ -261,14 +268,7 @@ class Exhibit(models.Model, ExportMixin):
                              ('L5', 'L5. Philatelic Literature – Articles (collections of)'),
                              ('L6', 'L6. Philatelic Literature – Websites'),
                              ('L7', 'L7. Philatelic Literature – Software'),
-                             ('L8', 'L8. Philatelic Literature – Other digital works'),
-                             ('Y1', 'Y1. Youth Philately - Exhibitor’s age (at 1.1.2021) 10-15 years'),
-                             ('Y2', 'Y2. Youth Philately - Exhibitor’s age (at 1.1.2021) 16-18 years'),
-                             ('Y3', 'Y3. Youth Philately - Exhibitor’s age (at 1.1.2021) 19-21 years'),
-                             ('A1', 'A1. Court of Honour (non-competitive)'),
-                             ('A2', 'A2. Official Class (non-competitive)'),
-                             ('A3', 'A3. Jury Class (non-competitive)'),
-                             ('A4', 'A4. Other exhibits (non-competitive)')]
+                             ('L8', 'L8. Philatelic Literature – Other digital works')]
     FRAME_CHOICES = [(0, 'None')] + [(f, f) for f in range(1, 9)]
 
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='exhibits')
@@ -295,6 +295,8 @@ class Exhibit(models.Model, ExportMixin):
     price = models.CharField(max_length=64, blank=True)
 
     rejected = models.BooleanField(default=False)
+    start_frame = models.IntegerField(null=True, blank=True)
+    received = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     changed_at = models.DateTimeField(auto_now=True)
@@ -304,6 +306,7 @@ class Exhibit(models.Model, ExportMixin):
                                   ('title', 'title'),
                                   ('short_description', 'short_description'),
                                   ('exhibit_class', 'exhibit_class'),
+                                  ('jury_group', 'jury_group'),
                                   ('date_of_birth', 'date_of_birth'),
                                   ('frames', 'frames'),
                                   ('introductory_page', 'introductory_page'),
@@ -318,7 +321,10 @@ class Exhibit(models.Model, ExportMixin):
                                   ('format', 'format'),
                                   ('frequency', 'frequency'),
                                   ('availability', 'availability'),
-                                  ('price', 'price')])
+                                  ('price', 'price'),
+                                  ('rejected', 'rejected'),
+                                  ('start_frame', 'start_frame'),
+                                  ('received', 'received')])
 
     def printout(self, all_fields=False):
         result = OrderedDict([('Title', self.title),

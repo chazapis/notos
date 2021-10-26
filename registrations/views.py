@@ -381,6 +381,14 @@ def export_exhibits(request):
     extras = request.GET.get('extras', '')
     extras = int(extras) if extras.isdigit() else 0
 
+    # XXX Create some new model for these...
+    JURY_GROUP_NAMES = {'C1': {1: 'Europe North, West, Rest of the World',
+                               2: 'Europe South, East, Mediterranean Sea'},
+                        'C2': {1: 'Europe North, West, Rest of the World',
+                               2: 'Europe South, East, Mediterranean Sea'},
+                        'C7': {1: 'History, Sports',
+                               2: 'Culture, Science, Nature, Transportation'}}
+
     if export_sort == 'class':
         exhibit_sections = OrderedDict({'non-competitive': {'title': 'Non-Competitive Classes',
                                                             'classes': []},
@@ -388,7 +396,7 @@ def export_exhibits(request):
                                                         'classes': []}})
         for exhibit_class, exhibit_class_title in Exhibit.EXHIBIT_CLASS_CHOICES:
             section = 'non-competitive' if exhibit_class_title.startswith('A') else 'competitive'
-            exhibits = Exhibit.objects.filter(exhibit_class=exhibit_class, rejected=False).order_by('participant__surname')
+            exhibits = Exhibit.objects.filter(exhibit_class=exhibit_class, rejected=False).order_by('start_frame', 'participant__surname')
             if len(exhibits) == 0:
                 continue
             if extras:
@@ -396,7 +404,10 @@ def export_exhibits(request):
                 if len(jury_groups) > 1:
                     for jury_group in sorted([(j if j else 0) for j in jury_groups]):
                         if jury_group:
-                            jury_group_title_suffix = ' (jury group %d)' % jury_group
+                            try:
+                                jury_group_title_suffix = ' (%s)' % JURY_GROUP_NAMES[exhibit_class][jury_group]
+                            except KeyError:
+                                jury_group_title_suffix = ' (jury group %d)' % jury_group
                         else:
                             jury_group_title_suffix = ' (empty jury group)'
                         exhibit_sections[section]['classes'].append({'title': exhibit_class_title + jury_group_title_suffix,

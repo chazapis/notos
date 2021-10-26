@@ -1,22 +1,24 @@
 <table>
   <tbody>
     <tr>
-      <td width="5%"><span style="color: #ffffff;">.</span></td>
+      <td width="5%"><span style="color: #ffffff;">&nbsp;</span></td>
+      <td width="5%"></td>
       <td width="25%"></td>
       <td width="5%"></td>
       <td width="5%"></td>
-      <td width="45%"></td>
+      <td width="40%"></td>
       <td></td>
     </tr>
     {% for exhibit_section in exhibit_sections.values %}
     {% if exhibit_section.classes|length != 0 %}
     <tr style="border-top: 1px solid #ededed;">
       <td></td>
-      <td colspan="5"><span style="color: #ff6600;">{{ exhibit_section.title }}</span></td>
+      <td colspan="6"><span style="color: #ff6600;">{{ exhibit_section.title }}</span></td>
     </tr>
     {% for exhibit_class in exhibit_section.classes %}
     <tr style="border-top: 1px solid #ededed;">
-      <td><span style="color: #ffffff;">.</span></td>
+      <td><span style="color: #ffffff;">&nbsp;</span></td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>
@@ -24,22 +26,24 @@
     </tr>
     <tr style="border-top: 1px solid #ededed;">
       <td></td>
-      <td colspan="5"><span style="color: #3366ff;">{{ exhibit_class.title }}<br></span></td>
+      <td colspan="6"><span style="color: #3366ff;">{{ exhibit_class.title }}<br></span></td>
     </tr>
     {% for exhibit in exhibit_class.exhibits %}
     <tr style="border-top: 1px solid #ededed;">
       <td></td>
+      <td>{% if exhibit.start_frame %}{% if exhibit_class.title|first in 'L' %}L{% endif %}{{ exhibit.start_frame }}{% endif %}</td>
       <td>{{ exhibit.participant.surname }}{% if exhibit.participant.name %}, {{ exhibit.participant.name }}{% endif %}</td>
-      <td>{% if extras == 1 %}{{ exhibit.participant.country.code }}{% else %}{{ exhibit.participant.country.unicode_flag }}{% endif %}</td>
+      <td>{{ exhibit.participant.country.unicode_flag }}</td>
       <!-- <td><img class="no-box wp-image-299" src="{{ exhibit.participant.country.flag }}" alt=""></td> -->
-      <td>{% if exhibit_class.title|first not in 'L' %}{{ exhibit.frames }}{% endif %}</td>
+      <td>{% if exhibit_class.title|first not in 'L' %}{{ exhibit.frames }}{% else %}{% if exhibit.received %}&#10003;{% endif %}{% endif %}</td>
       <td>{{ exhibit.title }}{% if extras == 2 %}{% if exhibit.introductory_page %} <a href="{{ request.scheme }}://{{ request.get_host }}{{ MEDIA_URL }}{{ exhibit.introductory_page }}" target="_blank">[&#128196; Intro]</a>{% endif %}{% if exhibit.synopsis %} <a href="{{ request.scheme }}://{{ request.get_host }}{{ MEDIA_URL }}{{ exhibit.synopsis }}" target="_blank">[&#128196; Synopsis]</a>{% endif %}{% endif %}</td>
     </tr>
     {% endfor %}
     {% endfor %}
     {% endif %}
     <tr style="border-top: 1px solid #ededed;">
-      <td><span style="color: #ffffff;">.</span></td>
+      <td><span style="color: #ffffff;">&nbsp;</span></td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>
@@ -47,7 +51,8 @@
     </tr>
     {% endfor %}
     <tr style="border-top: 1px solid #ededed;">
-      <td><span style="color: #ffffff;">.</span></td>
+      <td><span style="color: #ffffff;">&nbsp;</span></td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>

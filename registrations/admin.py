@@ -81,7 +81,7 @@ class ExhibitParticipationAdmin(admin.TabularInline):
 
 @admin.register(Exhibit)
 class ExhibitAdmin(admin.ModelAdmin):
-    list_display = ('title', 'exhibit_class', 'frames', 'jury_group', 'changed_at')
+    list_display = ('title', 'exhibit_class', 'start_frame', 'frames', 'jury_group', 'received', 'changed_at')
     list_filter = ('exhibit_class',)
     search_fields = ('title',)
     readonly_fields = ('created_at', 'changed_at')
@@ -97,6 +97,8 @@ class ExhibitAdmin(admin.ModelAdmin):
                                     'synopsis',
                                     'remarks',
                                     'rejected',
+                                    'start_frame',
+                                    'received',
                                     'created_at',
                                     'changed_at')}),
                  ('PHILATELIC LITERATURE APPENDIX', {'fields': ('author',
