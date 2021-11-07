@@ -353,7 +353,7 @@ class Exhibit(models.Model, ExportMixin):
         if all_fields:
             result.update(OrderedDict([('Rejected', 'Yes' if self.rejected else 'No'),
                                        ('Start frame', self.start_frame or ''),
-                                       ('End frame', self.start_frame + self.frames if self.start_frame else ''),
+                                       ('End frame', (self.start_frame + self.frames - 1) if self.start_frame else ''),
                                        ('Received', 'Yes' if self.received else 'No')]))
         return result
 
