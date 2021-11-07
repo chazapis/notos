@@ -350,6 +350,11 @@ class Exhibit(models.Model, ExportMixin):
             result.update(OrderedDict([('Introductory page', os.path.basename(self.introductory_page.path)),
                                        ('Synopsis', os.path.basename(self.synopsis.path) if self.synopsis else '')]))
         result.update(OrderedDict([('Remarks', self.remarks)]))
+        if all_fields:
+            result.update(OrderedDict([('Rejected', 'Yes' if self.rejected else 'No'),
+                                       ('Start frame', self.start_frame or ''),
+                                       ('End frame', self.start_frame + self.frames if self.start_frame else ''),
+                                       ('Received', 'Yes' if self.received else 'No')]))
         return result
 
     def __str__(self):

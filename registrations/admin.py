@@ -38,6 +38,7 @@ class ParticipantAdmin(AdminViews):
     admin_views = (('Export to CSV', 'export_to_csv'),
                    ('Export to XLSX', 'export_to_xlsx'),
                    ('Download XLSX report', 'report_to_xlsx'),
+                   ('Download XLSX report (inventory, no literature)', 'report_to_xlsx_inventory'),
                    ('Download exhibits in HTML (per class)', 'exhibits_in_html_per_class'),
                    ('Download exhibits in HTML (per class, plus jury groups)', 'exhibits_in_html_per_class_plus_jury_groups'),
                    ('Download exhibits in HTML (per class, plus jury groups and intro/synopsis)', 'exhibits_in_html_per_class_plus_intro'),
@@ -52,6 +53,9 @@ class ParticipantAdmin(AdminViews):
 
     def report_to_xlsx(self, *args, **kwargs):
         return redirect('export_report')
+
+    def report_to_xlsx_inventory(self, *args, **kwargs):
+        return redirect('{}?{}'.format(reverse('export_report'), urlencode({'type': 'inventory'})))
 
     def exhibits_in_html_per_class(self, *args, **kwargs):
         return redirect('{}?{}'.format(reverse('export_exhibits'), urlencode({'sort': 'class'})))

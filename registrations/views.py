@@ -330,6 +330,7 @@ def export_raw(request):
 
 @staff_member_required
 def export_report(request):
+    report_type = request.GET.get('type', '')
     report_name = '%s-report-%s' % (settings.EXHIBITION_NAME.replace(' ', '-'), datetime.now().strftime('%Y%m%d%H%M%S'))
 
     def write_entries(worksheet, entries):
@@ -354,18 +355,23 @@ def export_report(request):
                     'strings_to_formulas': False,
                     'strings_to_urls': False}
     with xlsxwriter.Workbook(xlsx_stream, xlsx_options) as workbook:
-        worksheet = workbook.add_worksheet('Registrants')
-        entries = []
-        for participant in Participant.objects.all():
-            entries.append({'id': {'ID': participant.id},
-                            'participant': participant.printout(all_fields=True),
-                            'appointments': participant.appointments.first().printout(all_fields=True) if participant.appointments.count() else None,
-                            'travel_details': participant.travel_details.first().printout(all_fields=True) if participant.travel_details.count() else None})
-        write_entries(worksheet, entries)
+        if report_type != 'inventory':
+            worksheet = workbook.add_worksheet('Registrants')
+            entries = []
+            for participant in Participant.objects.all():
+                entries.append({'id': {'ID': participant.id},
+                                'participant': participant.printout(all_fields=True),
+                                'appointments': participant.appointments.first().printout(all_fields=True) if participant.appointments.count() else None,
+                                'travel_details': participant.travel_details.first().printout(all_fields=True) if participant.travel_details.count() else None})
+            write_entries(worksheet, entries)
 
         worksheet = workbook.add_worksheet('Exhibits')
         entries = []
-        for exhibit in Exhibit.objects.all():
+        if report_type != 'inventory':
+            all_exhibits = Exhibit.objects.all()
+        else:
+            all_exhibits = Exhibit.objects.filter(rejected=False).exclude(exhibit_class__startswith='L')
+        for exhibit in all_exhibits:
             entries.append({'id': {'ID': exhibit.id},
                             'exhibit': exhibit.printout(all_fields=True),
                             'participant': exhibit.participant.printout(all_fields=True)})
